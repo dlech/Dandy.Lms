@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Dandy.Lms.Bytecodes</RootNamespace>
+    <AssemblyName>Dandy.Lms.Bytecodes</AssemblyName>
+    <Version>1.0.0-a1</Version>
+    <Authors>dlech</Authors>
+    <Company>DandyFX</Company>
+    <Description>LEGO MINDSTORMS VM Commands</Description>
+    <Copyright>2017 David Lechner</Copyright>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/dlech/Dandy.Lms/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/dlech/Dandy.Lms</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/dlech/Dandy.Lms.git</RepositoryUrl>
+    <AssemblyVersion>0.99.0.0</AssemblyVersion>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>Dandy.Lms.Bytecodes</PackageId>
+    <Product>Dandy.Lms.Bytecodes</Product>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="YamlDotNet" Version="4.2.1" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="NXT\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="EV3\BytecodeFactory.Generated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>BytecodeFactory.Generated.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="EV3\BytecodeFactory.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>BytecodeFactory.Generated.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+</Project>

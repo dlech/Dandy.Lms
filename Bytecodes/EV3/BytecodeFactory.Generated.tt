@@ -1,0 +1,404 @@
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.IO" #>
+<#@ assembly name="System.Runtime" #>
+<#@ assembly name="YamlDotNet" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="YamlDotNet.Serialization" #>
+<#@ import namespace="YamlDotNet.Serialization.NamingConventions" #>
+<#@ output extension=".cs" #>
+
+<#
+    var deserializer = new DeserializerBuilder()
+        .WithNamingConvention(new HyphenatedNamingConvention())
+        .IgnoreUnmatchedProperties()
+        .Build();
+
+    var bytecodes = deserializer.Deserialize<ByteCodes>(File.OpenText(Host.ResolvePath("ev3.yml")));
+
+	var subcommands = new Dictionary<string, Opcode>();
+	var subcommandMap = new Dictionary<string, string>();
+#>
+
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+
+#pragma warning disable IDE0028 // Collection Initalization
+#pragma warning disable IDE1006 // Naming Styles
+
+namespace Dandy.Lms.Bytecodes.EV3
+{
+<#
+	foreach (var op in bytecodes.Ops.Where(o => o.Value.Params.Any(p => p.Commands != null)))
+	{
+		foreach (var subcommand in op.Value.Params.Single(p => p.Commands != null).Commands)
+		{
+			subcommands.Add(subcommand.Key, subcommand.Value);
+			subcommandMap.Add(subcommand.Key, op.Key);
+		}
+#>
+	[DebuggerDisplay("{code}")]
+	public class cmd<#= op.Key #> : AbstractOpcode
+	{
+		cmd<#= op.Key #>Value code;
+
+		internal cmd<#= op.Key #>(cmd<#= op.Key #>Value code, params IByteCode[] parameters) : base((byte)code, parameters)
+		{
+			this.code = code;
+		}
+	}
+
+<#
+	}
+#>
+	partial class BytecodeFactory
+	{
+		public static class Constant
+		{
+<#
+	foreach (var d in bytecodes.Defines)
+	{
+		if (d.Value.Desc != null) {
+#>
+			/// <summary>
+			/// <#= d.Value.Desc.Trim() #>
+			/// </summary>
+<#
+		}
+
+		if (d.Value.Remarks != null) {
+#>
+			/// <remarks>
+			/// <#= d.Value.Remarks.Trim() #>
+			/// </remarks>
+<#
+		}
+
+#>
+			[Support(Official = <#= d.Value.Support.Official.ToString().ToLower() #>, Xtended = <#= d.Value.Support.Xtended.ToString().ToLower() #>, Compat = <#= d.Value.Support.Compat.ToString().ToLower() #>)]
+<#
+
+		try
+		{
+			if (d.Value.Value.StartsWith("0x"))
+			{
+#>
+			public const uint <#= d.Key #> = <#= d.Value.Value #>;
+
+<#
+			}
+			else
+			{
+				int.Parse(d.Value.Value);
+#>
+			public const int <#= d.Key #> = <#= d.Value.Value #>;
+
+<#
+			}
+		}
+		catch (Exception)
+		{
+#>
+			public const string <#= d.Key #> = "<#= d.Value.Value #>";
+
+<#
+		}
+	}
+#>
+		}
+
+<#
+	foreach (var e in bytecodes.Enums)
+	{
+		if (e.Value.Desc != null) {
+#>
+		/// <summary>
+		/// <#= e.Value.Desc.Trim() #>
+		/// </summary>
+<#
+		}
+
+		if (e.Value.Remarks != null) {
+#>
+			/// <remarks>
+			/// <#= e.Value.Remarks.Trim() #>
+			/// </remarks>
+<#
+		}
+
+#>
+		[Support(Official = <#= e.Value.Support.Official.ToString().ToLower() #>, Xtended = <#= e.Value.Support.Xtended.ToString().ToLower() #>, Compat = <#= e.Value.Support.Compat.ToString().ToLower() #>)]
+		public enum <#= e.Key #>
+		{
+<#
+		foreach (var m in e.Value.Members)
+		{
+			if (m.Value.Desc != null) {
+#>
+			/// <summary>
+			/// <#= m.Value.Desc.Trim() #>
+			/// </summary>
+<#
+			}
+
+			if (m.Value.Remarks != null) {
+#>
+				/// <remarks>
+				/// <#= m.Value.Remarks.Trim() #>
+				/// </remarks>
+<#
+			}
+
+#>
+			[Support(Official = <#= m.Value.Support.Official.ToString().ToLower() #>, Xtended = <#= m.Value.Support.Xtended.ToString().ToLower() #>, Compat = <#= m.Value.Support.Compat.ToString().ToLower() #>)]
+			<#= m.Key #> = <#= m.Value.Value #>,
+
+<#
+		}
+#>
+		}
+
+<#
+	}
+
+	foreach (var op in bytecodes.Ops.Concat(subcommands))
+	{
+		if (op.Value.Desc != null) {
+#>
+		/// <summary>
+		/// <#= op.Value.Desc.Trim() #>
+		/// </summary>
+<#
+		}
+
+		if (op.Value.Params?.Any(p => p.Desc != null) ?? false)
+		{
+			foreach (var p in op.Value.Params)
+			{
+#>
+		/// <param name="<#= p.Name ?? "" #>"><#= p.Desc?.Trim() ?? "" #></param>
+<#
+				if (p.Type == "PARNO")
+				{
+#>
+		/// <param name="<#= p.Name ?? "" #>_">variable arguments</param>
+<#
+				}
+			}
+		}
+		
+		if (op.Value.Remarks != null)
+		{
+#>
+		/// <remarks>
+<#
+			foreach (var line in op.Value.Remarks.Trim().Split(new string[]{"\r\n", "\n"}, StringSplitOptions.None))
+			{
+#>
+		/// <#= line #>
+<#
+			}
+#>
+		/// </remarks>
+<#
+		}
+
+		var parameters = string.Join(", ", op.Value.Params.Select(p => $"{GetManagedParameterType(p, op.Key)} {p.Name}"));
+		if (op.Value.Params.SingleOrDefault(p => p.Type == "PARNO")?.Name is string name)
+		{
+			parameters += $", params IExpression[] {name}_";
+		}
+		var opcodeType = GetManagedOpcodeType(subcommandMap, op.Key);
+		var opcodePrefix = (opcodeType == "Opcode") ? "op" : "cmd";
+		var opcodeEnum = (opcodeType == "Opcode") ? "OpcodeValue" : (opcodeType + "Value");
+#>
+		[Support(Official = <#= op.Value.Support.Official.ToString().ToLower() #>, Xtended = <#= op.Value.Support.Xtended.ToString().ToLower() #>, Compat = <#= op.Value.Support.Compat.ToString().ToLower() #>)]
+		public static <#= opcodeType #> <#= opcodePrefix #><#= op.Key #>(<#= parameters #>)
+		{
+			var parameterList = new List<IByteCode>();
+<#
+		foreach (var p in op.Value.Params)
+		{
+			if (p.Type == "PARVALUES")
+			{
+#>
+			parameterList.AddRange(<#= p.Name #> ?? throw new ArgumentNullException(nameof(<#= p.Name #>)));
+<#
+			}
+			else
+			{
+#>
+			parameterList.Add(<#= p.Name #> ?? throw new ArgumentNullException(nameof(<#= p.Name #>)));
+<#
+			}
+
+			if (p.Type == "PARNO")
+			{
+#>
+			parameterList.AddRange(<#= p.Name #>_ ?? throw new ArgumentNullException(nameof(<#= p.Name #>_)));
+<#
+			}
+		}
+#>
+			return new <#= opcodeType #>(<#= opcodeEnum #>.<#= op.Key #>, parameterList.ToArray());
+		}
+
+<#
+	}
+#>
+	}
+
+	enum OpcodeValue
+	{
+<#
+	foreach (var op in bytecodes.Ops)
+	{
+#>
+		<#= op.Key #> = <#= $"0x{op.Value.Value:X2}" #>,
+<#
+	}
+#>
+	}
+<#
+	foreach (var op in bytecodes.Ops.Where(o => o.Value.Params?.Any(p => p.Commands != null) ?? false))
+	{
+#>
+	enum cmd<#= op.Key #>Value
+	{
+<#
+		var subp = op.Value.Params.Single(p => p.Commands != null);
+		foreach (var s in subp.Commands)
+		{
+#>
+		<#= s.Key #> = <#= $"0x{s.Value.Value:X2}" #>,
+<#
+		}
+#>
+	}
+
+<#
+	}
+#>
+}
+
+#pragma warning restore IDE1006 // Naming Styles
+#pragma warning restore IDE0028 // Collection Initalization
+
+<#+
+	static string GetManagedOpcodeType(Dictionary<string, string> map, string opcode)
+	{
+		if (map.TryGetValue(opcode, out var parent))
+		{
+			return "cmd" + parent;
+		}
+		return "Opcode";
+	}
+
+	static string GetManagedParameterType(Param parameter, string opcode)
+	{
+		switch(parameter.Type)
+		{
+			case "PAR8":
+			case "PARNO":
+				return "IExpression<Data8>";
+			case "PAR16":
+				return "IExpression<Data16>";
+			case "PAR32":
+				return "IExpression<Data32>";
+			case "PARF":
+				return "IExpression<DataFloat>";
+			case "PARS":
+				return "IExpression<DataString>";
+			case "PARLAB":
+				return "IExpression<DataLabel>";
+			case "PARV":
+				return "IExpression";
+			case "PARVALUES":
+				return $"params IExpression<{GetBasicType(parameter.ElementType)}>[]";
+			case "SUBP":
+				return "cmd" + opcode;
+			default:
+				return "object";
+		}
+	}
+
+	static string GetBasicType(string type)
+	{
+		switch (type)
+		{
+			case "PAR8":
+				return "Data8";
+			case "PAR16":
+				return "Data16";
+			case "PAR32":
+				return "Data32";
+			case "PARF":
+				return "DataFloat";
+			default:
+				return "object";
+		}
+	}
+
+	class ByteCodes
+    {
+        public Dictionary<string, Define> Defines { get; set; }
+        public Dictionary<string, Enum> Enums { get; set; }
+        public Dictionary<string, Opcode> Ops { get; set; }
+    }
+
+    class Define
+    {
+        public string Desc { get; set; }
+        public string Remarks { get; set; }
+        public string Value { get; set; }
+        public Support Support { get; set; } = new Support();
+    }
+
+    class Enum
+    {
+        public string Desc { get; set; }
+        public string Remarks { get; set; }
+        public Dictionary<string, Member> Members { get; set; }
+        public Support Support { get; set; } = new Support();
+    }
+
+    class Member
+    {
+        public string Desc { get; set; }
+        public string Remarks { get; set; }
+        public int Value { get; set; }
+        public Support Support { get; set; } = new Support();
+    }
+
+    class Opcode
+    {
+        public string Desc { get; set; }
+        public string Remarks { get; set; }
+        public byte Value { get; set; }
+        public List<Param> Params { get; set; }
+        public Support Support { get; set; } = new Support();
+    }
+
+    class Param
+    {
+        public string Name { get; set; }
+        public string Desc { get; set; }
+        public string Remarks { get; set; }
+        public string Type { get; set; }
+        public string ElementType { get; set; }
+        public string Dir { get; set; }
+        public Enum Enum { get; set; }
+        public Dictionary<string, Opcode> Commands { get; set; }
+    }
+
+    class Support
+    {
+        public bool Official { get; set; } = true;
+        public bool Xtended { get; set; } = true;
+        public bool Compat { get; set; } = true;
+    }
+#>
