@@ -27,8 +27,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-#pragma warning disable IDE0028 // Collection Initalization
+#pragma warning disable IDE0028 // Collection Initialization
 #pragma warning disable IDE1006 // Naming Styles
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 namespace Dandy.Lms.Bytecodes.EV3
 {
@@ -65,7 +66,7 @@ namespace Dandy.Lms.Bytecodes.EV3
 		if (d.Value.Desc != null) {
 #>
 			/// <summary>
-			/// <#= d.Value.Desc.Trim() #>
+			/// <#= Escape(d.Value.Desc.Trim()) #>
 			/// </summary>
 <#
 		}
@@ -73,7 +74,7 @@ namespace Dandy.Lms.Bytecodes.EV3
 		if (d.Value.Remarks != null) {
 #>
 			/// <remarks>
-			/// <#= d.Value.Remarks.Trim() #>
+			/// <#= Escape(d.Value.Remarks.Trim()) #>
 			/// </remarks>
 <#
 		}
@@ -117,7 +118,7 @@ namespace Dandy.Lms.Bytecodes.EV3
 		if (e.Value.Desc != null) {
 #>
 		/// <summary>
-		/// <#= e.Value.Desc.Trim() #>
+		/// <#= Escape(e.Value.Desc.Trim()) #>
 		/// </summary>
 <#
 		}
@@ -125,7 +126,7 @@ namespace Dandy.Lms.Bytecodes.EV3
 		if (e.Value.Remarks != null) {
 #>
 			/// <remarks>
-			/// <#= e.Value.Remarks.Trim() #>
+			/// <#= Escape(e.Value.Remarks.Trim()) #>
 			/// </remarks>
 <#
 		}
@@ -140,7 +141,7 @@ namespace Dandy.Lms.Bytecodes.EV3
 			if (m.Value.Desc != null) {
 #>
 			/// <summary>
-			/// <#= m.Value.Desc.Trim() #>
+			/// <#= Escape(m.Value.Desc.Trim()) #>
 			/// </summary>
 <#
 			}
@@ -148,7 +149,7 @@ namespace Dandy.Lms.Bytecodes.EV3
 			if (m.Value.Remarks != null) {
 #>
 				/// <remarks>
-				/// <#= m.Value.Remarks.Trim() #>
+				/// <#= Escape( m.Value.Remarks.Trim()) #>
 				/// </remarks>
 <#
 			}
@@ -170,7 +171,7 @@ namespace Dandy.Lms.Bytecodes.EV3
 		if (op.Value.Desc != null) {
 #>
 		/// <summary>
-		/// <#= op.Value.Desc.Trim() #>
+		/// <#= Escape(op.Value.Desc.Trim()) #>
 		/// </summary>
 <#
 		}
@@ -180,7 +181,7 @@ namespace Dandy.Lms.Bytecodes.EV3
 			foreach (var p in op.Value.Params)
 			{
 #>
-		/// <param name="<#= p.Name ?? "" #>"><#= p.Desc?.Trim() ?? "" #></param>
+		/// <param name="<#= p.Name ?? "" #>"><#= Escape(p.Desc?.Trim()) ?? "" #></param>
 <#
 				if (p.Type == "PARNO")
 				{
@@ -199,7 +200,7 @@ namespace Dandy.Lms.Bytecodes.EV3
 			foreach (var line in op.Value.Remarks.Trim().Split(new string[]{"\r\n", "\n"}, StringSplitOptions.None))
 			{
 #>
-		/// <#= line #>
+		/// <#= Escape(line) #>
 <#
 			}
 #>
@@ -285,10 +286,16 @@ namespace Dandy.Lms.Bytecodes.EV3
 #>
 }
 
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 #pragma warning restore IDE1006 // Naming Styles
-#pragma warning restore IDE0028 // Collection Initalization
+#pragma warning restore IDE0028 // Collection Initialization
 
 <#+
+	static string Escape(string text)
+	{
+		return text?.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;");
+	}
+
 	static string GetManagedOpcodeType(Dictionary<string, string> map, string opcode)
 	{
 		if (map.TryGetValue(opcode, out var parent))

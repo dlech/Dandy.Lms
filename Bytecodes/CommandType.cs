@@ -18,13 +18,38 @@ namespace Dandy.Lms.Bytecodes
         SystemReplyError = 0x05,
     }
 
+    /// <summary>
+    /// Flags indicating the type of a command.
+    /// </summary>
     [Flags]
     public enum CommandTypeFlags
     {
+        /// <summary>
+        /// The command is a direct command.
+        /// </summary>
+        /// <remarks>
+        /// This is not an actual flag (value is 0), so it can't be used with <see cref="Enum.HasFlag(Enum)"/>.
+        /// </remarks>
         Direct = 0x00,
+
+        /// <summary>
+        /// The command is a system command.
+        /// </summary>
         System = 0x01,
+
+        /// <summary>
+        /// This is a reply to a command.
+        /// </summary>
         Reply = 0x02,
+
+        /// <summary>
+        /// The command was not successful. (Only present in replies).
+        /// </summary>
         Error = 0x04,
+
+        /// <summary>
+        /// The device should not send a reply to this command.
+        /// </summary>
         NoReply = 0x80,
     }
 }

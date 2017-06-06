@@ -9,25 +9,64 @@ using System.Text;
 
 namespace Dandy.Lms.Bytecodes.EV3
 {
+    /// <summary>
+    /// Common interface of all bytecodes.
+    /// </summary>
     public interface IByteCode
     {
+        /// <summary>
+        /// Write the bytecode's binary data.
+        /// </summary>
+        /// <param name="writer">Writer used to write the bytecode.</param>
         void Write(BinaryWriter writer);
     }
 
+    /// <summary>
+    /// Common interface for all bytecode expressions.
+    /// </summary>
+    /// <remarks>
+    /// Expressions are things like variables, unary operators, binary operators, and so on.
+    /// </remarks>
     public interface IExpression : IByteCode
     {
     }
 
+    /// <summary>
+    /// Interface that declares the type returned by an <see cref="IExpression"/> when it is evaluated.
+    /// </summary>
+    /// <typeparam name="T">The type of the expression.</typeparam>
     public interface IExpression<T> : IExpression where T : VMValueType
     {
+        /// <summary>
+        /// Gets an index accessor expression.
+        /// </summary>
+        /// <param name="index">The index of an element.</param>
+        /// <returns>A new expression.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown if this expression is not a string or an array.
+        /// </exception>
         IExpression<Data8> this[int index] { get; }
     }
     
+    /// <summary>
+    /// Indicates if an opcode, enum member, etc. is supported by a VM/firmware vendor.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Enum | AttributeTargets.Field)]
     sealed class SupportAttribute : Attribute
     {
+        /// <summary>
+        /// Indicates that the target is supported on the official LEGO VM.
+        /// </summary>
         public bool Official;
+
+        /// <summary>
+        /// Indicates that the target is supported on the RoboMatter/National Instruments eXtended VM.
+        /// </summary>
         public bool Xtended;
+
+        /// <summary>
+        /// Indicates that the target is supported on the ev3dev lms2012-compat VM".
+        /// </summary>
         public bool Compat;
     }
     
@@ -160,7 +199,7 @@ namespace Dandy.Lms.Bytecodes.EV3
             this.obj = obj ?? throw new ArgumentNullException(nameof(obj));
         }
 
-        IExpression<Data8> IExpression<DataLabel>.this[int index] => throw new NotSupportedException();
+        IExpression<Data8> IExpression<DataLabel>.this[int index] => throw new InvalidOperationException();
 
         void IByteCode.Write(BinaryWriter writer)
         {
@@ -172,7 +211,7 @@ namespace Dandy.Lms.Bytecodes.EV3
     {
         readonly byte[] bytes;
 
-        IExpression<Data8> IExpression<Data8>.this[int index] => throw new NotSupportedException();
+        IExpression<Data8> IExpression<Data8>.this[int index] => throw new InvalidOperationException();
 
         internal LocalConstant8(sbyte value)
         {
@@ -189,7 +228,7 @@ namespace Dandy.Lms.Bytecodes.EV3
     {
         readonly byte[] bytes;
  
-        IExpression<Data8> IExpression<Data16>.this[int index] => throw new NotSupportedException();
+        IExpression<Data8> IExpression<Data16>.this[int index] => throw new InvalidOperationException();
 
         internal LocalConstant16(short value)
         {
@@ -206,7 +245,7 @@ namespace Dandy.Lms.Bytecodes.EV3
     {
         readonly byte[] bytes;
 
-        IExpression<Data8> IExpression<Data32>.this[int index] => throw new NotSupportedException();
+        IExpression<Data8> IExpression<Data32>.this[int index] => throw new InvalidOperationException();
 
         internal LocalConstant32(int value)
         {
@@ -223,7 +262,7 @@ namespace Dandy.Lms.Bytecodes.EV3
     {
         readonly byte[] bytes;
 
-        IExpression<Data8> IExpression<DataFloat>.this[int index] => throw new NotSupportedException();
+        IExpression<Data8> IExpression<DataFloat>.this[int index] => throw new InvalidOperationException();
 
         internal LocalConstantFloat(float value)
         {
@@ -316,7 +355,7 @@ namespace Dandy.Lms.Bytecodes.EV3
         }
 
         /// <summary>
-        /// Align <paramref name="offset"/> to a 32-bit boundry if <paramref name="size"/> is 16-bit or 32- bit.
+        /// Align <paramref name="offset"/> to a 32-bit boundary if <paramref name="size"/> is 16-bit or 32- bit.
         /// </summary>
         /// <param name="size">The size of the data type.</param>
         /// <param name="offset">The current offset.</param>
@@ -358,6 +397,9 @@ namespace Dandy.Lms.Bytecodes.EV3
         }
     }
 
+    /// <summary>
+    /// Base class for <see cref="Opcode"/> and subcommands.
+    /// </summary>
     public abstract class AbstractOpcode : IByteCode
     {
         readonly byte code;
@@ -401,6 +443,9 @@ namespace Dandy.Lms.Bytecodes.EV3
         }
     }
 
+    /// <summary>
+    /// Represents an opcode. These are basically VM function calls and are the building blocks of <see cref="BytecodeObject"/>s.
+    /// </summary>
     [DebuggerDisplay("{code}")]
     public class Opcode : AbstractOpcode
     {
@@ -421,19 +466,50 @@ namespace Dandy.Lms.Bytecodes.EV3
 
     delegate T ReplyParser<T>(BinaryReader reader);
 
+    /// <summary>
+    /// This class is used to generate <see cref="Program"/>s and <see cref="DirectCommand"/>s.
+    /// </summary>
+    /// <remarks>
+    /// All objects returned by the factory methods are immutable, so, for example, if you call a
+    /// With...() method on an object, a new object will be returned.
+    /// </remarks>
     public static partial class BytecodeFactory
     {
+        /// <summary>
+        /// Create a new empty program.
+        /// </summary>
+        /// <returns>Object representing the program.</returns>
         public static Program Program()
         {
             return new Program(0, new BytecodeObject[0]);
         }
 
+        /// <summary>
+        /// Creates a new empty direct command with no global variables.
+        /// </summary>
+        /// <returns>Object representing the direct command.</returns>
+        /// <remarks>
+        /// <see cref="DBNull"/> basically just means a <c>void</c> return type (we can't
+        /// use <see cref="Void"/> as a type parameter for technical reasons).
+        /// </remarks>
         public static DirectCommand<DBNull> DirectCommand()
         {
             ReplyParser<DBNull> parser = (r) => DBNull.Value;
-            return new DirectCommand<DBNull>(0, parser, new BytecodeObject(null, BytecodeObjectType.VMThread, 0, new Opcode[0]));
+            return new DirectCommand<DBNull>(0, parser, new BytecodeObject(BytecodeObjectType.VMThread, 0, new Opcode[0]));
         }
 
+        /// <summary>
+        /// Creates a new empty direct command with one global variable.
+        /// </summary>
+        /// <typeparam name="T0">The VM variable type of <paramref name="gv0"/></typeparam>
+        /// <param name="gv0">Object representing a global variable.</param>
+        /// <param name="size0">The number of bytes to allocate for <paramref name="gv0"/></param>
+        /// <returns>Object representing the direct command.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if <paramref name="size0"/> is negative or if <typeparamref name="T0"/> is a fixed
+        /// size type such as <see cref="Data8"/> and <paramref name="size0"/> is not the correct size.
+        /// (Tip: You can use <see cref="Data8.FixedSize"/> to get the correct size.)
+        /// </exception>
         public static DirectCommand<T0> DirectCommand<T0>(
             out IExpression<T0> gv0, int size0)
             where T0 : VMValueType
@@ -441,9 +517,25 @@ namespace Dandy.Lms.Bytecodes.EV3
             int offset = 0;
             gv0 = new GlobalVariable<T0>(size0, ref offset);
             ReplyParser<T0> parser = ((GlobalVariable<T0>)gv0).Parse;
-            return new DirectCommand<T0>(0, parser, new BytecodeObject(null, BytecodeObjectType.VMThread, 0, new Opcode[0]));
+            return new DirectCommand<T0>(0, parser, new BytecodeObject(BytecodeObjectType.VMThread, 0, new Opcode[0]));
         }
 
+        /// <summary>
+        /// Creates a new empty direct command with two global variables.
+        /// </summary>
+        /// <typeparam name="T0">The VM variable type of <paramref name="gv0"/></typeparam>
+        /// <typeparam name="T1">The VM variable type of <paramref name="gv1"/></typeparam>
+        /// <param name="gv0">Object representing a global variable.</param>
+        /// <param name="size0">The number of bytes to allocate for <paramref name="gv0"/></param>
+        /// <param name="gv1">Object representing a global variable.</param>
+        /// <param name="size1">The number of bytes to allocate for <paramref name="gv1"/></param>
+        /// <returns>Object representing the direct command.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if <paramref name="size0"/> is negative or if <typeparamref name="T0"/> is a fixed
+        /// size type such as <see cref="Data8"/> and <paramref name="size0"/> is not the correct size.
+        /// The same applies to the additional parameters.
+        /// (Tip: You can use <see cref="Data8.FixedSize"/> to get the correct size.)
+        /// </exception>
         public static DirectCommand<ValueTuple<T0, T1>> DirectCommand<T0, T1>(
             out IExpression<T0> gv0, int size0,
             out IExpression<T1> gv1, int size1)
@@ -462,9 +554,28 @@ namespace Dandy.Lms.Bytecodes.EV3
                 var r1 = p1(r);
                 return (r0, r1);
             };
-            return new DirectCommand<ValueTuple<T0, T1>>(0, parser, new BytecodeObject(null, BytecodeObjectType.VMThread, 0, new Opcode[0]));
+            return new DirectCommand<ValueTuple<T0, T1>>(0, parser, new BytecodeObject(BytecodeObjectType.VMThread, 0, new Opcode[0]));
         }
 
+        /// <summary>
+        /// Creates a new empty direct command with three global variables.
+        /// </summary>
+        /// <typeparam name="T0">The VM variable type of <paramref name="gv0"/></typeparam>
+        /// <typeparam name="T1">The VM variable type of <paramref name="gv1"/></typeparam>
+        /// <typeparam name="T2">The VM variable type of <paramref name="gv2"/></typeparam>
+        /// <param name="gv0">Object representing a global variable.</param>
+        /// <param name="size0">The number of bytes to allocate for <paramref name="gv0"/></param>
+        /// <param name="gv1">Object representing a global variable.</param>
+        /// <param name="size1">The number of bytes to allocate for <paramref name="gv1"/></param>
+        /// <param name="gv2">Object representing a global variable.</param>
+        /// <param name="size2">The number of bytes to allocate for <paramref name="gv2"/></param>
+        /// <returns>Object representing the direct command.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if <paramref name="size0"/> is negative or if <typeparamref name="T0"/> is a fixed
+        /// size type such as <see cref="Data8"/> and <paramref name="size0"/> is not the correct size.
+        /// The same applies to the additional parameters.
+        /// (Tip: You can use <see cref="Data8.FixedSize"/> to get the correct size.)
+        /// </exception>
         public static DirectCommand<ValueTuple<T0, T1, T2>> DirectCommand<T0, T1, T2>(
             out IExpression<T0> gv0, int size0,
             out IExpression<T1> gv1, int size1,
@@ -488,9 +599,31 @@ namespace Dandy.Lms.Bytecodes.EV3
                 var r2 = p2(r);
                 return (r0, r1, r2);
             };
-            return new DirectCommand<ValueTuple<T0, T1, T2>>(0, parser, new BytecodeObject(null, BytecodeObjectType.VMThread, 0, new Opcode[0]));
+            return new DirectCommand<ValueTuple<T0, T1, T2>>(0, parser, new BytecodeObject(BytecodeObjectType.VMThread, 0, new Opcode[0]));
         }
 
+        /// <summary>
+        /// Creates a new empty direct command with four global variables.
+        /// </summary>
+        /// <typeparam name="T0">The VM variable type of <paramref name="gv0"/></typeparam>
+        /// <typeparam name="T1">The VM variable type of <paramref name="gv1"/></typeparam>
+        /// <typeparam name="T2">The VM variable type of <paramref name="gv2"/></typeparam>
+        /// <typeparam name="T3">The VM variable type of <paramref name="gv3"/></typeparam>
+        /// <param name="gv0">Object representing a global variable.</param>
+        /// <param name="size0">The number of bytes to allocate for <paramref name="gv0"/></param>
+        /// <param name="gv1">Object representing a global variable.</param>
+        /// <param name="size1">The number of bytes to allocate for <paramref name="gv1"/></param>
+        /// <param name="gv2">Object representing a global variable.</param>
+        /// <param name="size2">The number of bytes to allocate for <paramref name="gv2"/></param>
+        /// <param name="gv3">Object representing a global variable.</param>
+        /// <param name="size3">The number of bytes to allocate for <paramref name="gv3"/></param>
+        /// <returns>Object representing the direct command.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if <paramref name="size0"/> is negative or if <typeparamref name="T0"/> is a fixed
+        /// size type such as <see cref="Data8"/> and <paramref name="size0"/> is not the correct size.
+        /// The same applies to the additional parameters.
+        /// (Tip: You can use <see cref="Data8.FixedSize"/> to get the correct size.)
+        /// </exception>
         public static DirectCommand<ValueTuple<T0, T1, T2, T3>> DirectCommand<T0, T1, T2, T3>(
             out IExpression<T0> gv0, int size0,
             out IExpression<T1> gv1, int size1,
@@ -519,9 +652,34 @@ namespace Dandy.Lms.Bytecodes.EV3
                 var r3 = p3(r);
                 return (r0, r1, r2, r3);
             };
-            return new DirectCommand<ValueTuple<T0, T1, T2, T3>>(0, parser, new BytecodeObject(null, BytecodeObjectType.VMThread, 0, new Opcode[0]));
+            return new DirectCommand<ValueTuple<T0, T1, T2, T3>>(0, parser, new BytecodeObject(BytecodeObjectType.VMThread, 0, new Opcode[0]));
         }
 
+        /// <summary>
+        /// Creates a new empty direct command with five global variables.
+        /// </summary>
+        /// <typeparam name="T0">The VM variable type of <paramref name="gv0"/></typeparam>
+        /// <typeparam name="T1">The VM variable type of <paramref name="gv1"/></typeparam>
+        /// <typeparam name="T2">The VM variable type of <paramref name="gv2"/></typeparam>
+        /// <typeparam name="T3">The VM variable type of <paramref name="gv3"/></typeparam>
+        /// <typeparam name="T4">The VM variable type of <paramref name="gv4"/></typeparam>
+        /// <param name="gv0">Object representing a global variable.</param>
+        /// <param name="size0">The number of bytes to allocate for <paramref name="gv0"/></param>
+        /// <param name="gv1">Object representing a global variable.</param>
+        /// <param name="size1">The number of bytes to allocate for <paramref name="gv1"/></param>
+        /// <param name="gv2">Object representing a global variable.</param>
+        /// <param name="size2">The number of bytes to allocate for <paramref name="gv2"/></param>
+        /// <param name="gv3">Object representing a global variable.</param>
+        /// <param name="size3">The number of bytes to allocate for <paramref name="gv3"/></param>
+        /// <param name="gv4">Object representing a global variable.</param>
+        /// <param name="size4">The number of bytes to allocate for <paramref name="gv4"/></param>
+        /// <returns>Object representing the direct command.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if <paramref name="size0"/> is negative or if <typeparamref name="T0"/> is a fixed
+        /// size type such as <see cref="Data8"/> and <paramref name="size0"/> is not the correct size.
+        /// The same applies to the additional parameters.
+        /// (Tip: You can use <see cref="Data8.FixedSize"/> to get the correct size.)
+        /// </exception>
         public static DirectCommand<ValueTuple<T0, T1, T2, T3, T4>> DirectCommand<T0, T1, T2, T3, T4>(
             out IExpression<T0> gv0, int size0,
             out IExpression<T1> gv1, int size1,
@@ -555,9 +713,37 @@ namespace Dandy.Lms.Bytecodes.EV3
                 var r4 = p4(r);
                 return (r0, r1, r2, r3, r4);
             };
-            return new DirectCommand<ValueTuple<T0, T1, T2, T3, T4>>(0, parser, new BytecodeObject(null, BytecodeObjectType.VMThread, 0, new Opcode[0]));
+            return new DirectCommand<ValueTuple<T0, T1, T2, T3, T4>>(0, parser, new BytecodeObject(BytecodeObjectType.VMThread, 0, new Opcode[0]));
         }
 
+        /// <summary>
+        /// Creates a new empty direct command with six global variables.
+        /// </summary>
+        /// <typeparam name="T0">The VM variable type of <paramref name="gv0"/></typeparam>
+        /// <typeparam name="T1">The VM variable type of <paramref name="gv1"/></typeparam>
+        /// <typeparam name="T2">The VM variable type of <paramref name="gv2"/></typeparam>
+        /// <typeparam name="T3">The VM variable type of <paramref name="gv3"/></typeparam>
+        /// <typeparam name="T4">The VM variable type of <paramref name="gv4"/></typeparam>
+        /// <typeparam name="T5">The VM variable type of <paramref name="gv5"/></typeparam>
+        /// <param name="gv0">Object representing a global variable.</param>
+        /// <param name="size0">The number of bytes to allocate for <paramref name="gv0"/></param>
+        /// <param name="gv1">Object representing a global variable.</param>
+        /// <param name="size1">The number of bytes to allocate for <paramref name="gv1"/></param>
+        /// <param name="gv2">Object representing a global variable.</param>
+        /// <param name="size2">The number of bytes to allocate for <paramref name="gv2"/></param>
+        /// <param name="gv3">Object representing a global variable.</param>
+        /// <param name="size3">The number of bytes to allocate for <paramref name="gv3"/></param>
+        /// <param name="gv4">Object representing a global variable.</param>
+        /// <param name="size4">The number of bytes to allocate for <paramref name="gv4"/></param>
+        /// <param name="gv5">Object representing a global variable.</param>
+        /// <param name="size5">The number of bytes to allocate for <paramref name="gv5"/></param>
+        /// <returns>Object representing the direct command.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if <paramref name="size0"/> is negative or if <typeparamref name="T0"/> is a fixed
+        /// size type such as <see cref="Data8"/> and <paramref name="size0"/> is not the correct size.
+        /// The same applies to the additional parameters.
+        /// (Tip: You can use <see cref="Data8.FixedSize"/> to get the correct size.)
+        /// </exception>
         public static DirectCommand<ValueTuple<T0, T1, T2, T3, T4, T5>> DirectCommand<T0, T1, T2, T3, T4, T5>(
             out IExpression<T0> gv0, int size0,
             out IExpression<T1> gv1, int size1,
@@ -596,9 +782,40 @@ namespace Dandy.Lms.Bytecodes.EV3
                 var r5 = p5(r);
                 return (r0, r1, r2, r3, r4, r5);
             };
-            return new DirectCommand<ValueTuple<T0, T1, T2, T3, T4, T5>>(0, parser, new BytecodeObject(null, BytecodeObjectType.VMThread, 0, new Opcode[0]));
+            return new DirectCommand<ValueTuple<T0, T1, T2, T3, T4, T5>>(0, parser, new BytecodeObject(BytecodeObjectType.VMThread, 0, new Opcode[0]));
         }
 
+        /// <summary>
+        /// Creates a new empty direct command with seven global variables.
+        /// </summary>
+        /// <typeparam name="T0">The VM variable type of <paramref name="gv0"/></typeparam>
+        /// <typeparam name="T1">The VM variable type of <paramref name="gv1"/></typeparam>
+        /// <typeparam name="T2">The VM variable type of <paramref name="gv2"/></typeparam>
+        /// <typeparam name="T3">The VM variable type of <paramref name="gv3"/></typeparam>
+        /// <typeparam name="T4">The VM variable type of <paramref name="gv4"/></typeparam>
+        /// <typeparam name="T5">The VM variable type of <paramref name="gv5"/></typeparam>
+        /// <typeparam name="T6">The VM variable type of <paramref name="gv6"/></typeparam>
+        /// <param name="gv0">Object representing a global variable.</param>
+        /// <param name="size0">The number of bytes to allocate for <paramref name="gv0"/></param>
+        /// <param name="gv1">Object representing a global variable.</param>
+        /// <param name="size1">The number of bytes to allocate for <paramref name="gv1"/></param>
+        /// <param name="gv2">Object representing a global variable.</param>
+        /// <param name="size2">The number of bytes to allocate for <paramref name="gv2"/></param>
+        /// <param name="gv3">Object representing a global variable.</param>
+        /// <param name="size3">The number of bytes to allocate for <paramref name="gv3"/></param>
+        /// <param name="gv4">Object representing a global variable.</param>
+        /// <param name="size4">The number of bytes to allocate for <paramref name="gv4"/></param>
+        /// <param name="gv5">Object representing a global variable.</param>
+        /// <param name="size5">The number of bytes to allocate for <paramref name="gv5"/></param>
+        /// <param name="gv6">Object representing a global variable.</param>
+        /// <param name="size6">The number of bytes to allocate for <paramref name="gv6"/></param>
+        /// <returns>Object representing the direct command.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if <paramref name="size0"/> is negative or if <typeparamref name="T0"/> is a fixed
+        /// size type such as <see cref="Data8"/> and <paramref name="size0"/> is not the correct size.
+        /// The same applies to the additional parameters.
+        /// (Tip: You can use <see cref="Data8.FixedSize"/> to get the correct size.)
+        /// </exception>
         public static DirectCommand<ValueTuple<T0, T1, T2, T3, T4, T5, T6>> DirectCommand<T0, T1, T2, T3, T4, T5, T6>(
             out IExpression<T0> gv0, int size0,
             out IExpression<T1> gv1, int size1,
@@ -642,38 +859,72 @@ namespace Dandy.Lms.Bytecodes.EV3
                 var r6 = p6(r);
                 return (r0, r1, r2, r3, r4, r5, r6);
             };
-            return new DirectCommand<ValueTuple<T0, T1, T2, T3, T4, T5, T6>>(0, parser, new BytecodeObject(null, BytecodeObjectType.VMThread, 0, new Opcode[0]));
+            return new DirectCommand<ValueTuple<T0, T1, T2, T3, T4, T5, T6>>(0, parser, new BytecodeObject(BytecodeObjectType.VMThread, 0, new Opcode[0]));
         }
 
-        public static BytecodeObject VMThread(string name = null)
+        /// <summary>
+        /// Creates a new bytecode object representing a VM thread.
+        /// </summary>
+        /// <returns>A new bytecode object.</returns>
+        public static BytecodeObject VMThread()
         {
-            return new BytecodeObject(name, BytecodeObjectType.VMThread, 0, new Opcode[0]);
-        }
-        public static BytecodeObject Subcall(string name)
-        {
-            return new BytecodeObject(name, BytecodeObjectType.Subcall, 0, new Opcode[0]);
+            return new BytecodeObject(BytecodeObjectType.VMThread, 0, new Opcode[0]);
         }
 
+        /// <summary>
+        /// Creates a new bytecode object representing a VM subroutine.
+        /// </summary>
+        /// <returns>A new bytecode object.</returns>
+        public static BytecodeObject Subcall()
+        {
+            return new BytecodeObject(BytecodeObjectType.Subcall, 0, new Opcode[0]);
+        }
+
+        /// <summary>
+        /// Create a new constant expression representing an 8-bit signed integer value.
+        /// </summary>
+        /// <param name="value">The constant value.</param>
+        /// <returns>A new expression.</returns>
         public static IExpression<Data8> LocalConstant(sbyte value)
         {
             return new LocalConstant8(value);
         }
 
+        /// <summary>
+        /// Create a new constant expression representing an 16-bit signed integer value.
+        /// </summary>
+        /// <param name="value">The constant value.</param>
+        /// <returns>A new expression.</returns>
         public static IExpression<Data16> LocalConstant(short value)
         {
             return new LocalConstant16(value);
         }
 
+        /// <summary>
+        /// Create a new constant expression representing an 32-bit signed integer value.
+        /// </summary>
+        /// <param name="value">The constant value.</param>
+        /// <returns>A new expression.</returns>
         public static IExpression<Data32> LocalConstant(int value)
         {
             return new LocalConstant32(value);
         }
 
+        /// <summary>
+        /// Create a new constant expression representing an 32-bit floating point value.
+        /// </summary>
+        /// <param name="value">The constant value.</param>
+        /// <returns>A new expression.</returns>
         public static IExpression<DataFloat> LocalConstant(float value)
         {
             return new LocalConstantFloat(value);
         }
 
+        /// <summary>
+        /// Create a new constant expression representing a string value.
+        /// </summary>
+        /// <param name="value">The constant value.</param>
+        /// <returns>A new expression.</returns>
         public static IExpression<DataString> LocalConstant(string value)
         {
             return new LocalConstantString(value);

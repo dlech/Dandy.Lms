@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Dandy.Lms.Bytecodes.EV3
 {
+    /// <summary>
+    /// Object that represents a VM program.
+    /// </summary>
     public sealed class Program
     {
         readonly int globals;
@@ -17,11 +20,20 @@ namespace Dandy.Lms.Bytecodes.EV3
             this.objs = objs;
         }
 
+        /// <summary>
+        /// Creates a copy of this program with the specified bytecode objects.
+        /// </summary>
+        /// <param name="objs">The bytecode objects.</param>
+        /// <returns>A new program object.</returns>
         public Program WithBytecodeObjects(params BytecodeObject[] objs)
         {
             return new Program(globals, objs);
         }
 
+        /// <summary>
+        /// Converts the program to a sequence of bytes suitable for running on the VM.
+        /// </summary>
+        /// <returns>The program data.</returns>
         public byte[] ToBytes()
         {
             using (var writer = new BinaryWriter(new MemoryStream()))

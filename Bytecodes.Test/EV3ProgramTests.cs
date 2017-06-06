@@ -34,7 +34,7 @@ namespace Dandy.Lms.Bytecodes.EV3.Test
 
             // program based on Test/Change Name.lms
             var program = Program().WithBytecodeObjects(
-                VMThread("MAIN")
+                VMThread()
                     .WithLocals<Data8>(out var showVersion, Data8.FixedSize)
                     .WithLabels(out var dontShowVersion, out var showVersionWait)
                     .WithOpcodes(
@@ -67,7 +67,7 @@ namespace Dandy.Lms.Bytecodes.EV3.Test
                         opUI_DRAW(cmdTOPLINE(LC8(1))
                     )
                 ),
-                Subcall("ChangeName")
+                Subcall()
                     .WithLocals<Data8, DataString>(out var state, Data8.FixedSize, out var @string, BRICKNAMESIZE)
                     .WithLabels(out var noString)
                     .WithOpcodes(

@@ -18,6 +18,14 @@
     <Product>Dandy.Lms.Bytecodes</Product>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard2.0\Dandy.Lms.Bytecodes.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netstandard2.0\Dandy.Lms.Bytecodes.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="YamlDotNet" Version="4.2.1" PrivateAssets="All" />
   </ItemGroup>

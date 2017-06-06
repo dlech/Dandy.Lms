@@ -7,6 +7,9 @@ using System.Text;
 
 namespace Dandy.Lms.Bytecodes.EV3
 {
+    /// <summary>
+    /// Object that represents a VM routine.
+    /// </summary>
     [DebuggerDisplay("{Type} {Name}")]
     public class BytecodeObject : IByteCode
     {
@@ -14,14 +17,13 @@ namespace Dandy.Lms.Bytecodes.EV3
         readonly int locals;
         readonly Opcode[] ops;
         
-        internal BytecodeObject(string name, BytecodeObjectType type, int locals, params Opcode[] ops)
+        internal BytecodeObject(BytecodeObjectType type, int locals, params Opcode[] ops)
         {
             if (locals < 0)
             {
                 throw new ArgumentOutOfRangeException("Must be >= 0", nameof(locals));
             }
 
-            Name = name;
             this.type = type;
             this.locals = locals;
             this.ops = ops ?? throw new ArgumentNullException(nameof(ops));
@@ -29,9 +31,20 @@ namespace Dandy.Lms.Bytecodes.EV3
 
         internal BytecodeObjectType Type => type;
         internal int Locals => locals;
+        internal IReadOnlyList<Opcode> Opcodes => ops.ToList().AsReadOnly();
 
-        public string Name { get; }
-
+        /// <summary>
+        /// Creates a copy of this object with one local variable.
+        /// </summary>
+        /// <typeparam name="T0">The VM data type of <paramref name="lv0"/>.</typeparam>
+        /// <param name="lv0">Object representing a local variable.</param>
+        /// <param name="size0">The number of bytes to allocate for <paramref name="lv0"/>.</param>
+        /// <returns>A new bytecode object.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if <paramref name="size0"/> is negative or if <typeparamref name="T0"/> is a fixed
+        /// size type such as <see cref="Data8"/> and <paramref name="size0"/> is not the correct size.
+        /// (Tip: You can use <see cref="Data8.FixedSize"/> to get the correct size.)
+        /// </exception>
         public BytecodeObject WithLocals<T0>(
             out IExpression<T0> lv0, int size0)
             where T0 : VMValueType
@@ -42,9 +55,25 @@ namespace Dandy.Lms.Bytecodes.EV3
             }
             int offset = 0;
             lv0 = new LocalVariable<T0>(size0, ref offset);
-            return new BytecodeObject(Name, type, offset,  ops);
+            return new BytecodeObject(type, offset,  ops);
         }
 
+        /// <summary>
+        /// Creates a copy of this object with two local variables.
+        /// </summary>
+        /// <typeparam name="T0">The VM data type of <paramref name="lv0"/>.</typeparam>
+        /// <typeparam name="T1">The VM data type of <paramref name="lv1"/>.</typeparam>
+        /// <param name="lv0">Object representing a local variable.</param>
+        /// <param name="size0">The number of bytes to allocate for <paramref name="lv0"/>.</param>
+        /// <param name="lv1">Object representing a local variable.</param>
+        /// <param name="size1">The number of bytes to allocate for <paramref name="lv1"/>.</param>
+        /// <returns>A new bytecode object.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if <paramref name="size0"/> is negative or if <typeparamref name="T0"/> is a fixed
+        /// size type such as <see cref="Data8"/> and <paramref name="size0"/> is not the correct size.
+        /// The same applies to the additional arguments.
+        /// (Tip: You can use <see cref="Data8.FixedSize"/> to get the correct size.)
+        /// </exception>
         public BytecodeObject WithLocals<T0, T1>(
             out IExpression<T0> lv0, int size0,
             out IExpression<T1> lv1, int size1)
@@ -54,9 +83,28 @@ namespace Dandy.Lms.Bytecodes.EV3
             int offset = 0;
             lv0 = new LocalVariable<T0>(size0, ref offset);
             lv1 = new LocalVariable<T1>(size1, ref offset);
-            return new BytecodeObject(Name, type, offset,  ops);
+            return new BytecodeObject(type, offset,  ops);
         }
 
+        /// <summary>
+        /// Creates a copy of this object with three local variables.
+        /// </summary>
+        /// <typeparam name="T0">The VM data type of <paramref name="lv0"/>.</typeparam>
+        /// <typeparam name="T1">The VM data type of <paramref name="lv1"/>.</typeparam>
+        /// <typeparam name="T2">The VM data type of <paramref name="lv2"/>.</typeparam>
+        /// <param name="lv0">Object representing a local variable.</param>
+        /// <param name="size0">The number of bytes to allocate for <paramref name="lv0"/>.</param>
+        /// <param name="lv1">Object representing a local variable.</param>
+        /// <param name="size1">The number of bytes to allocate for <paramref name="lv1"/>.</param>
+        /// <param name="lv2">Object representing a local variable.</param>
+        /// <param name="size2">The number of bytes to allocate for <paramref name="lv2"/>.</param>
+        /// <returns>A new bytecode object.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if <paramref name="size0"/> is negative or if <typeparamref name="T0"/> is a fixed
+        /// size type such as <see cref="Data8"/> and <paramref name="size0"/> is not the correct size.
+        /// The same applies to the additional arguments.
+        /// (Tip: You can use <see cref="Data8.FixedSize"/> to get the correct size.)
+        /// </exception>
         public BytecodeObject WithLocals<T0, T1, T2>(
             out IExpression<T0> lv0, int size0,
             out IExpression<T1> lv1, int size1,
@@ -69,9 +117,31 @@ namespace Dandy.Lms.Bytecodes.EV3
             lv0 = new LocalVariable<T0>(size0, ref offset);
             lv1 = new LocalVariable<T1>(size1, ref offset);
             lv2 = new LocalVariable<T2>(size2, ref offset);
-            return new BytecodeObject(Name, type, offset,  ops);
+            return new BytecodeObject(type, offset,  ops);
         }
 
+        /// <summary>
+        /// Creates a copy of this object with four local variables.
+        /// </summary>
+        /// <typeparam name="T0">The VM data type of <paramref name="lv0"/>.</typeparam>
+        /// <typeparam name="T1">The VM data type of <paramref name="lv1"/>.</typeparam>
+        /// <typeparam name="T2">The VM data type of <paramref name="lv2"/>.</typeparam>
+        /// <typeparam name="T3">The VM data type of <paramref name="lv3"/>.</typeparam>
+        /// <param name="lv0">Object representing a local variable.</param>
+        /// <param name="size0">The number of bytes to allocate for <paramref name="lv0"/>.</param>
+        /// <param name="lv1">Object representing a local variable.</param>
+        /// <param name="size1">The number of bytes to allocate for <paramref name="lv1"/>.</param>
+        /// <param name="lv2">Object representing a local variable.</param>
+        /// <param name="size2">The number of bytes to allocate for <paramref name="lv2"/>.</param>
+        /// <param name="lv3">Object representing a local variable.</param>
+        /// <param name="size3">The number of bytes to allocate for <paramref name="lv3"/>.</param>
+        /// <returns>A new bytecode object.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if <paramref name="size0"/> is negative or if <typeparamref name="T0"/> is a fixed
+        /// size type such as <see cref="Data8"/> and <paramref name="size0"/> is not the correct size.
+        /// The same applies to the additional arguments.
+        /// (Tip: You can use <see cref="Data8.FixedSize"/> to get the correct size.)
+        /// </exception>
         public BytecodeObject WithLocals<T0, T1, T2, T3>(
             out IExpression<T0> lv0, int size0,
             out IExpression<T1> lv1, int size1,
@@ -87,9 +157,34 @@ namespace Dandy.Lms.Bytecodes.EV3
             lv1 = new LocalVariable<T1>(size1, ref offset);
             lv2 = new LocalVariable<T2>(size2, ref offset);
             lv3 = new LocalVariable<T3>(size3, ref offset);
-            return new BytecodeObject(Name, type, offset,  ops);
+            return new BytecodeObject(type, offset,  ops);
         }
 
+        /// <summary>
+        /// Creates a copy of this object with five local variables.
+        /// </summary>
+        /// <typeparam name="T0">The VM data type of <paramref name="lv0"/>.</typeparam>
+        /// <typeparam name="T1">The VM data type of <paramref name="lv1"/>.</typeparam>
+        /// <typeparam name="T2">The VM data type of <paramref name="lv2"/>.</typeparam>
+        /// <typeparam name="T3">The VM data type of <paramref name="lv3"/>.</typeparam>
+        /// <typeparam name="T4">The VM data type of <paramref name="lv4"/>.</typeparam>
+        /// <param name="lv0">Object representing a local variable.</param>
+        /// <param name="size0">The number of bytes to allocate for <paramref name="lv0"/>.</param>
+        /// <param name="lv1">Object representing a local variable.</param>
+        /// <param name="size1">The number of bytes to allocate for <paramref name="lv1"/>.</param>
+        /// <param name="lv2">Object representing a local variable.</param>
+        /// <param name="size2">The number of bytes to allocate for <paramref name="lv2"/>.</param>
+        /// <param name="lv3">Object representing a local variable.</param>
+        /// <param name="size3">The number of bytes to allocate for <paramref name="lv3"/>.</param>
+        /// <param name="lv4">Object representing a local variable.</param>
+        /// <param name="size4">The number of bytes to allocate for <paramref name="lv4"/>.</param>
+        /// <returns>A new bytecode object.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if <paramref name="size0"/> is negative or if <typeparamref name="T0"/> is a fixed
+        /// size type such as <see cref="Data8"/> and <paramref name="size0"/> is not the correct size.
+        /// The same applies to the additional arguments.
+        /// (Tip: You can use <see cref="Data8.FixedSize"/> to get the correct size.)
+        /// </exception>
         public BytecodeObject WithLocals<T0, T1, T2, T3, T4>(
             out IExpression<T0> lv0, int size0,
             out IExpression<T1> lv1, int size1,
@@ -108,9 +203,37 @@ namespace Dandy.Lms.Bytecodes.EV3
             lv2 = new LocalVariable<T2>(size2, ref offset);
             lv3 = new LocalVariable<T3>(size3, ref offset);
             lv4 = new LocalVariable<T4>(size4, ref offset);
-            return new BytecodeObject(Name, type, offset,  ops);
+            return new BytecodeObject(type, offset,  ops);
         }
 
+        /// <summary>
+        /// Creates a copy of this object with six local variables.
+        /// </summary>
+        /// <typeparam name="T0">The VM data type of <paramref name="lv0"/>.</typeparam>
+        /// <typeparam name="T1">The VM data type of <paramref name="lv1"/>.</typeparam>
+        /// <typeparam name="T2">The VM data type of <paramref name="lv2"/>.</typeparam>
+        /// <typeparam name="T3">The VM data type of <paramref name="lv3"/>.</typeparam>
+        /// <typeparam name="T4">The VM data type of <paramref name="lv4"/>.</typeparam>
+        /// <typeparam name="T5">The VM data type of <paramref name="lv5"/>.</typeparam>
+        /// <param name="lv0">Object representing a local variable.</param>
+        /// <param name="size0">The number of bytes to allocate for <paramref name="lv0"/>.</param>
+        /// <param name="lv1">Object representing a local variable.</param>
+        /// <param name="size1">The number of bytes to allocate for <paramref name="lv1"/>.</param>
+        /// <param name="lv2">Object representing a local variable.</param>
+        /// <param name="size2">The number of bytes to allocate for <paramref name="lv2"/>.</param>
+        /// <param name="lv3">Object representing a local variable.</param>
+        /// <param name="size3">The number of bytes to allocate for <paramref name="lv3"/>.</param>
+        /// <param name="lv4">Object representing a local variable.</param>
+        /// <param name="size4">The number of bytes to allocate for <paramref name="lv4"/>.</param>
+        /// <param name="lv5">Object representing a local variable.</param>
+        /// <param name="size5">The number of bytes to allocate for <paramref name="lv5"/>.</param>
+        /// <returns>A new bytecode object.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if <paramref name="size0"/> is negative or if <typeparamref name="T0"/> is a fixed
+        /// size type such as <see cref="Data8"/> and <paramref name="size0"/> is not the correct size.
+        /// The same applies to the additional arguments.
+        /// (Tip: You can use <see cref="Data8.FixedSize"/> to get the correct size.)
+        /// </exception>
         public BytecodeObject WithLocals<T0, T1, T2, T3, T4, T5>(
             out IExpression<T0> lv0, int size0,
             out IExpression<T1> lv1, int size1,
@@ -132,9 +255,40 @@ namespace Dandy.Lms.Bytecodes.EV3
             lv3 = new LocalVariable<T3>(size3, ref offset);
             lv4 = new LocalVariable<T4>(size4, ref offset);
             lv5 = new LocalVariable<T5>(size5, ref offset);
-            return new BytecodeObject(Name, type, offset,  ops);
+            return new BytecodeObject(type, offset,  ops);
         }
 
+        /// <summary>
+        /// Creates a copy of this object with seven local variables.
+        /// </summary>
+        /// <typeparam name="T0">The VM data type of <paramref name="lv0"/>.</typeparam>
+        /// <typeparam name="T1">The VM data type of <paramref name="lv1"/>.</typeparam>
+        /// <typeparam name="T2">The VM data type of <paramref name="lv2"/>.</typeparam>
+        /// <typeparam name="T3">The VM data type of <paramref name="lv3"/>.</typeparam>
+        /// <typeparam name="T4">The VM data type of <paramref name="lv4"/>.</typeparam>
+        /// <typeparam name="T5">The VM data type of <paramref name="lv5"/>.</typeparam>
+        /// <typeparam name="T6">The VM data type of <paramref name="lv6"/>.</typeparam>
+        /// <param name="lv0">Object representing a local variable.</param>
+        /// <param name="size0">The number of bytes to allocate for <paramref name="lv0"/>.</param>
+        /// <param name="lv1">Object representing a local variable.</param>
+        /// <param name="size1">The number of bytes to allocate for <paramref name="lv1"/>.</param>
+        /// <param name="lv2">Object representing a local variable.</param>
+        /// <param name="size2">The number of bytes to allocate for <paramref name="lv2"/>.</param>
+        /// <param name="lv3">Object representing a local variable.</param>
+        /// <param name="size3">The number of bytes to allocate for <paramref name="lv3"/>.</param>
+        /// <param name="lv4">Object representing a local variable.</param>
+        /// <param name="size4">The number of bytes to allocate for <paramref name="lv4"/>.</param>
+        /// <param name="lv5">Object representing a local variable.</param>
+        /// <param name="size5">The number of bytes to allocate for <paramref name="lv5"/>.</param>
+        /// <param name="lv6">Object representing a local variable.</param>
+        /// <param name="size6">The number of bytes to allocate for <paramref name="lv6"/>.</param>
+        /// <returns>A new bytecode object.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if <paramref name="size0"/> is negative or if <typeparamref name="T0"/> is a fixed
+        /// size type such as <see cref="Data8"/> and <paramref name="size0"/> is not the correct size.
+        /// The same applies to the additional arguments.
+        /// (Tip: You can use <see cref="Data8.FixedSize"/> to get the correct size.)
+        /// </exception>
         public BytecodeObject WithLocals<T0, T1, T2, T3, T4, T5, T6>(
             out IExpression<T0> lv0, int size0,
             out IExpression<T1> lv1, int size1,
@@ -159,25 +313,43 @@ namespace Dandy.Lms.Bytecodes.EV3
             lv4 = new LocalVariable<T4>(size4, ref offset);
             lv5 = new LocalVariable<T5>(size5, ref offset);
             lv6 = new LocalVariable<T6>(size6, ref offset);
-            return new BytecodeObject(Name, type, offset, ops);
+            return new BytecodeObject(type, offset, ops);
         }
 
+        /// <summary>
+        /// Creates a copy of this bytecode object with one label.
+        /// </summary>
+        /// <param name="l0">An object representing the label.</param>
+        /// <returns>A new bytecode object.</returns>
         public BytecodeObject WithLabels(
             out IExpression<DataLabel> l0)
         {
             l0 = new LabelPlaceholder(this);
-            return this;
+            return new BytecodeObject(type, locals, ops);
         }
 
+        /// <summary>
+        /// Creates a copy of this bytecode object with two labels.
+        /// </summary>
+        /// <param name="l0">An object representing the label.</param>
+        /// <param name="l1">An object representing the label.</param>
+        /// <returns>A new bytecode object.</returns>
         public BytecodeObject WithLabels(
             out IExpression<DataLabel> l0,
             out IExpression<DataLabel> l1)
         {
             l0 = new LabelPlaceholder(this);
             l1 = new LabelPlaceholder(this);
-            return this;
+            return new BytecodeObject(type, locals, ops);
         }
 
+        /// <summary>
+        /// Creates a copy of this bytecode object with three labels.
+        /// </summary>
+        /// <param name="l0">An object representing the label.</param>
+        /// <param name="l1">An object representing the label.</param>
+        /// <param name="l2">An object representing the label.</param>
+        /// <returns>A new bytecode object.</returns>
         public BytecodeObject WithLabels(
             out IExpression<DataLabel> l0,
             out IExpression<DataLabel> l1,
@@ -186,9 +358,17 @@ namespace Dandy.Lms.Bytecodes.EV3
             l0 = new LabelPlaceholder(this);
             l1 = new LabelPlaceholder(this);
             l2 = new LabelPlaceholder(this);
-            return this;
+            return new BytecodeObject(type, locals, ops);
         }
 
+        /// <summary>
+        /// Creates a copy of this bytecode object with four labels.
+        /// </summary>
+        /// <param name="l0">An object representing the label.</param>
+        /// <param name="l1">An object representing the label.</param>
+        /// <param name="l2">An object representing the label.</param>
+        /// <param name="l3">An object representing the label.</param>
+        /// <returns>A new bytecode object.</returns>
         public BytecodeObject WithLabels(
             out IExpression<DataLabel> l0,
             out IExpression<DataLabel> l1,
@@ -199,9 +379,18 @@ namespace Dandy.Lms.Bytecodes.EV3
             l1 = new LabelPlaceholder(this);
             l2 = new LabelPlaceholder(this);
             l3 = new LabelPlaceholder(this);
-            return this;
+            return new BytecodeObject(type, locals, ops);
         }
 
+        /// <summary>
+        /// Creates a copy of this bytecode object with five labels.
+        /// </summary>
+        /// <param name="l0">An object representing the label.</param>
+        /// <param name="l1">An object representing the label.</param>
+        /// <param name="l2">An object representing the label.</param>
+        /// <param name="l3">An object representing the label.</param>
+        /// <param name="l4">An object representing the label.</param>
+        /// <returns>A new bytecode object.</returns>
         public BytecodeObject WithLabels(
             out IExpression<DataLabel> l0,
             out IExpression<DataLabel> l1,
@@ -214,9 +403,19 @@ namespace Dandy.Lms.Bytecodes.EV3
             l2 = new LabelPlaceholder(this);
             l3 = new LabelPlaceholder(this);
             l4 = new LabelPlaceholder(this);
-            return this;
+            return new BytecodeObject(type, locals, ops);
         }
 
+        /// <summary>
+        /// Creates a copy of this bytecode object with six labels.
+        /// </summary>
+        /// <param name="l0">An object representing the label.</param>
+        /// <param name="l1">An object representing the label.</param>
+        /// <param name="l2">An object representing the label.</param>
+        /// <param name="l3">An object representing the label.</param>
+        /// <param name="l4">An object representing the label.</param>
+        /// <param name="l5">An object representing the label.</param>
+        /// <returns>A new bytecode object.</returns>
         public BytecodeObject WithLabels(
             out IExpression<DataLabel> l0,
             out IExpression<DataLabel> l1,
@@ -231,9 +430,20 @@ namespace Dandy.Lms.Bytecodes.EV3
             l3 = new LabelPlaceholder(this);
             l4 = new LabelPlaceholder(this);
             l5 = new LabelPlaceholder(this);
-            return this;
+            return new BytecodeObject(type, locals, ops);
         }
 
+        /// <summary>
+        /// Creates a copy of this bytecode object with seven labels.
+        /// </summary>
+        /// <param name="l0">An object representing the label.</param>
+        /// <param name="l1">An object representing the label.</param>
+        /// <param name="l2">An object representing the label.</param>
+        /// <param name="l3">An object representing the label.</param>
+        /// <param name="l4">An object representing the label.</param>
+        /// <param name="l5">An object representing the label.</param>
+        /// <param name="l6">An object representing the label.</param>
+        /// <returns>A new bytecode object.</returns>
         public BytecodeObject WithLabels(
             out IExpression<DataLabel> l0,
             out IExpression<DataLabel> l1,
@@ -250,9 +460,21 @@ namespace Dandy.Lms.Bytecodes.EV3
             l4 = new LabelPlaceholder(this);
             l5 = new LabelPlaceholder(this);
             l6 = new LabelPlaceholder(this);
-            return this;
+            return new BytecodeObject(type, locals, ops);
         }
 
+        /// <summary>
+        /// Creates a copy of this bytecode object with eight labels.
+        /// </summary>
+        /// <param name="l0">An object representing the label.</param>
+        /// <param name="l1">An object representing the label.</param>
+        /// <param name="l2">An object representing the label.</param>
+        /// <param name="l3">An object representing the label.</param>
+        /// <param name="l4">An object representing the label.</param>
+        /// <param name="l5">An object representing the label.</param>
+        /// <param name="l6">An object representing the label.</param>
+        /// <param name="l7">An object representing the label.</param>
+        /// <returns>A new bytecode object.</returns>
         public BytecodeObject WithLabels(
             out IExpression<DataLabel> l0,
             out IExpression<DataLabel> l1,
@@ -271,12 +493,17 @@ namespace Dandy.Lms.Bytecodes.EV3
             l5 = new LabelPlaceholder(this);
             l6 = new LabelPlaceholder(this);
             l7 = new LabelPlaceholder(this);
-            return this;
+            return new BytecodeObject(type, locals, ops);
         }
 
+        /// <summary>
+        /// Creates a copy of this bytecode object with the specified opcodes.
+        /// </summary>
+        /// <param name="ops">The opcodes.</param>
+        /// <returns>A new bytecode object.</returns>
         public BytecodeObject WithOpcodes(params Opcode[] ops)
         {
-            return new BytecodeObject(Name, type, locals, ops);
+            return new BytecodeObject(type, locals, ops);
         }
 
         void IByteCode.Write(BinaryWriter writer)

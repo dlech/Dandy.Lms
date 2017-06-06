@@ -6,7 +6,9 @@ using System.Linq;
 
 namespace Dandy.Lms.Bytecodes.EV3
 {
-
+    /// <summary>
+    /// Base class for all VM data types.
+    /// </summary>
     public abstract class VMValueType
     {
         internal VMValueType()
@@ -16,6 +18,10 @@ namespace Dandy.Lms.Bytecodes.EV3
         internal abstract void ParseValue(BinaryReader reader, int size);
     }
 
+    /// <summary>
+    /// Base class for VM data types that are associated with managed data type.
+    /// </summary>
+    /// <typeparam name="T">The managed data type.</typeparam>
     [DebuggerDisplay("{Value}")]
     public abstract class VMValueType<T> : VMValueType
     {
@@ -23,8 +29,15 @@ namespace Dandy.Lms.Bytecodes.EV3
         {
         }
 
+        /// <summary>
+        /// Gets the managed representation of the VM data type.
+        /// </summary>
         public T Value { get; protected set; }
 
+        /// <summary>
+        /// Converts the VM data type to the corresponding managed data type.
+        /// </summary>
+        /// <param name="self"></param>
         public static implicit operator T(VMValueType<T> self)
         {
             if (self == null)
@@ -35,8 +48,14 @@ namespace Dandy.Lms.Bytecodes.EV3
         }
     }
 
+    /// <summary>
+    /// Represents an 8-bit signed integer value.
+    /// </summary>
     public sealed class Data8 : VMValueType<sbyte>
     {
+        /// <summary>
+        /// The size of this type in bytes.
+        /// </summary>
         public static int FixedSize => sizeof(sbyte);
 
         internal sealed override void ParseValue(BinaryReader reader, int size)
@@ -49,8 +68,14 @@ namespace Dandy.Lms.Bytecodes.EV3
         }
     }
 
+    /// <summary>
+    /// Represents an 16-bit signed integer value.
+    /// </summary>
     public sealed class Data16 : VMValueType<short>
     {
+        /// <summary>
+        /// The size of this type in bytes.
+        /// </summary>
         public static int FixedSize => sizeof(short);
 
         internal sealed override void ParseValue(BinaryReader reader, int size)
@@ -63,8 +88,14 @@ namespace Dandy.Lms.Bytecodes.EV3
         }
     }
 
+    /// <summary>
+    /// Represents an 32-bit signed integer value.
+    /// </summary>
     public sealed class Data32 : VMValueType<int>
     {
+        /// <summary>
+        /// The size of this type in bytes.
+        /// </summary>
         public static int FixedSize => sizeof(int);
 
         internal sealed override void ParseValue(BinaryReader reader, int size)
@@ -77,8 +108,14 @@ namespace Dandy.Lms.Bytecodes.EV3
         }
     }
 
+    /// <summary>
+    /// Represents an 32-bit floating point value.
+    /// </summary>
     public sealed class DataFloat : VMValueType<float>
     {
+        /// <summary>
+        /// The size of this type in bytes.
+        /// </summary>
         public static int FixedSize => sizeof(float);
 
         internal sealed override void ParseValue(BinaryReader reader, int size)
@@ -91,6 +128,9 @@ namespace Dandy.Lms.Bytecodes.EV3
         }
     }
 
+    /// <summary>
+    /// Represents an string (character array) value.
+    /// </summary>
     public sealed class DataString : VMValueType<string>
     {
         internal sealed override void ParseValue(BinaryReader reader, int size)
@@ -99,6 +139,9 @@ namespace Dandy.Lms.Bytecodes.EV3
         }
     }
 
+    /// <summary>
+    /// Represents an array of 8-bit signed integers.
+    /// </summary>
     public sealed class DataArray8 : VMValueType<sbyte[]>
     {
         static IEnumerable<sbyte> GetValues(BinaryReader reader, int length)
@@ -119,6 +162,9 @@ namespace Dandy.Lms.Bytecodes.EV3
         }
     }
 
+    /// <summary>
+    /// Represents an array of 16-bit signed integers.
+    /// </summary>
     public sealed class DataArray16 : VMValueType<short[]>
     {
         static IEnumerable<short> GetValues(BinaryReader reader, int length)
@@ -139,6 +185,9 @@ namespace Dandy.Lms.Bytecodes.EV3
         }
     }
 
+    /// <summary>
+    /// Represents an array of 32-bit signed integers.
+    /// </summary>
     public sealed class DataArray32 : VMValueType<int[]>
     {
         static IEnumerable<int> GetValues(BinaryReader reader, int length)
@@ -159,6 +208,9 @@ namespace Dandy.Lms.Bytecodes.EV3
         }
     }
 
+    /// <summary>
+    /// Represents an array of 32-bit floating point values.
+    /// </summary>
     public sealed class DataArrayFloat : VMValueType<float[]>
     {
         static IEnumerable<float> GetValues(BinaryReader reader, int length)
@@ -179,7 +231,10 @@ namespace Dandy.Lms.Bytecodes.EV3
         }
     }
 
-    public sealed class DataLabel : VMValueType<byte> // FIXME: not sure what the actual size is
+    /// <summary>
+    /// Represents a bytecode object label.
+    /// </summary>
+    public sealed class DataLabel : VMValueType<short>
     {
         internal sealed override void ParseValue(BinaryReader reader, int size)
         {

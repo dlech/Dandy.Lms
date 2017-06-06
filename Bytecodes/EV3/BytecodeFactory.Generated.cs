@@ -4,8 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-#pragma warning disable IDE0028 // Collection Initalization
+#pragma warning disable IDE0028 // Collection Initialization
 #pragma warning disable IDE1006 // Naming Styles
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 namespace Dandy.Lms.Bytecodes.EV3
 {
@@ -2356,7 +2357,7 @@ namespace Dandy.Lms.Bytecodes.EV3
 		}
 
 		/// <summary>
-		/// And two 8 bit values DESTINATION = SOURCE1 & SOURCE2
+		/// And two 8 bit values DESTINATION = SOURCE1 &amp; SOURCE2
 		/// </summary>
 		[Support(Official = true, Xtended = true, Compat = true)]
 		public static Opcode opAND8(IExpression<Data8> SOURCE1, IExpression<Data8> SOURCE2, IExpression<Data8> DESTINATION)
@@ -2369,7 +2370,7 @@ namespace Dandy.Lms.Bytecodes.EV3
 		}
 
 		/// <summary>
-		/// And two 16 bit values DESTINATION = SOURCE1 & SOURCE2
+		/// And two 16 bit values DESTINATION = SOURCE1 &amp; SOURCE2
 		/// </summary>
 		[Support(Official = true, Xtended = true, Compat = true)]
 		public static Opcode opAND16(IExpression<Data16> SOURCE1, IExpression<Data16> SOURCE2, IExpression<Data16> DESTINATION)
@@ -2382,7 +2383,7 @@ namespace Dandy.Lms.Bytecodes.EV3
 		}
 
 		/// <summary>
-		/// And two 32 bit values DESTINATION = SOURCE1 & SOURCE2
+		/// And two 32 bit values DESTINATION = SOURCE1 &amp; SOURCE2
 		/// </summary>
 		[Support(Official = true, Xtended = true, Compat = true)]
 		public static Opcode opAND32(IExpression<Data32> SOURCE1, IExpression<Data32> SOURCE2, IExpression<Data32> DESTINATION)
@@ -2434,7 +2435,7 @@ namespace Dandy.Lms.Bytecodes.EV3
 		}
 
 		/// <summary>
-		/// Rotate left 8 bit value DESTINATION = SOURCE1 << SOURCE2
+		/// Rotate left 8 bit value DESTINATION = SOURCE1 &lt;&lt; SOURCE2
 		/// </summary>
 		[Support(Official = true, Xtended = true, Compat = true)]
 		public static Opcode opRL8(IExpression<Data8> SOURCE1, IExpression<Data8> SOURCE2, IExpression<Data8> DESTINATION)
@@ -2447,7 +2448,7 @@ namespace Dandy.Lms.Bytecodes.EV3
 		}
 
 		/// <summary>
-		/// Rotate left 16 bit value DESTINATION = SOURCE1 << SOURCE2
+		/// Rotate left 16 bit value DESTINATION = SOURCE1 &lt;&lt; SOURCE2
 		/// </summary>
 		[Support(Official = true, Xtended = true, Compat = true)]
 		public static Opcode opRL16(IExpression<Data16> SOURCE1, IExpression<Data16> SOURCE2, IExpression<Data16> DESTINATION)
@@ -2460,7 +2461,7 @@ namespace Dandy.Lms.Bytecodes.EV3
 		}
 
 		/// <summary>
-		/// Rotate left 32 bit value DESTINATION = SOURCE1 << SOURCE2
+		/// Rotate left 32 bit value DESTINATION = SOURCE1 &lt;&lt; SOURCE2
 		/// </summary>
 		[Support(Official = true, Xtended = true, Compat = true)]
 		public static Opcode opRL32(IExpression<Data32> SOURCE1, IExpression<Data32> SOURCE2, IExpression<Data32> DESTINATION)
@@ -3115,7 +3116,7 @@ namespace Dandy.Lms.Bytecodes.EV3
 		/// <param name="PortIn">EncodedPortNumber</param>
 		/// <param name="Layer">Layer</param>
 		/// <param name="Bitfield">Bitfield</param>
-		/// <param name="Inverted">yes if left/right motor are inverted (ie, C&A)</param>
+		/// <param name="Inverted">yes if left/right motor are inverted (ie, C&amp;A)</param>
 		[Support(Official = true, Xtended = true, Compat = true)]
 		public static Opcode opPORT_CNV_OUTPUT(IExpression<Data32> PortIn, IExpression<Data8> Layer, IExpression<Data8> Bitfield, IExpression<Data8> Inverted)
 		{
@@ -3827,7 +3828,7 @@ namespace Dandy.Lms.Bytecodes.EV3
 		/// </summary>
 		/// <param name="TIME">Sample time [mS]</param>
 		/// <param name="SAMPLES">Number of samples</param>
-		/// <param name="INIT">DATA16 array (handle) - to start/reset buffer -> fill array with -1 otherwise don't change</param>
+		/// <param name="INIT">DATA16 array (handle) - to start/reset buffer -&gt; fill array with -1 otherwise don't change</param>
 		/// <param name="DEVICES">DATA8 array (handle) with devices to sample</param>
 		/// <param name="TYPES">DATA8 array (handle) with types</param>
 		/// <param name="MODES">DATA8 array (handle) with modes</param>
@@ -5371,7 +5372,7 @@ namespace Dandy.Lms.Bytecodes.EV3
 		}
 
 		/// <summary>
-		/// Add two strings (SOURCE1 + SOURCE2 -> DESTINATION)
+		/// Add two strings (SOURCE1 + SOURCE2 -&gt; DESTINATION)
 		/// </summary>
 		/// <param name="SOURCE1">String variable or handle to string</param>
 		/// <param name="SOURCE2">String variable or handle to string</param>
@@ -5403,7 +5404,7 @@ namespace Dandy.Lms.Bytecodes.EV3
 		}
 
 		/// <summary>
-		/// Duplicate a string (SOURCE1 -> DESTINATION)
+		/// Duplicate a string (SOURCE1 -&gt; DESTINATION)
 		/// </summary>
 		/// <param name="SOURCE1">String variable or handle to string</param>
 		/// <param name="DESTINATION">String variable or handle to string</param>
@@ -5420,7 +5421,7 @@ namespace Dandy.Lms.Bytecodes.EV3
 		/// Convert floating point value to a string (strips trailing zeroes)
 		/// </summary>
 		/// <param name="VALUE">Value to write (if "nan" op to 4 dashes is returned: "----")</param>
-		/// <param name="FIGURES">Total number of figures inclusive decimal point (FIGURES < 0 -> Left adjusted)</param>
+		/// <param name="FIGURES">Total number of figures inclusive decimal point (FIGURES &lt; 0 -&gt; Left adjusted)</param>
 		/// <param name="DECIMALS">Number of decimals</param>
 		/// <param name="DESTINATION">String variable or handle to string</param>
 		[Support(Official = true, Xtended = true, Compat = true)]
@@ -5446,7 +5447,7 @@ namespace Dandy.Lms.Bytecodes.EV3
 		}
 
 		/// <summary>
-		/// Strip a string for spaces (SOURCE1 -> DESTINATION)
+		/// Strip a string for spaces (SOURCE1 -&gt; DESTINATION)
 		/// </summary>
 		/// <param name="SOURCE1">String variable or handle to string</param>
 		/// <param name="DESTINATION">String variable or handle to string</param>
@@ -6524,7 +6525,7 @@ namespace Dandy.Lms.Bytecodes.EV3
 			return new cmdUI_DRAW(cmdUI_DRAWValue.TOPLINE, parameterList.ToArray());
 		}
 
-		/// <param name="COLOR">Color [BG_COLOR..FG_COLOR] (Color != BG_COLOR and FG_COLOR -> test pattern)</param>
+		/// <param name="COLOR">Color [BG_COLOR..FG_COLOR] (Color != BG_COLOR and FG_COLOR -&gt; test pattern)</param>
 		/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
 		/// <param name="Y1">X size [0..LCD_HEIGHT]</param>
 		[Support(Official = true, Xtended = true, Compat = true)]
@@ -6632,7 +6633,7 @@ namespace Dandy.Lms.Bytecodes.EV3
 			return new cmdUI_DRAW(cmdUI_DRAWValue.STORE, parameterList.ToArray());
 		}
 
-		/// <param name="NO">Level number (N=0 -> Saved screen just before run)</param>
+		/// <param name="NO">Level number (N=0 -&gt; Saved screen just before run)</param>
 		[Support(Official = true, Xtended = true, Compat = true)]
 		public static cmdUI_DRAW cmdRESTORE(IExpression<Data8> NO)
 		{
@@ -7294,7 +7295,7 @@ namespace Dandy.Lms.Bytecodes.EV3
 		/// <param name="NEWMODE">New mode</param>
 		/// <param name="ERROR">Error if not Third Party type (0 = no error, 1 = error or not found)</param>
 		/// <remarks>
-		/// if TYPE==NEWTYPE and MODE==NEWMODE -> ERROR will be 0 if exists and nothing is changed
+		/// if TYPE==NEWTYPE and MODE==NEWMODE -&gt; ERROR will be 0 if exists and nothing is changed
 		/// </remarks>
 		[Support(Official = true, Xtended = true, Compat = true)]
 		public static cmdINPUT_DEVICE cmdSET_TYPEMODE(IExpression<Data8> TYPE, IExpression<Data8> MODE, IExpression<Data8> NEWTYPE, IExpression<Data8> NEWMODE, IExpression<Data8> ERROR)
@@ -7315,7 +7316,7 @@ namespace Dandy.Lms.Bytecodes.EV3
 		/// <param name="NO">Port number</param>
 		/// <param name="WRLNG">No of bytes to write</param>
 		/// <param name="WRDATA">DATA8 array  (handle) of data to write</param>
-		/// <param name="RDLNG">No of bytes to read (if negative -> byte order is reversed)</param>
+		/// <param name="RDLNG">No of bytes to read (if negative -&gt; byte order is reversed)</param>
 		/// <param name="RDDATA">DATA8 array  (handle) to read into</param>
 		/// <param name="RESULT">Write/read result (OK, FAIL)</param>
 		[Support(Official = true, Xtended = true, Compat = true)]
@@ -9607,6 +9608,7 @@ namespace Dandy.Lms.Bytecodes.EV3
 
 }
 
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 #pragma warning restore IDE1006 // Naming Styles
-#pragma warning restore IDE0028 // Collection Initalization
+#pragma warning restore IDE0028 // Collection Initialization
 
