@@ -225,7 +225,7 @@ namespace Dandy.Lms.Bytecodes.EV3.System
         }
     }
 
-    sealed class CloseFileHandle : SystemCommand<DBNull>
+    sealed class CloseFileHandle : SystemCommand<Unit>
     {
         private readonly byte handle;
         private readonly ulong hash;
@@ -244,13 +244,13 @@ namespace Dandy.Lms.Bytecodes.EV3.System
             writer.Write(hash);
         }
 
-        protected sealed override DBNull ParseReplyParameters(BinaryReader reader)
+        protected sealed override Unit ParseReplyParameters(BinaryReader reader)
         {
-            return DBNull.Value;
+            return Unit.Value;
         }
     }
 
-    sealed class CreateDirectory : SystemCommand<DBNull>
+    sealed class CreateDirectory : SystemCommand<Unit>
     {
         private readonly string path;
 
@@ -266,13 +266,13 @@ namespace Dandy.Lms.Bytecodes.EV3.System
             writer.Write(path, 0);
         }
 
-        protected sealed override DBNull ParseReplyParameters(BinaryReader reader)
+        protected sealed override Unit ParseReplyParameters(BinaryReader reader)
         {
-            return DBNull.Value;
+            return Unit.Value;
         }
     }
 
-    sealed class DeleteFile : SystemCommand<DBNull>
+    sealed class DeleteFile : SystemCommand<Unit>
     {
         private readonly string path;
 
@@ -288,9 +288,9 @@ namespace Dandy.Lms.Bytecodes.EV3.System
             writer.Write(path, 0);
         }
 
-        protected sealed override DBNull ParseReplyParameters(BinaryReader reader)
+        protected sealed override Unit ParseReplyParameters(BinaryReader reader)
         {
-            return DBNull.Value;
+            return Unit.Value;
         }
     }
 
@@ -313,7 +313,7 @@ namespace Dandy.Lms.Bytecodes.EV3.System
         }
     }
 
-    sealed class WriteMailbox : SystemCommand<DBNull>
+    sealed class WriteMailbox : SystemCommand<Unit>
     {
         private readonly string name;
         private readonly byte[] payload;
@@ -333,7 +333,7 @@ namespace Dandy.Lms.Bytecodes.EV3.System
             writer.Write(payload);
         }
 
-        protected sealed override DBNull ParseReplyParameters(BinaryReader reader)
+        protected sealed override Unit ParseReplyParameters(BinaryReader reader)
         {
             throw new InvalidOperationException();
         }
@@ -368,7 +368,7 @@ namespace Dandy.Lms.Bytecodes.EV3.System
         }
     }
 
-    sealed class EnterFimrwareUpdateMode : SystemCommand<DBNull>
+    sealed class EnterFimrwareUpdateMode : SystemCommand<Unit>
     {
         public sealed override SystemCommandType SystemCommandType => SystemCommandType.EnterFimrwareUpdateMode;
 
@@ -380,13 +380,13 @@ namespace Dandy.Lms.Bytecodes.EV3.System
         {
         }
 
-        protected sealed override DBNull ParseReplyParameters(BinaryReader reader)
+        protected sealed override Unit ParseReplyParameters(BinaryReader reader)
         {
-            return DBNull.Value;
+            return Unit.Value;
         }
     }
 
-    sealed class SetBundleID : SystemCommand<DBNull>
+    sealed class SetBundleID : SystemCommand<Unit>
     {
         private readonly string id;
 
@@ -402,13 +402,13 @@ namespace Dandy.Lms.Bytecodes.EV3.System
             writer.Write(id, 0);
         }
 
-        protected sealed override DBNull ParseReplyParameters(BinaryReader reader)
+        protected sealed override Unit ParseReplyParameters(BinaryReader reader)
         {
-            return DBNull.Value;
+            return Unit.Value;
         }
     }
 
-    sealed class SetBundleSeedID : SystemCommand<DBNull>
+    sealed class SetBundleSeedID : SystemCommand<Unit>
     {
         private readonly string id;
 
@@ -424,9 +424,9 @@ namespace Dandy.Lms.Bytecodes.EV3.System
             writer.Write(id, 0);
         }
 
-        protected sealed override DBNull ParseReplyParameters(BinaryReader reader)
+        protected sealed override Unit ParseReplyParameters(BinaryReader reader)
         {
-            return DBNull.Value;
+            return Unit.Value;
         }
     }
 }

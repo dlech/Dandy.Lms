@@ -48,7 +48,7 @@ namespace Dandy.Lms.Bytecodes.EV3.Direct.Test
             Assert.Equal(new byte[] { DirectCommandReply, 0, 0,
                 opERROR,
                 opOBJECT_END }, cmd.ToBytes());
-            Assert.Equal(DBNull.Value, cmd.ParseReply(new byte[] { DirectReply }));
+            Assert.Equal(Unit.Value, cmd.ParseReply(new byte[] { DirectReply }));
         }
 
         [Fact]
@@ -59,7 +59,7 @@ namespace Dandy.Lms.Bytecodes.EV3.Direct.Test
             Assert.Equal(new byte[] { DirectCommandReply, 0, 0,
                 opNOP,
                 opOBJECT_END }, cmd.ToBytes());
-            Assert.Equal(DBNull.Value, cmd.ParseReply(new byte[] { DirectReply }));
+            Assert.Equal(Unit.Value, cmd.ParseReply(new byte[] { DirectReply }));
         }
 
         [Fact]
@@ -70,7 +70,7 @@ namespace Dandy.Lms.Bytecodes.EV3.Direct.Test
             Assert.Equal(new byte[] { DirectCommandReply, 0, 0,
                 opPROGRAM_STOP, 0x3F,
                 opOBJECT_END }, cmd.ToBytes());
-            Assert.Equal(DBNull.Value, cmd.ParseReply(new byte[] { DirectReply }));
+            Assert.Equal(Unit.Value, cmd.ParseReply(new byte[] { DirectReply }));
         }
     }
 }

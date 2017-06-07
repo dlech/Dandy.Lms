@@ -489,13 +489,13 @@ namespace Dandy.Lms.Bytecodes.EV3
         /// </summary>
         /// <returns>Object representing the direct command.</returns>
         /// <remarks>
-        /// <see cref="DBNull"/> basically just means a <c>void</c> return type (we can't
+        /// <see cref="Unit"/> basically just means a <c>void</c> return type (we can't
         /// use <see cref="Void"/> as a type parameter for technical reasons).
         /// </remarks>
-        public static DirectCommand<DBNull> DirectCommand()
+        public static DirectCommand<Unit> DirectCommand()
         {
-            ReplyParser<DBNull> parser = (r) => DBNull.Value;
-            return new DirectCommand<DBNull>(0, parser, new BytecodeObject(BytecodeObjectType.VMThread, 0, new Opcode[0]));
+            ReplyParser<Unit> parser = (r) => Unit.Value;
+            return new DirectCommand<Unit>(0, parser, new BytecodeObject(BytecodeObjectType.VMThread, 0, new Opcode[0]));
         }
 
         /// <summary>
