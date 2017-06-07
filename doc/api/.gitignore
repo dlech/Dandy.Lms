@@ -1,0 +1,3 @@
+# DocFX metadata files
+.manifest
+*.yml

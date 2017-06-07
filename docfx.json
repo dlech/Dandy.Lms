@@ -1,0 +1,47 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "files": [
+            "src/**.csproj",
+            "src/**.cs"
+          ],
+          "exclude": [
+            "**/obj/**",
+            "**/bin/**",
+            "**.Test/**"
+          ]
+        }
+      ],
+      "dest": "doc/api",
+      "shouldSkipMarkup": true
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": [
+          "api/**.yml",
+          "api/index.md"
+        ],
+        "src": "doc/"
+      },
+      {
+        "files": [
+          "toc.yml",
+          "*.md"
+        ],
+        "src": "doc/",
+        "exclude": [
+          "obj/**",
+          "_site/**"
+        ]
+      }
+    ],
+    "dest": "doc/_site",
+    "template": [
+      "default"
+    ]
+  }
+}

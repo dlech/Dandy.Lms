@@ -1,0 +1,18 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+    "search.exclude": {
+        "**/_site": true,
+        "doc/api/*.yml": true,
+        "doc/api/.manifest": true,
+        "**/bin": true,
+        "**/obj": true
+    },
+    "json.schemas": [
+        {
+            "fileMatch": [
+                "docfx.json"
+            ],
+            "url": "http://json.schemastore.org/docfx"
+        }
+    ]
+}
