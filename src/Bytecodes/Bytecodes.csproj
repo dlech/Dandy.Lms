@@ -9,8 +9,8 @@
     <Company>DandyFX</Company>
     <Description>LEGO MINDSTORMS VM Commands</Description>
     <Copyright>2017 David Lechner</Copyright>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/dlech/Dandy.Lms/master/LICENSE.txt</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/dlech/Dandy.Lms</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/dlech/Dandy.Lms/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageProjectUrl>dlech.github.io/Dandy.Lms</PackageProjectUrl>
     <RepositoryUrl>https://github.com/dlech/Dandy.Lms.git</RepositoryUrl>
     <AssemblyVersion>0.99.0.0</AssemblyVersion>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
