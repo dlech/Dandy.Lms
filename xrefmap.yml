@@ -10658,3 +10658,21 @@ references:
   fullName.vb: Dandy.Lms.Bytecodes.EV3.VMValueType(Of T).Value
   nameWithType: VMValueType<T>.Value
   nameWithType.vb: VMValueType(Of T).Value
+- uid: Dandy.Lms.Bytecodes.Unit
+  name: Unit
+  href: api/Dandy.Lms.Bytecodes.Unit.html
+  commentId: T:Dandy.Lms.Bytecodes.Unit
+  fullName: Dandy.Lms.Bytecodes.Unit
+  nameWithType: Unit
+- uid: Dandy.Lms.Bytecodes.Unit.Value
+  name: Value
+  href: api/Dandy.Lms.Bytecodes.Unit.html#Dandy_Lms_Bytecodes_Unit_Value
+  commentId: P:Dandy.Lms.Bytecodes.Unit.Value
+  fullName: Dandy.Lms.Bytecodes.Unit.Value
+  nameWithType: Unit.Value
+- uid: Dandy.Lms.Bytecodes.Unit.Value*
+  name: Value
+  href: api/Dandy.Lms.Bytecodes.Unit.html#Dandy_Lms_Bytecodes_Unit_Value_
+  commentId: Overload:Dandy.Lms.Bytecodes.Unit.Value
+  fullName: Dandy.Lms.Bytecodes.Unit.Value
+  nameWithType: Unit.Value
