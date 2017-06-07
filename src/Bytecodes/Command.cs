@@ -6,7 +6,7 @@ namespace Dandy.Lms.Bytecodes
     /// Base class for all commands. Commands represent a single communication transaction with a Device.
     /// </summary>
     /// <typeparam name="TReply">
-    /// The data type for values returned by the command. By conventions, <see cref="Unit"/> is used
+    /// The data type for values returned by the command. By convention, <see cref="Dandy.Core.Unit"/> is used
     /// when no values are returned and <see cref="ValueTuple"/> is used when more than one value is
     /// returned.
     /// </typeparam>

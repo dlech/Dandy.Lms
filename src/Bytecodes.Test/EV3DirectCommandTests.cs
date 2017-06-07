@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 
+using Dandy.Core;
+
 using static Dandy.Lms.Bytecodes.EV3.BytecodeFactory;
 
 using Xunit;

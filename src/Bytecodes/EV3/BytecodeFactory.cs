@@ -7,6 +7,8 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 
+using Dandy.Core;
+
 namespace Dandy.Lms.Bytecodes.EV3
 {
     /// <summary>

@@ -40,6 +40,9 @@
       }
     ],
     "dest": "doc/_site",
+    "xref": [
+      "https://dlech.github.io/Dandy.Core/xrefmap.yml"
+    ],
     "template": [
       "default"
     ]

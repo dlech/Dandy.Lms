@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Dandy.Core;
+
 namespace Dandy.Lms.Bytecodes.EV3.System
 {
     sealed class BeginDownload : SystemCommand<byte>
