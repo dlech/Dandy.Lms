@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard1.4</TargetFramework>
     <RootNamespace>Dandy.Lms.Bytecodes</RootNamespace>
     <AssemblyName>Dandy.Lms.Bytecodes</AssemblyName>
     <Version>1.0.0-a1</Version>
@@ -27,6 +27,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.ValueTuple" Version="4.3.1" />
     <PackageReference Include="YamlDotNet" Version="4.2.1" PrivateAssets="All" />
   </ItemGroup>
 
