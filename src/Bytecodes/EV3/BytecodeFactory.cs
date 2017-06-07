@@ -517,7 +517,7 @@ namespace Dandy.Lms.Bytecodes.EV3
             int offset = 0;
             gv0 = new GlobalVariable<T0>(size0, ref offset);
             ReplyParser<T0> parser = ((GlobalVariable<T0>)gv0).Parse;
-            return new DirectCommand<T0>(0, parser, new BytecodeObject(BytecodeObjectType.VMThread, 0, new Opcode[0]));
+            return new DirectCommand<T0>(offset, parser, new BytecodeObject(BytecodeObjectType.VMThread, 0, new Opcode[0]));
         }
 
         /// <summary>
@@ -554,7 +554,7 @@ namespace Dandy.Lms.Bytecodes.EV3
                 var r1 = p1(r);
                 return (r0, r1);
             };
-            return new DirectCommand<ValueTuple<T0, T1>>(0, parser, new BytecodeObject(BytecodeObjectType.VMThread, 0, new Opcode[0]));
+            return new DirectCommand<ValueTuple<T0, T1>>(offset, parser, new BytecodeObject(BytecodeObjectType.VMThread, 0, new Opcode[0]));
         }
 
         /// <summary>
@@ -599,7 +599,7 @@ namespace Dandy.Lms.Bytecodes.EV3
                 var r2 = p2(r);
                 return (r0, r1, r2);
             };
-            return new DirectCommand<ValueTuple<T0, T1, T2>>(0, parser, new BytecodeObject(BytecodeObjectType.VMThread, 0, new Opcode[0]));
+            return new DirectCommand<ValueTuple<T0, T1, T2>>(offset, parser, new BytecodeObject(BytecodeObjectType.VMThread, 0, new Opcode[0]));
         }
 
         /// <summary>
@@ -652,7 +652,7 @@ namespace Dandy.Lms.Bytecodes.EV3
                 var r3 = p3(r);
                 return (r0, r1, r2, r3);
             };
-            return new DirectCommand<ValueTuple<T0, T1, T2, T3>>(0, parser, new BytecodeObject(BytecodeObjectType.VMThread, 0, new Opcode[0]));
+            return new DirectCommand<ValueTuple<T0, T1, T2, T3>>(offset, parser, new BytecodeObject(BytecodeObjectType.VMThread, 0, new Opcode[0]));
         }
 
         /// <summary>
@@ -713,7 +713,7 @@ namespace Dandy.Lms.Bytecodes.EV3
                 var r4 = p4(r);
                 return (r0, r1, r2, r3, r4);
             };
-            return new DirectCommand<ValueTuple<T0, T1, T2, T3, T4>>(0, parser, new BytecodeObject(BytecodeObjectType.VMThread, 0, new Opcode[0]));
+            return new DirectCommand<ValueTuple<T0, T1, T2, T3, T4>>(offset, parser, new BytecodeObject(BytecodeObjectType.VMThread, 0, new Opcode[0]));
         }
 
         /// <summary>
@@ -782,7 +782,7 @@ namespace Dandy.Lms.Bytecodes.EV3
                 var r5 = p5(r);
                 return (r0, r1, r2, r3, r4, r5);
             };
-            return new DirectCommand<ValueTuple<T0, T1, T2, T3, T4, T5>>(0, parser, new BytecodeObject(BytecodeObjectType.VMThread, 0, new Opcode[0]));
+            return new DirectCommand<ValueTuple<T0, T1, T2, T3, T4, T5>>(offset, parser, new BytecodeObject(BytecodeObjectType.VMThread, 0, new Opcode[0]));
         }
 
         /// <summary>
@@ -859,7 +859,7 @@ namespace Dandy.Lms.Bytecodes.EV3
                 var r6 = p6(r);
                 return (r0, r1, r2, r3, r4, r5, r6);
             };
-            return new DirectCommand<ValueTuple<T0, T1, T2, T3, T4, T5, T6>>(0, parser, new BytecodeObject(BytecodeObjectType.VMThread, 0, new Opcode[0]));
+            return new DirectCommand<ValueTuple<T0, T1, T2, T3, T4, T5, T6>>(offset, parser, new BytecodeObject(BytecodeObjectType.VMThread, 0, new Opcode[0]));
         }
 
         /// <summary>

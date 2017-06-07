@@ -5,6 +5,7 @@ using System.Text;
 using static Dandy.Lms.Bytecodes.EV3.BytecodeFactory;
 
 using Xunit;
+using FluentAssertions;
 
 namespace Dandy.Lms.Bytecodes.EV3.Direct.Test
 {
@@ -39,6 +40,27 @@ namespace Dandy.Lms.Bytecodes.EV3.Direct.Test
         const short DEBUG_SLOT = 4;
         const short SLOTS = 5;
         const short CURRENT_SLOT = -1;
+
+        [Fact]
+        public void TestGlobals()
+        {
+            var cmd = DirectCommand<DataString>(out var gv, 100);
+            var bytes = cmd.ToBytes();
+            bytes[1].Should().Be(100);
+            bytes[2].Should().Be(0);
+
+            cmd = DirectCommand(out gv, 256);
+            bytes = cmd.ToBytes();
+            bytes[1].Should().Be(0);
+            bytes[2].Should().Be(1);
+
+            // max allowable
+            DirectCommand(out gv, 1021);
+
+            // too many
+            Action act = () => DirectCommand(out gv, 1022);
+            act.ShouldThrow<ArgumentOutOfRangeException>();
+        }
 
         [Fact]
         public void Test_opERROR()
