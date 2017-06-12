@@ -410,7 +410,7 @@ namespace Dandy.Lms.Bytecodes.EV3
         /// The same applies to the additional parameters.
         /// (Tip: You can use <see cref="Data8.FixedSize"/> to get the correct size.)
         /// </exception>
-        public static DirectCommand<ValueTuple<T0, T1>> DirectCommand<T0, T1>(
+        public static DirectCommand<(T0, T1)> DirectCommand<T0, T1>(
             out IExpression<T0> gv0, int size0,
             out IExpression<T1> gv1, int size1)
             where T0 : VMDataType
@@ -422,13 +422,13 @@ namespace Dandy.Lms.Bytecodes.EV3
             // can't use out parameters inside lambda, so this is a way to encapsulate them
             ReplyParser<T0> p0 = ((GlobalVariable<T0>)gv0).Parse;
             ReplyParser<T1> p1 = ((GlobalVariable<T1>)gv1).Parse;
-            ReplyParser<ValueTuple<T0, T1>> parser = (r) =>
+            ReplyParser<(T0, T1)> parser = (r) =>
             {
                 var r0 = p0(r);
                 var r1 = p1(r);
                 return (r0, r1);
             };
-            return new DirectCommand<ValueTuple<T0, T1>>(offset, parser, new BytecodeObject(BytecodeObjectType.VMThread, 0, new Opcodes.Opcode[0]));
+            return new DirectCommand<(T0, T1)>(offset, parser, new BytecodeObject(BytecodeObjectType.VMThread, 0, new Opcodes.Opcode[0]));
         }
 
         /// <summary>
@@ -450,7 +450,7 @@ namespace Dandy.Lms.Bytecodes.EV3
         /// The same applies to the additional parameters.
         /// (Tip: You can use <see cref="Data8.FixedSize"/> to get the correct size.)
         /// </exception>
-        public static DirectCommand<ValueTuple<T0, T1, T2>> DirectCommand<T0, T1, T2>(
+        public static DirectCommand<(T0, T1, T2)> DirectCommand<T0, T1, T2>(
             out IExpression<T0> gv0, int size0,
             out IExpression<T1> gv1, int size1,
             out IExpression<T2> gv2, int size2)
@@ -466,14 +466,14 @@ namespace Dandy.Lms.Bytecodes.EV3
             ReplyParser<T0> p0 = ((GlobalVariable<T0>)gv0).Parse;
             ReplyParser<T1> p1 = ((GlobalVariable<T1>)gv1).Parse;
             ReplyParser<T2> p2 = ((GlobalVariable<T2>)gv2).Parse;
-            ReplyParser<ValueTuple<T0, T1, T2>> parser = (r) =>
+            ReplyParser<(T0, T1, T2)> parser = (r) =>
             {
                 var r0 = p0(r);
                 var r1 = p1(r);
                 var r2 = p2(r);
                 return (r0, r1, r2);
             };
-            return new DirectCommand<ValueTuple<T0, T1, T2>>(offset, parser, new BytecodeObject(BytecodeObjectType.VMThread, 0, new Opcodes.Opcode[0]));
+            return new DirectCommand<(T0, T1, T2)>(offset, parser, new BytecodeObject(BytecodeObjectType.VMThread, 0, new Opcodes.Opcode[0]));
         }
 
         /// <summary>
@@ -498,7 +498,7 @@ namespace Dandy.Lms.Bytecodes.EV3
         /// The same applies to the additional parameters.
         /// (Tip: You can use <see cref="Data8.FixedSize"/> to get the correct size.)
         /// </exception>
-        public static DirectCommand<ValueTuple<T0, T1, T2, T3>> DirectCommand<T0, T1, T2, T3>(
+        public static DirectCommand<(T0, T1, T2, T3)> DirectCommand<T0, T1, T2, T3>(
             out IExpression<T0> gv0, int size0,
             out IExpression<T1> gv1, int size1,
             out IExpression<T2> gv2, int size2,
@@ -518,7 +518,7 @@ namespace Dandy.Lms.Bytecodes.EV3
             ReplyParser<T1> p1 = ((GlobalVariable<T1>)gv1).Parse;
             ReplyParser<T2> p2 = ((GlobalVariable<T2>)gv2).Parse;
             ReplyParser<T3> p3 = ((GlobalVariable<T3>)gv3).Parse;
-            ReplyParser<ValueTuple<T0, T1, T2, T3>> parser = (r) =>
+            ReplyParser<(T0, T1, T2, T3)> parser = (r) =>
             {
                 var r0 = p0(r);
                 var r1 = p1(r);
@@ -526,7 +526,7 @@ namespace Dandy.Lms.Bytecodes.EV3
                 var r3 = p3(r);
                 return (r0, r1, r2, r3);
             };
-            return new DirectCommand<ValueTuple<T0, T1, T2, T3>>(offset, parser, new BytecodeObject(BytecodeObjectType.VMThread, 0, new Opcodes.Opcode[0]));
+            return new DirectCommand<(T0, T1, T2, T3)>(offset, parser, new BytecodeObject(BytecodeObjectType.VMThread, 0, new Opcodes.Opcode[0]));
         }
 
         /// <summary>
@@ -554,7 +554,7 @@ namespace Dandy.Lms.Bytecodes.EV3
         /// The same applies to the additional parameters.
         /// (Tip: You can use <see cref="Data8.FixedSize"/> to get the correct size.)
         /// </exception>
-        public static DirectCommand<ValueTuple<T0, T1, T2, T3, T4>> DirectCommand<T0, T1, T2, T3, T4>(
+        public static DirectCommand<(T0, T1, T2, T3, T4)> DirectCommand<T0, T1, T2, T3, T4>(
             out IExpression<T0> gv0, int size0,
             out IExpression<T1> gv1, int size1,
             out IExpression<T2> gv2, int size2,
@@ -578,7 +578,7 @@ namespace Dandy.Lms.Bytecodes.EV3
             ReplyParser<T2> p2 = ((GlobalVariable<T2>)gv2).Parse;
             ReplyParser<T3> p3 = ((GlobalVariable<T3>)gv3).Parse;
             ReplyParser<T4> p4 = ((GlobalVariable<T4>)gv4).Parse;
-            ReplyParser<ValueTuple<T0, T1, T2, T3, T4>> parser = (r) =>
+            ReplyParser<(T0, T1, T2, T3, T4)> parser = (r) =>
             {
                 var r0 = p0(r);
                 var r1 = p1(r);
@@ -587,7 +587,7 @@ namespace Dandy.Lms.Bytecodes.EV3
                 var r4 = p4(r);
                 return (r0, r1, r2, r3, r4);
             };
-            return new DirectCommand<ValueTuple<T0, T1, T2, T3, T4>>(offset, parser, new BytecodeObject(BytecodeObjectType.VMThread, 0, new Opcodes.Opcode[0]));
+            return new DirectCommand<(T0, T1, T2, T3, T4)>(offset, parser, new BytecodeObject(BytecodeObjectType.VMThread, 0, new Opcodes.Opcode[0]));
         }
 
         /// <summary>
@@ -618,7 +618,7 @@ namespace Dandy.Lms.Bytecodes.EV3
         /// The same applies to the additional parameters.
         /// (Tip: You can use <see cref="Data8.FixedSize"/> to get the correct size.)
         /// </exception>
-        public static DirectCommand<ValueTuple<T0, T1, T2, T3, T4, T5>> DirectCommand<T0, T1, T2, T3, T4, T5>(
+        public static DirectCommand<(T0, T1, T2, T3, T4, T5)> DirectCommand<T0, T1, T2, T3, T4, T5>(
             out IExpression<T0> gv0, int size0,
             out IExpression<T1> gv1, int size1,
             out IExpression<T2> gv2, int size2,
@@ -646,7 +646,7 @@ namespace Dandy.Lms.Bytecodes.EV3
             ReplyParser<T3> p3 = ((GlobalVariable<T3>)gv3).Parse;
             ReplyParser<T4> p4 = ((GlobalVariable<T4>)gv4).Parse;
             ReplyParser<T5> p5 = ((GlobalVariable<T5>)gv5).Parse;
-            ReplyParser<ValueTuple<T0, T1, T2, T3, T4, T5>> parser = (r) =>
+            ReplyParser<(T0, T1, T2, T3, T4, T5)> parser = (r) =>
             {
                 var r0 = p0(r);
                 var r1 = p1(r);
@@ -656,7 +656,7 @@ namespace Dandy.Lms.Bytecodes.EV3
                 var r5 = p5(r);
                 return (r0, r1, r2, r3, r4, r5);
             };
-            return new DirectCommand<ValueTuple<T0, T1, T2, T3, T4, T5>>(offset, parser, new BytecodeObject(BytecodeObjectType.VMThread, 0, new Opcodes.Opcode[0]));
+            return new DirectCommand<(T0, T1, T2, T3, T4, T5)>(offset, parser, new BytecodeObject(BytecodeObjectType.VMThread, 0, new Opcodes.Opcode[0]));
         }
 
         /// <summary>
@@ -690,7 +690,7 @@ namespace Dandy.Lms.Bytecodes.EV3
         /// The same applies to the additional parameters.
         /// (Tip: You can use <see cref="Data8.FixedSize"/> to get the correct size.)
         /// </exception>
-        public static DirectCommand<ValueTuple<T0, T1, T2, T3, T4, T5, T6>> DirectCommand<T0, T1, T2, T3, T4, T5, T6>(
+        public static DirectCommand<(T0, T1, T2, T3, T4, T5, T6)> DirectCommand<T0, T1, T2, T3, T4, T5, T6>(
             out IExpression<T0> gv0, int size0,
             out IExpression<T1> gv1, int size1,
             out IExpression<T2> gv2, int size2,
@@ -722,7 +722,7 @@ namespace Dandy.Lms.Bytecodes.EV3
             ReplyParser<T4> p4 = ((GlobalVariable<T4>)gv4).Parse;
             ReplyParser<T5> p5 = ((GlobalVariable<T5>)gv5).Parse;
             ReplyParser<T6> p6 = ((GlobalVariable<T6>)gv6).Parse;
-            ReplyParser<ValueTuple<T0, T1, T2, T3, T4, T5, T6>> parser = (r) =>
+            ReplyParser<(T0, T1, T2, T3, T4, T5, T6)> parser = (r) =>
             {
                 var r0 = p0(r);
                 var r1 = p1(r);
@@ -733,7 +733,7 @@ namespace Dandy.Lms.Bytecodes.EV3
                 var r6 = p6(r);
                 return (r0, r1, r2, r3, r4, r5, r6);
             };
-            return new DirectCommand<ValueTuple<T0, T1, T2, T3, T4, T5, T6>>(offset, parser, new BytecodeObject(BytecodeObjectType.VMThread, 0, new Opcodes.Opcode[0]));
+            return new DirectCommand<(T0, T1, T2, T3, T4, T5, T6)>(offset, parser, new BytecodeObject(BytecodeObjectType.VMThread, 0, new Opcodes.Opcode[0]));
         }
 
         /// <summary>

@@ -54,7 +54,7 @@ namespace Dandy.Lms.Bytecodes.NXT
             /// When this command returns successfully, the file handle must be closed with
             /// a <see cref="Close"/> command when it is no longer needed.
             /// </remarks>
-            public static ICommand<ValueTuple<byte, int>> OpenRead(string fileName)
+            public static ICommand<(byte, int)> OpenRead(string fileName)
             {
                 AssertFileName(fileName);
 
@@ -65,14 +65,14 @@ namespace Dandy.Lms.Bytecodes.NXT
                     writer.Write(bytes);
                 };
 
-                Func<BinaryReader, ValueTuple<byte, int>> parseReply = (reader) =>
+                Func<BinaryReader, (byte, int)> parseReply = (reader) =>
                 {
                     var handle = reader.ReadByte();
                     var size = reader.ReadInt32();
                     return (handle, size);
                 };
 
-                return new Command<ValueTuple<byte, int>>(CommandTypeFlags.System,
+                return new Command<(byte, int)>(CommandTypeFlags.System,
                     CommandValue.OpenRead, writeParameters, parseReply);
             }
 
@@ -126,7 +126,7 @@ namespace Dandy.Lms.Bytecodes.NXT
             /// <param name="handle">A file handled returned byte <see cref="OpenRead"/>.</param>
             /// <param name="size">The number of bytes to read from the file.</param>
             /// <returns>A new command that returns a file handle and the data read.</returns>
-            public static ICommand<ValueTuple<byte, byte[]>> Read(byte handle, int size)
+            public static ICommand<(byte, byte[])> Read(byte handle, int size)
             {
                 if (size < ushort.MinValue || size > ushort.MaxValue)
                 {
@@ -139,7 +139,7 @@ namespace Dandy.Lms.Bytecodes.NXT
                     writer.Write((ushort)size);
                 };
 
-                Func<BinaryReader, ValueTuple<byte, byte[]>> parseReply = (reader) =>
+                Func<BinaryReader, (byte, byte[])> parseReply = (reader) =>
                 {
                     var newHandle = reader.ReadByte();
                     var readSize = reader.ReadUInt16();
@@ -147,7 +147,7 @@ namespace Dandy.Lms.Bytecodes.NXT
                     return (newHandle, readData);
                 };
 
-                return new Command<ValueTuple<byte, byte[]>>(CommandTypeFlags.System,
+                return new Command<(byte, byte[])>(CommandTypeFlags.System,
                     CommandValue.Read, writeParameters, parseReply);
             }
 
@@ -157,7 +157,7 @@ namespace Dandy.Lms.Bytecodes.NXT
             /// <param name="handle">A file handled returned byte <see cref="OpenWrite"/>.</param>
             /// <param name="data">The data to write to the file.</param>
             /// <returns>A new command that returns a file handle and the number of bytes actually writtern.</returns>
-            public static ICommand<ValueTuple<byte, int>> Write(byte handle, byte[] data)
+            public static ICommand<(byte, int)> Write(byte handle, byte[] data)
             {
                 if (data == null)
                 {
@@ -170,14 +170,14 @@ namespace Dandy.Lms.Bytecodes.NXT
                     writer.Write(data);
                 };
 
-                Func<BinaryReader, ValueTuple<byte, int>> parseReply = (reader) =>
+                Func<BinaryReader, (byte, int)> parseReply = (reader) =>
                 {
                     var newHandle = reader.ReadByte();
                     var writeSize = reader.ReadUInt16();
                     return (newHandle, writeSize);
                 };
 
-                return new Command<ValueTuple<byte, int>>(CommandTypeFlags.System,
+                return new Command<(byte, int)>(CommandTypeFlags.System,
                     CommandValue.Write, writeParameters, parseReply);
             }
 
@@ -210,13 +210,13 @@ namespace Dandy.Lms.Bytecodes.NXT
             /// A new command that returns the NXT name, the Bluetooth MAC address, the Bluetooth
             /// signal strength, and the free flash memory size in bytes.
             /// </returns>
-            public static ICommand<ValueTuple<string, ulong, int, int>> GetDeviceInfo()
+            public static ICommand<(string, ulong, int, int)> GetDeviceInfo()
             {
                 Action<BinaryWriter> writeParameters = (writer) =>
                 {
                 };
 
-                Func<BinaryReader, ValueTuple<string, ulong, int, int>> parseReply = (reader) =>
+                Func<BinaryReader, (string, ulong, int, int)> parseReply = (reader) =>
                 {
                     var nameBytes = reader.ReadBytes(15);
                     var name = Encoding.ASCII.GetString(nameBytes).TrimEnd('\0');
@@ -232,7 +232,7 @@ namespace Dandy.Lms.Bytecodes.NXT
                     return (name, macAddress, rssi, freeFlash);
                 };
 
-                return new Command<ValueTuple<string, ulong, int, int>>(CommandTypeFlags.System,
+                return new Command<(string, ulong, int, int)>(CommandTypeFlags.System,
                     CommandValue.GetDeviceInfo, writeParameters, parseReply);
             }
         }

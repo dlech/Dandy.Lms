@@ -105,7 +105,7 @@ namespace Dandy.Lms.Bytecodes.EV3
             /// <exception cref="ArgumentNullException">
             /// Thrown if <paramref name="path"/> is <c>null</c>.
             /// </exception>
-            public static ICommand<ValueTuple<int, byte, byte[]>> BeginUpload(ushort payloadSize, string path)
+            public static ICommand<(int, byte, byte[])> BeginUpload(ushort payloadSize, string path)
             {
                 if (path == null)
                 {
@@ -118,7 +118,7 @@ namespace Dandy.Lms.Bytecodes.EV3
                     writer.Write(path, 0);
                 };
 
-                Func<BinaryReader, ValueTuple<int, byte, byte[]>> parseReplyParameters = (reader) =>
+                Func<BinaryReader, (int, byte, byte[])> parseReplyParameters = (reader) =>
                 {
                     var length = reader.ReadInt32();
                     var handle = reader.ReadByte();
@@ -126,7 +126,7 @@ namespace Dandy.Lms.Bytecodes.EV3
                     return (length, handle, payload);
                 };
 
-                return new SystemCommand<ValueTuple<int, byte, byte[]>>(SystemCommandValue.BeginUpload,
+                return new SystemCommand<(int, byte, byte[])>(SystemCommandValue.BeginUpload,
                     writecommandParameters, parseReplyParameters);
             }
 
@@ -140,7 +140,7 @@ namespace Dandy.Lms.Bytecodes.EV3
             /// The number of bytes to transfer in this command. This must not exceede the packet size.
             /// </param>
             /// <returns>A new command that returns a new file handle and the payload.</returns>
-            public static ICommand<ValueTuple<byte, byte[]>> ContinueUpload(byte handle, ushort payloadSize)
+            public static ICommand<(byte, byte[])> ContinueUpload(byte handle, ushort payloadSize)
             {
                 Action<BinaryWriter> writecommandParameters = (writer) =>
                 {
@@ -148,14 +148,14 @@ namespace Dandy.Lms.Bytecodes.EV3
                     writer.Write(payloadSize);
                 };
 
-                Func<BinaryReader, ValueTuple<byte, byte[]>> parseReplyParameters = (reader) =>
+                Func<BinaryReader, (byte, byte[])> parseReplyParameters = (reader) =>
                 {
                     var newHandle = reader.ReadByte();
                     var payload = reader.ReadBytes(payloadSize);
                     return (newHandle, payload);
                 };
 
-                return new SystemCommand<ValueTuple<byte, byte[]>>(SystemCommandValue.ContinueUpload,
+                return new SystemCommand<(byte, byte[])>(SystemCommandValue.ContinueUpload,
                     writecommandParameters, parseReplyParameters);
             }
 
@@ -172,7 +172,7 @@ namespace Dandy.Lms.Bytecodes.EV3
             /// <exception cref="ArgumentNullException">
             /// Thrown if <paramref name="path"/> is <c>null</c>.
             /// </exception>
-            public static ICommand<ValueTuple<int, byte, byte[]>> BeginGetFile(ushort payloadSize, string path)
+            public static ICommand<(int, byte, byte[])> BeginGetFile(ushort payloadSize, string path)
             {
                 if (path == null)
                 {
@@ -185,7 +185,7 @@ namespace Dandy.Lms.Bytecodes.EV3
                     writer.Write(path, 0);
                 };
 
-                Func<BinaryReader, ValueTuple<int, byte, byte[]>> parseReplyParameters = (reader) =>
+                Func<BinaryReader, (int, byte, byte[])> parseReplyParameters = (reader) =>
                 {
                     var length = reader.ReadInt32();
                     var handle = reader.ReadByte();
@@ -193,7 +193,7 @@ namespace Dandy.Lms.Bytecodes.EV3
                     return (length, handle, payload);
                 };
 
-                return new SystemCommand<ValueTuple<int, byte, byte[]>>(SystemCommandValue.BeginGetFile,
+                return new SystemCommand<(int, byte, byte[])>(SystemCommandValue.BeginGetFile,
                     writecommandParameters, parseReplyParameters);
             }
 
@@ -207,7 +207,7 @@ namespace Dandy.Lms.Bytecodes.EV3
             /// The number of bytes to transfer in this command. This must not exceede the packet size.
             /// </param>
             /// <returns>A new command that returns a new file handle and the payload.</returns>
-            public static ICommand<ValueTuple<int, byte, byte[]>> ContinueGetFile(byte handle, ushort payloadSize)
+            public static ICommand<(int, byte, byte[])> ContinueGetFile(byte handle, ushort payloadSize)
             {
                 Action<BinaryWriter> writecommandParameters = (writer) =>
                 {
@@ -215,7 +215,7 @@ namespace Dandy.Lms.Bytecodes.EV3
                     writer.Write(payloadSize);
                 };
 
-                Func<BinaryReader, ValueTuple<int, byte, byte[]>> parseReplyParameters = (reader) =>
+                Func<BinaryReader, (int, byte, byte[])> parseReplyParameters = (reader) =>
                 {
                     var length = reader.ReadInt32();
                     var newHandle = reader.ReadByte();
@@ -223,7 +223,7 @@ namespace Dandy.Lms.Bytecodes.EV3
                     return (length, newHandle, payload);
                 };
 
-                return new SystemCommand<ValueTuple<int, byte, byte[]>>(SystemCommandValue.ContinueGetFile,
+                return new SystemCommand<(int, byte, byte[])>(SystemCommandValue.ContinueGetFile,
                     writecommandParameters, parseReplyParameters);
             }
 
@@ -250,7 +250,7 @@ namespace Dandy.Lms.Bytecodes.EV3
             /// [folder name] + [slash character (/)]
             /// </code>
             /// </remarks>
-            public static ICommand<ValueTuple<int, byte, byte[]>> BeginListFiles(ushort payloadSize, string path)
+            public static ICommand<(int, byte, byte[])> BeginListFiles(ushort payloadSize, string path)
             {
                 if (path == null)
                 {
@@ -263,7 +263,7 @@ namespace Dandy.Lms.Bytecodes.EV3
                     writer.Write(path, 0);
                 };
 
-                Func<BinaryReader, ValueTuple<int, byte, byte[]>> parseReplyParameters = (reader) =>
+                Func<BinaryReader, (int, byte, byte[])> parseReplyParameters = (reader) =>
                 {
                     var length = reader.ReadInt32();
                     var handle = reader.ReadByte();
@@ -271,7 +271,7 @@ namespace Dandy.Lms.Bytecodes.EV3
                     return (length, handle, payload);
                 };
 
-                return new SystemCommand<ValueTuple<int, byte, byte[]>>(SystemCommandValue.BeginListFiles,
+                return new SystemCommand<(int, byte, byte[])>(SystemCommandValue.BeginListFiles,
                     writecommandParameters, parseReplyParameters);
             }
 
@@ -287,7 +287,7 @@ namespace Dandy.Lms.Bytecodes.EV3
             /// <returns>
             /// A new command that returns a new file handle, and a payload.
             /// </returns>
-            public static ICommand<ValueTuple<byte, byte[]>> ContinueListFiles(byte handle, ushort payloadSize)
+            public static ICommand<(byte, byte[])> ContinueListFiles(byte handle, ushort payloadSize)
             {
                 Action<BinaryWriter> writecommandParameters = (writer) =>
                 {
@@ -295,14 +295,14 @@ namespace Dandy.Lms.Bytecodes.EV3
                     writer.Write(payloadSize);
                 };
 
-                Func<BinaryReader, ValueTuple<byte, byte[]>> parseReplyParameters = (reader) =>
+                Func<BinaryReader, (byte, byte[])> parseReplyParameters = (reader) =>
                 {
                     var newHandle = reader.ReadByte();
                     var payload = reader.ReadBytes(payloadSize);
                     return (newHandle, payload);
                 };
 
-                return new SystemCommand<ValueTuple<byte, byte[]>>(SystemCommandValue.ContinueListFiles,
+                return new SystemCommand<(byte, byte[])>(SystemCommandValue.ContinueListFiles,
                     writecommandParameters, parseReplyParameters);
             }
 
@@ -457,7 +457,7 @@ namespace Dandy.Lms.Bytecodes.EV3
             /// <exception cref="ArgumentNullException">
             /// Thrown if <paramref name="hostMACAddress"/> or <paramref name="pinCode"/> is <c>null</c>.
             /// </exception>
-            public static ICommand<ValueTuple<string, string>> SendBluetoothPin(string hostMACAddress, string pinCode)
+            public static ICommand<(string, string)> SendBluetoothPin(string hostMACAddress, string pinCode)
             {
                 if (hostMACAddress == null)
                 {
@@ -475,7 +475,7 @@ namespace Dandy.Lms.Bytecodes.EV3
                     writer.Write(pinCode, sizeof(byte));
                 };
 
-                Func<BinaryReader, ValueTuple<string, string>> parseReplyParameters = (reader) =>
+                Func<BinaryReader, (string, string)> parseReplyParameters = (reader) =>
                 {
                     var clientMacAddressLength = reader.ReadByte();
                     var clientMACAddress = reader.ReadString(clientMacAddressLength);
@@ -484,7 +484,7 @@ namespace Dandy.Lms.Bytecodes.EV3
                     return (clientMACAddress, clientPinCode);
                 };
 
-                return new SystemCommand<ValueTuple<string, string>>(SystemCommandValue.SendBluetoothPin,
+                return new SystemCommand<(string, string)>(SystemCommandValue.SendBluetoothPin,
                     writecommandParameters, parseReplyParameters);
             }
 
