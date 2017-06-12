@@ -12,13 +12,13 @@ namespace Dandy.Lms.Bytecodes
     /// when no values are returned and <see cref="ValueTuple"/> is used when more than one value is
     /// returned.
     /// </typeparam>
-    public abstract class Command<TReply>
+    public interface ICommand<TReply>
     {
         /// <summary>
         /// The kind of device that this command is compatible with (e.g. EV3 or NXT).
         /// </summary>
         /// <value>The kind of device.</value>
-        public abstract DeviceKind DeviceKind { get; }
+        DeviceKind DeviceKind { get; }
         
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace Dandy.Lms.Bytecodes
         /// </summary>
         /// <param name="expectReply"></param>
         /// <returns>The bytes.</returns>
-        public abstract byte[] ToBytes(bool expectReply = true);
+        byte[] ToBytes(bool expectReply = true);
 
 
         /// <summary>
@@ -34,6 +34,6 @@ namespace Dandy.Lms.Bytecodes
         /// </summary>
         /// <param name="data">The bytes received from a device in response to this command.</param>
         /// <returns>The values decoded from the reply.</returns>
-        public abstract TReply ParseReply(byte[] data);
+       TReply ParseReply(byte[] data);
     }
 }

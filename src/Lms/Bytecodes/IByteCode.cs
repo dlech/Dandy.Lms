@@ -13,7 +13,7 @@ namespace Dandy.Lms.Bytecodes
         /// <summary>
         /// Writes the binary representation of the bytecode.
         /// </summary>
-        /// <param name="writer">Writer used to write the bytecode.</param>
+        /// <param name="writer">Writer to write to bytecodes to.</param>
         void Write(BinaryWriter writer);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dandy.Lms.Devices;
+using System;
 using System.IO;
 
 namespace Dandy.Lms.Bytecodes.EV3
@@ -7,8 +8,8 @@ namespace Dandy.Lms.Bytecodes.EV3
     /// Object that represents an EV3 direct command.
     /// </summary>
     /// <typeparam name="TReply">The data type for values returned by the command.</typeparam>
-    /// <seealso cref="Command{TReply}"/>
-    public sealed class DirectCommand<TReply> : EV3Command<TReply>
+    /// <seealso cref="ICommand{TReply}"/>
+    public sealed class DirectCommand<TReply> : ICommand<TReply>
     {
         const int maxLocals = 64;
         const int maxGlobals = 1021;
@@ -19,9 +20,12 @@ namespace Dandy.Lms.Bytecodes.EV3
         readonly BytecodeObject obj;
 
         /// <summary>
-        /// The type of command. Always returns <see cref="CommandTypeFlags.Direct"/>
+        /// Gets the type of device compatible with this command.
         /// </summary>
-        internal sealed override CommandTypeFlags CommandType => CommandTypeFlags.Direct;
+        /// <value>
+        /// Always returns <see cref="DeviceKind.EV3"/>.
+        /// </value>
+        public DeviceKind DeviceKind => DeviceKind.EV3;
 
         internal DirectCommand(int globals, ReplyParser<TReply> replyParser, BytecodeObject obj)
         {
@@ -77,11 +81,11 @@ namespace Dandy.Lms.Bytecodes.EV3
         /// <exception cref="InvalidOperationException">
         /// Thrown if the direct command exceeds 64 bytes in size.
         /// </exception>
-        public override sealed byte[] ToBytes(bool expectReply = true)
+        public byte[] ToBytes(bool expectReply = true)
         {
             using (var writer = new BinaryWriter(new MemoryStream()))
             {
-                var commandType = CommandType;
+                var commandType = CommandTypeFlags.Direct;
                 if (!expectReply)
                 {
                     commandType |= CommandTypeFlags.NoReply;
@@ -103,7 +107,7 @@ namespace Dandy.Lms.Bytecodes.EV3
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public sealed override TReply ParseReply(byte[] data)
+        public TReply ParseReply(byte[] data)
         {
             using (var reader = new BinaryReader(new MemoryStream(data)))
             {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dandy.Lms.Devices;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,18 +8,24 @@ using System.Threading.Tasks;
 
 namespace Dandy.Lms.Bytecodes.EV3.System
 {
-    abstract class SystemCommand<TReply> : EV3Command<TReply>
+    abstract class SystemCommand<TReply> : ICommand<TReply>
     {
-        internal sealed override CommandTypeFlags CommandType => CommandTypeFlags.System;
-
         internal abstract SystemCommandValue SystemCommandValue { get; }
 
-        public sealed override byte[] ToBytes(bool expectReply)
+        /// <summary>
+        /// Gets the type of device compatible with this command.
+        /// </summary>
+        /// <value>
+        /// Always returns <see cref="DeviceKind.EV3"/>.
+        /// </value>
+        public DeviceKind DeviceKind => DeviceKind.EV3;
+
+        public byte[] ToBytes(bool expectReply)
         {
             using (var writer = new BinaryWriter(new MemoryStream()))
             {
                 var replyFlag = expectReply ? 0 : CommandTypeFlags.NoReply;
-                writer.Write((byte)(CommandType | replyFlag));
+                writer.Write((byte)(CommandTypeFlags.System | replyFlag));
                 writer.Write((byte)SystemCommandValue);
                 WriteCommandParameters(writer);
                 return ((MemoryStream)writer.BaseStream).ToArray();
@@ -27,7 +34,7 @@ namespace Dandy.Lms.Bytecodes.EV3.System
 
         protected abstract void WriteCommandParameters(BinaryWriter writer);
 
-        public sealed override TReply ParseReply(byte[] data)
+        public TReply ParseReply(byte[] data)
         {
             using (var reader = new BinaryReader(new MemoryStream(data), Encoding.ASCII))
             {
