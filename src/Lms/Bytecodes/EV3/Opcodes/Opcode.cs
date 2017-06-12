@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace Dandy.Lms.Bytecodes.EV3
+namespace Dandy.Lms.Bytecodes.EV3.Opcodes
 {
     /// <summary>
     /// Base class for <see cref="Opcode"/> and subcommands.

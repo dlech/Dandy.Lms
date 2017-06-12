@@ -2513,7165 +2513,7171 @@ namespace Dandy.Lms.Bytecodes.EV3
 	partial class BytecodeFactory
 	{
 		/// <summary>
-		/// This code does not exist in normal program
-		/// </summary>
-		/// <remarks>
-		/// Dispatch status changes to INSTRBREAK
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opERROR()
-		{
-			var parameterList = new List<IByteCode>();
-			return new Opcode(OpcodeValue.ERROR, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// This code does absolutely nothing
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opNOP()
-		{
-			var parameterList = new List<IByteCode>();
-			return new Opcode(OpcodeValue.NOP, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Stops specific program id slot
-		/// </summary>
-		/// <param name="PRGID">Program id (GUI_SLOT = all, CURRENT_SLOT = current)</param>
-		/// <remarks>
-		/// Dispatch status changes to PRGBREAK
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opPROGRAM_STOP(IExpression<Data16> PRGID)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
-			return new Opcode(OpcodeValue.PROGRAM_STOP, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Start program id slot
-		/// </summary>
-		/// <param name="PRGID">Program id</param>
-		/// <param name="SIZE">Size of image</param>
-		/// <param name="IP">Address of image (value from opFILE(LOAD_IMAGE,..) )</param>
-		/// <param name="DEBUG">Debug mode (0=normal, 1=debug, 2=don't execute)</param>
-		/// <remarks>
-		/// Dispatch status unchanged
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opPROGRAM_START(IExpression<Data16> PRGID, IExpression<Data32> SIZE, IExpression<Data32> IP, IExpression<Data8> DEBUG)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
-			parameterList.Add(SIZE ?? throw new ArgumentNullException(nameof(SIZE)));
-			parameterList.Add(IP ?? throw new ArgumentNullException(nameof(IP)));
-			parameterList.Add(DEBUG ?? throw new ArgumentNullException(nameof(DEBUG)));
-			return new Opcode(OpcodeValue.PROGRAM_START, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Stops specific object
-		/// </summary>
-		/// <param name="OBJID">Object id</param>
-		/// <remarks>
-		/// Dispatch status changes to STOPBREAK
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opOBJECT_STOP(IExpression<Data16> OBJID)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(OBJID ?? throw new ArgumentNullException(nameof(OBJID)));
-			return new Opcode(OpcodeValue.OBJECT_STOP, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Start specific object
-		/// </summary>
-		/// <param name="OBJID">Object id</param>
-		/// <remarks>
-		/// Dispatch status unchanged
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opOBJECT_START(IExpression<Data16> OBJID)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(OBJID ?? throw new ArgumentNullException(nameof(OBJID)));
-			return new Opcode(OpcodeValue.OBJECT_START, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Triggers object and run the object if fully triggered
-		/// </summary>
-		/// <param name="OBJID">Object id</param>
-		/// <remarks>
-		/// Dispatch status unchanged
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opOBJECT_TRIG(IExpression<Data16> OBJID)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(OBJID ?? throw new ArgumentNullException(nameof(OBJID)));
-			return new Opcode(OpcodeValue.OBJECT_TRIG, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Wait until object has run
-		/// </summary>
-		/// <param name="OBJID">Object id</param>
-		/// <remarks>
-		/// Dispatch status can change to BUSYBREAK
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opOBJECT_WAIT(IExpression<Data16> OBJID)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(OBJID ?? throw new ArgumentNullException(nameof(OBJID)));
-			return new Opcode(OpcodeValue.OBJECT_WAIT, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Return from byte code subroutine
-		/// </summary>
-		/// <remarks>
-		/// Dispatch status changes to STOPBREAK
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opRETURN()
-		{
-			var parameterList = new List<IByteCode>();
-			return new Opcode(OpcodeValue.RETURN, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Calls byte code subroutine
-		/// </summary>
-		/// <param name="OBJID">Object id</param>
-		/// <param name="PARAMETERS">Number of parameters</param>
-		/// <param name="PARAMETERS_">variable arguments</param>
-		/// <remarks>
-		/// Dispatch status changes to STOPBREAK or BUSYBREAK
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opCALL(IExpression<Data16> OBJID, IExpression<Data8> PARAMETERS, params IExpression[] PARAMETERS_)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(OBJID ?? throw new ArgumentNullException(nameof(OBJID)));
-			parameterList.Add(PARAMETERS ?? throw new ArgumentNullException(nameof(PARAMETERS)));
-			parameterList.AddRange(PARAMETERS_ ?? throw new ArgumentNullException(nameof(PARAMETERS_)));
-			return new Opcode(OpcodeValue.CALL, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Stops current object
-		/// </summary>
-		/// <remarks>
-		/// Dispatch status changes to STOPBREAK
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opOBJECT_END()
-		{
-			var parameterList = new List<IByteCode>();
-			return new Opcode(OpcodeValue.OBJECT_END, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Breaks execution of current VMTHREAD
-		/// </summary>
-		/// <remarks>
-		/// Dispatch status changes to INSTRBREAK
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opSLEEP()
-		{
-			var parameterList = new List<IByteCode>();
-			return new Opcode(OpcodeValue.SLEEP, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Get program data
-		/// </summary>
-		/// <param name="CMD">Specific command parameter</param>
-		/// <remarks>
-		/// Dispatch status can change to FAILBREAK
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opPROGRAM_INFO(PROGRAM_INFOSubcommand CMD)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
-			return new Opcode(OpcodeValue.PROGRAM_INFO, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// This code does nothing besides marking an address to a label
-		/// </summary>
-		/// <param name="NO">Label number</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opLABEL(IExpression<DataLabel> NO)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			return new Opcode(OpcodeValue.LABEL, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Display globals or object locals on terminal
-		/// </summary>
-		/// <param name="PRGID">Program slot number</param>
-		/// <param name="OBJID">Object id (zero means globals)</param>
-		/// <param name="OFFSET">Offset (start from)</param>
-		/// <param name="SIZE">Size (length of dump) zero means all (max 1024)</param>
-		/// <remarks>
-		/// Dispatch status unchanged
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opPROBE(IExpression<Data16> PRGID, IExpression<Data16> OBJID, IExpression<Data32> OFFSET, IExpression<Data32> SIZE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
-			parameterList.Add(OBJID ?? throw new ArgumentNullException(nameof(OBJID)));
-			parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
-			parameterList.Add(SIZE ?? throw new ArgumentNullException(nameof(SIZE)));
-			return new Opcode(OpcodeValue.PROBE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Run byte code snippet
-		/// </summary>
-		/// <param name="PRGID">Program slot number</param>
-		/// <param name="IMAGE">Address of image</param>
-		/// <param name="GLOBAL">Address of global variables</param>
-		/// <remarks>
-		/// Dispatch status can change to BUSYBREAK
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opDO(IExpression<Data16> PRGID, IExpression<Data32> IMAGE, IExpression<Data32> GLOBAL)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
-			parameterList.Add(IMAGE ?? throw new ArgumentNullException(nameof(IMAGE)));
-			parameterList.Add(GLOBAL ?? throw new ArgumentNullException(nameof(GLOBAL)));
-			return new Opcode(OpcodeValue.DO, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Add two 8-bit values DESTINATION = SOURCE1 + SOURCE2
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opADD8(IExpression<Data8> SOURCE1, IExpression<Data8> SOURCE2, IExpression<Data8> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.ADD8, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Add two 16-bit values DESTINATION = SOURCE1 + SOURCE2
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opADD16(IExpression<Data16> SOURCE1, IExpression<Data16> SOURCE2, IExpression<Data16> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.ADD16, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Add two 32-bit values DESTINATION = SOURCE1 + SOURCE2
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opADD32(IExpression<Data32> SOURCE1, IExpression<Data32> SOURCE2, IExpression<Data32> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.ADD32, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Add two floating point values DESTINATION = SOURCE1 + SOURCE2
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opADDF(IExpression<DataFloat> SOURCE1, IExpression<DataFloat> SOURCE2, IExpression<DataFloat> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.ADDF, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Subtract two 8 bit values DESTINATION = SOURCE1 - SOURCE2
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opSUB8(IExpression<Data8> SOURCE1, IExpression<Data8> SOURCE2, IExpression<Data8> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.SUB8, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Subtract two 16 bit values DESTINATION = SOURCE1 - SOURCE2
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opSUB16(IExpression<Data16> SOURCE1, IExpression<Data16> SOURCE2, IExpression<Data16> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.SUB16, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Subtract two 32 bit values DESTINATION = SOURCE1 - SOURCE2
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opSUB32(IExpression<Data32> SOURCE1, IExpression<Data32> SOURCE2, IExpression<Data32> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.SUB32, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Subtract two floating point values DESTINATION = SOURCE1 - SOURCE2
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opSUBF(IExpression<DataFloat> SOURCE1, IExpression<DataFloat> SOURCE2, IExpression<DataFloat> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.SUBF, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Multiply two 8 bit values DESTINATION = SOURCE1 * SOURCE2
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opMUL8(IExpression<Data8> SOURCE1, IExpression<Data8> SOURCE2, IExpression<Data8> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.MUL8, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Multiply two 16 bit values DESTINATION = SOURCE1 * SOURCE2
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opMUL16(IExpression<Data16> SOURCE1, IExpression<Data16> SOURCE2, IExpression<Data16> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.MUL16, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Multiply two 32 bit values DESTINATION = SOURCE1 * SOURCE2
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opMUL32(IExpression<Data32> SOURCE1, IExpression<Data32> SOURCE2, IExpression<Data32> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.MUL32, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Multiply two floating point values DESTINATION = SOURCE1 * SOURCE2
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opMULF(IExpression<DataFloat> SOURCE1, IExpression<DataFloat> SOURCE2, IExpression<DataFloat> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.MULF, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Divide two 8 bit values DESTINATION = SOURCE1 / SOURCE2
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opDIV8(IExpression<Data8> SOURCE1, IExpression<Data8> SOURCE2, IExpression<Data8> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.DIV8, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Divide two 16 bit values DESTINATION = SOURCE1 / SOURCE2
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opDIV16(IExpression<Data16> SOURCE1, IExpression<Data16> SOURCE2, IExpression<Data16> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.DIV16, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Divide two 32 bit values DESTINATION = SOURCE1 / SOURCE2
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opDIV32(IExpression<Data32> SOURCE1, IExpression<Data32> SOURCE2, IExpression<Data32> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.DIV32, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Divide two floating point values DESTINATION = SOURCE1 / SOURCE2
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opDIVF(IExpression<DataFloat> SOURCE1, IExpression<DataFloat> SOURCE2, IExpression<DataFloat> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.DIVF, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Or two 8 bit values DESTINATION = SOURCE1 | SOURCE2
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opOR8(IExpression<Data8> SOURCE1, IExpression<Data8> SOURCE2, IExpression<Data8> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.OR8, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Or two 16 bit values DESTINATION = SOURCE1 | SOURCE2
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opOR16(IExpression<Data16> SOURCE1, IExpression<Data16> SOURCE2, IExpression<Data16> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.OR16, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Or two 32 bit values DESTINATION = SOURCE1 | SOURCE2
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opOR32(IExpression<Data32> SOURCE1, IExpression<Data32> SOURCE2, IExpression<Data32> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.OR32, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// And two 8 bit values DESTINATION = SOURCE1 &amp; SOURCE2
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opAND8(IExpression<Data8> SOURCE1, IExpression<Data8> SOURCE2, IExpression<Data8> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.AND8, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// And two 16 bit values DESTINATION = SOURCE1 &amp; SOURCE2
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opAND16(IExpression<Data16> SOURCE1, IExpression<Data16> SOURCE2, IExpression<Data16> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.AND16, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// And two 32 bit values DESTINATION = SOURCE1 &amp; SOURCE2
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opAND32(IExpression<Data32> SOURCE1, IExpression<Data32> SOURCE2, IExpression<Data32> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.AND32, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Exclusive or two 8 bit values DESTINATION = SOURCE1 ^ SOURCE2
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opXOR8(IExpression<Data8> SOURCE1, IExpression<Data8> SOURCE2, IExpression<Data8> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.XOR8, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Exclusive or two 16 bit values DESTINATION = SOURCE1 ^ SOURCE2
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opXOR16(IExpression<Data16> SOURCE1, IExpression<Data16> SOURCE2, IExpression<Data16> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.XOR16, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Exclusive or two 32 bit values DESTINATION = SOURCE1 ^ SOURCE2
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opXOR32(IExpression<Data32> SOURCE1, IExpression<Data32> SOURCE2, IExpression<Data32> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.XOR32, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Rotate left 8 bit value DESTINATION = SOURCE1 &lt;&lt; SOURCE2
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opRL8(IExpression<Data8> SOURCE1, IExpression<Data8> SOURCE2, IExpression<Data8> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.RL8, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Rotate left 16 bit value DESTINATION = SOURCE1 &lt;&lt; SOURCE2
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opRL16(IExpression<Data16> SOURCE1, IExpression<Data16> SOURCE2, IExpression<Data16> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.RL16, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Rotate left 32 bit value DESTINATION = SOURCE1 &lt;&lt; SOURCE2
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opRL32(IExpression<Data32> SOURCE1, IExpression<Data32> SOURCE2, IExpression<Data32> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.RL32, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Move LENGTH number of DATA8 from BYTE STREAM to memory DESTINATION START
-		/// </summary>
-		/// <param name="DESTINATION">First element in DATA8 array to be initiated</param>
-		/// <param name="LENGTH">Number of elements to initiate</param>
-		/// <param name="SOURCE">First element to initiate DATA8 array with</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opINIT_BYTES(IExpression<Data8> DESTINATION, IExpression<Data32> LENGTH, params IExpression<Data8>[] SOURCE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.AddRange(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
-			return new Opcode(OpcodeValue.INIT_BYTES, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Move 8 bit value from SOURCE to DESTINATION
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opMOVE8_8(IExpression<Data8> SOURCE, IExpression<Data8> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.MOVE8_8, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Move 8 bit value from SOURCE to DESTINATION
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opMOVE8_16(IExpression<Data8> SOURCE, IExpression<Data16> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.MOVE8_16, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Move 8 bit value from SOURCE to DESTINATION
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opMOVE8_32(IExpression<Data8> SOURCE, IExpression<Data32> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.MOVE8_32, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Move 8 bit value from SOURCE to DESTINATION
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opMOVE8_F(IExpression<Data8> SOURCE, IExpression<DataFloat> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.MOVE8_F, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Move 16 bit value from SOURCE to DESTINATION
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opMOVE16_8(IExpression<Data16> SOURCE, IExpression<Data8> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.MOVE16_8, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Move 16 bit value from SOURCE to DESTINATION
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opMOVE16_16(IExpression<Data16> SOURCE, IExpression<Data16> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.MOVE16_16, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Move 16 bit value from SOURCE to DESTINATION
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opMOVE16_32(IExpression<Data16> SOURCE, IExpression<Data32> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.MOVE16_32, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Move 16 bit value from SOURCE to DESTINATION
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opMOVE16_F(IExpression<Data16> SOURCE, IExpression<DataFloat> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.MOVE16_F, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Move 32 bit value from SOURCE to DESTINATION
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opMOVE32_8(IExpression<Data32> SOURCE, IExpression<Data8> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.MOVE32_8, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Move 32 bit value from SOURCE to DESTINATION
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opMOVE32_16(IExpression<Data32> SOURCE, IExpression<Data16> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.MOVE32_16, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Move 32 bit value from SOURCE to DESTINATION
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opMOVE32_32(IExpression<Data32> SOURCE, IExpression<Data32> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.MOVE32_32, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Move 32 bit value from SOURCE to DESTINATION
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opMOVE32_F(IExpression<Data32> SOURCE, IExpression<DataFloat> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.MOVE32_F, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Move floating point value from SOURCE to DESTINATION
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opMOVEF_8(IExpression<DataFloat> SOURCE, IExpression<Data8> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.MOVEF_8, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Move floating point value from SOURCE to DESTINATION
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opMOVEF_16(IExpression<DataFloat> SOURCE, IExpression<Data16> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.MOVEF_16, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Move floating point value from SOURCE to DESTINATION
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opMOVEF_32(IExpression<DataFloat> SOURCE, IExpression<Data32> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.MOVEF_32, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Move floating point value from SOURCE to DESTINATION
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opMOVEF_F(IExpression<DataFloat> SOURCE, IExpression<DataFloat> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.MOVEF_F, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Branch unconditionally relative
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opJR(IExpression<DataLabel> OFFSET)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
-			return new Opcode(OpcodeValue.JR, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Branch relative if FLAG is FALSE (zero)
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opJR_FALSE(IExpression<Data8> FLAG, IExpression<DataLabel> OFFSET)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
-			parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
-			return new Opcode(OpcodeValue.JR_FALSE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Branch relative if FLAG is TRUE (non zero)
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opJR_TRUE(IExpression<Data8> FLAG, IExpression<DataLabel> OFFSET)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
-			parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
-			return new Opcode(OpcodeValue.JR_TRUE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Branch relative if VALUE is NAN (not a number)
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opJR_NAN(IExpression<DataFloat> VALUE, IExpression<DataLabel> OFFSET)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
-			return new Opcode(OpcodeValue.JR_NAN, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// If LEFT is less than RIGTH - set FLAG
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opCP_LT8(IExpression<Data8> LEFT, IExpression<Data8> RIGHT, IExpression<Data8> FLAG)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
-			return new Opcode(OpcodeValue.CP_LT8, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// If LEFT is less than RIGTH - set FLAG
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opCP_LT16(IExpression<Data16> LEFT, IExpression<Data16> RIGHT, IExpression<Data8> FLAG)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
-			return new Opcode(OpcodeValue.CP_LT16, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// If LEFT is less than RIGTH - set FLAG
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opCP_LT32(IExpression<Data32> LEFT, IExpression<Data32> RIGHT, IExpression<Data8> FLAG)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
-			return new Opcode(OpcodeValue.CP_LT32, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// If LEFT is less than RIGTH - set FLAG
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opCP_LTF(IExpression<DataFloat> LEFT, IExpression<DataFloat> RIGHT, IExpression<Data8> FLAG)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
-			return new Opcode(OpcodeValue.CP_LTF, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// If LEFT is greater than RIGTH - set FLAG
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opCP_GT8(IExpression<Data8> LEFT, IExpression<Data8> RIGHT, IExpression<Data8> FLAG)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
-			return new Opcode(OpcodeValue.CP_GT8, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// If LEFT is greater than RIGTH - set FLAG
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opCP_GT16(IExpression<Data16> LEFT, IExpression<Data16> RIGHT, IExpression<Data8> FLAG)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
-			return new Opcode(OpcodeValue.CP_GT16, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// If LEFT is greater than RIGTH - set FLAG
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opCP_GT32(IExpression<Data32> LEFT, IExpression<Data32> RIGHT, IExpression<Data8> FLAG)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
-			return new Opcode(OpcodeValue.CP_GT32, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// If LEFT is greater than RIGTH - set FLAG
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opCP_GTF(IExpression<DataFloat> LEFT, IExpression<DataFloat> RIGHT, IExpression<Data8> FLAG)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
-			return new Opcode(OpcodeValue.CP_GTF, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// If LEFT is equal to RIGTH - set FLAG
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opCP_EQ8(IExpression<Data8> LEFT, IExpression<Data8> RIGHT, IExpression<Data8> FLAG)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
-			return new Opcode(OpcodeValue.CP_EQ8, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// If LEFT is equal to RIGTH - set FLAG
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opCP_EQ16(IExpression<Data16> LEFT, IExpression<Data16> RIGHT, IExpression<Data8> FLAG)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
-			return new Opcode(OpcodeValue.CP_EQ16, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// If LEFT is equal to RIGTH - set FLAG
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opCP_EQ32(IExpression<Data32> LEFT, IExpression<Data32> RIGHT, IExpression<Data8> FLAG)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
-			return new Opcode(OpcodeValue.CP_EQ32, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// If LEFT is equal to RIGTH - set FLAG
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opCP_EQF(IExpression<DataFloat> LEFT, IExpression<DataFloat> RIGHT, IExpression<Data8> FLAG)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
-			return new Opcode(OpcodeValue.CP_EQF, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// If LEFT is not equal to RIGTH - set FLAG
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opCP_NEQ8(IExpression<Data8> LEFT, IExpression<Data8> RIGHT, IExpression<Data8> FLAG)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
-			return new Opcode(OpcodeValue.CP_NEQ8, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// If LEFT is not equal to RIGTH - set FLAG
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opCP_NEQ16(IExpression<Data16> LEFT, IExpression<Data16> RIGHT, IExpression<Data8> FLAG)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
-			return new Opcode(OpcodeValue.CP_NEQ16, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// If LEFT is not equal to RIGTH - set FLAG
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opCP_NEQ32(IExpression<Data32> LEFT, IExpression<Data32> RIGHT, IExpression<Data8> FLAG)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
-			return new Opcode(OpcodeValue.CP_NEQ32, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// If LEFT is not equal to RIGTH - set FLAG
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opCP_NEQF(IExpression<DataFloat> LEFT, IExpression<DataFloat> RIGHT, IExpression<Data8> FLAG)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
-			return new Opcode(OpcodeValue.CP_NEQF, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// If LEFT is less than or equal to RIGTH - set FLAG
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opCP_LTEQ8(IExpression<Data8> LEFT, IExpression<Data8> RIGHT, IExpression<Data8> FLAG)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
-			return new Opcode(OpcodeValue.CP_LTEQ8, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// If LEFT is less than or equal to RIGTH - set FLAG
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opCP_LTEQ16(IExpression<Data16> LEFT, IExpression<Data16> RIGHT, IExpression<Data8> FLAG)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
-			return new Opcode(OpcodeValue.CP_LTEQ16, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// If LEFT is less than or equal to RIGTH - set FLAG
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opCP_LTEQ32(IExpression<Data32> LEFT, IExpression<Data32> RIGHT, IExpression<Data8> FLAG)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
-			return new Opcode(OpcodeValue.CP_LTEQ32, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// If LEFT is less than or equal to RIGTH - set FLAG
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opCP_LTEQF(IExpression<DataFloat> LEFT, IExpression<DataFloat> RIGHT, IExpression<Data8> FLAG)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
-			return new Opcode(OpcodeValue.CP_LTEQF, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// If LEFT is greater than or equal to RIGTH - set FLAG
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opCP_GTEQ8(IExpression<Data8> LEFT, IExpression<Data8> RIGHT, IExpression<Data8> FLAG)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
-			return new Opcode(OpcodeValue.CP_GTEQ8, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// If LEFT is greater than or equal to RIGTH - set FLAG
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opCP_GTEQ16(IExpression<Data16> LEFT, IExpression<Data16> RIGHT, IExpression<Data8> FLAG)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
-			return new Opcode(OpcodeValue.CP_GTEQ16, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// If LEFT is greater than or equal to RIGTH - set FLAG
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opCP_GTEQ32(IExpression<Data32> LEFT, IExpression<Data32> RIGHT, IExpression<Data8> FLAG)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
-			return new Opcode(OpcodeValue.CP_GTEQ32, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// If LEFT is greater than or equal to RIGTH - set FLAG
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opCP_GTEQF(IExpression<DataFloat> LEFT, IExpression<DataFloat> RIGHT, IExpression<Data8> FLAG)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
-			return new Opcode(OpcodeValue.CP_GTEQF, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// If FLAG is set move SOURCE1 to RESULT else move SOURCE2 to RESULT
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opSELECT8(IExpression<Data8> FLAG, IExpression<Data8> SOURCE1, IExpression<Data8> SOURCE2, IExpression<Data8> RESULT)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
-			parameterList.Add(RESULT ?? throw new ArgumentNullException(nameof(RESULT)));
-			return new Opcode(OpcodeValue.SELECT8, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// If FLAG is set move SOURCE1 to RESULT else move SOURCE2 to RESULT
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opSELECT16(IExpression<Data8> FLAG, IExpression<Data16> SOURCE1, IExpression<Data16> SOURCE2, IExpression<Data16> RESULT)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
-			parameterList.Add(RESULT ?? throw new ArgumentNullException(nameof(RESULT)));
-			return new Opcode(OpcodeValue.SELECT16, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// If FLAG is set move SOURCE1 to RESULT else move SOURCE2 to RESULT
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opSELECT32(IExpression<Data8> FLAG, IExpression<Data32> SOURCE1, IExpression<Data32> SOURCE2, IExpression<Data32> RESULT)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
-			parameterList.Add(RESULT ?? throw new ArgumentNullException(nameof(RESULT)));
-			return new Opcode(OpcodeValue.SELECT32, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// If FLAG is set move SOURCE1 to RESULT else move SOURCE2 to RESULT
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opSELECTF(IExpression<Data8> FLAG, IExpression<DataFloat> SOURCE1, IExpression<DataFloat> SOURCE2, IExpression<DataFloat> RESULT)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
-			parameterList.Add(RESULT ?? throw new ArgumentNullException(nameof(RESULT)));
-			return new Opcode(OpcodeValue.SELECTF, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Executes a system command
-		/// </summary>
-		/// <param name="COMMAND">Command string (HND)</param>
-		/// <param name="STATUS">Return status of the command</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opSYSTEM(IExpression<DataString> COMMAND, IExpression<Data32> STATUS)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(COMMAND ?? throw new ArgumentNullException(nameof(COMMAND)));
-			parameterList.Add(STATUS ?? throw new ArgumentNullException(nameof(STATUS)));
-			return new Opcode(OpcodeValue.SYSTEM, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Convert encoded port to Layer and Bitfield
-		/// </summary>
-		/// <param name="PortIn">EncodedPortNumber</param>
-		/// <param name="Layer">Layer</param>
-		/// <param name="Bitfield">Bitfield</param>
-		/// <param name="Inverted">yes if left/right motor are inverted (ie, C&amp;A)</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opPORT_CNV_OUTPUT(IExpression<Data32> PortIn, IExpression<Data8> Layer, IExpression<Data8> Bitfield, IExpression<Data8> Inverted)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(PortIn ?? throw new ArgumentNullException(nameof(PortIn)));
-			parameterList.Add(Layer ?? throw new ArgumentNullException(nameof(Layer)));
-			parameterList.Add(Bitfield ?? throw new ArgumentNullException(nameof(Bitfield)));
-			parameterList.Add(Inverted ?? throw new ArgumentNullException(nameof(Inverted)));
-			return new Opcode(OpcodeValue.PORT_CNV_OUTPUT, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Convert encoded port to Layer and Port
-		/// </summary>
-		/// <param name="PortIn">EncodedPortNumber</param>
-		/// <param name="Layer">Layer</param>
-		/// <param name="PortOut">0-index port for use with VM commands</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opPORT_CNV_INPUT(IExpression<Data32> PortIn, IExpression<Data8> Layer, IExpression<Data8> PortOut)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(PortIn ?? throw new ArgumentNullException(nameof(PortIn)));
-			parameterList.Add(Layer ?? throw new ArgumentNullException(nameof(Layer)));
-			parameterList.Add(PortOut ?? throw new ArgumentNullException(nameof(PortOut)));
-			return new Opcode(OpcodeValue.PORT_CNV_INPUT, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Convert note to tone
-		/// </summary>
-		/// <param name="NOTE">Note string (HND) (e.c. "C#4")</param>
-		/// <param name="FREQ">Frequency [Hz]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opNOTE_TO_FREQ(IExpression<DataString> NOTE, IExpression<Data16> FREQ)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(NOTE ?? throw new ArgumentNullException(nameof(NOTE)));
-			parameterList.Add(FREQ ?? throw new ArgumentNullException(nameof(FREQ)));
-			return new Opcode(OpcodeValue.NOTE_TO_FREQ, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Branch relative OFFSET if LEFT is less than RIGHT
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opJR_LT8(IExpression<Data8> LEFT, IExpression<Data8> RIGHT, IExpression<DataLabel> OFFSET)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
-			return new Opcode(OpcodeValue.JR_LT8, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Branch relative OFFSET if LEFT is less than RIGHT
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opJR_LT16(IExpression<Data16> LEFT, IExpression<Data16> RIGHT, IExpression<DataLabel> OFFSET)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
-			return new Opcode(OpcodeValue.JR_LT16, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Branch relative OFFSET if LEFT is less than RIGHT
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opJR_LT32(IExpression<Data32> LEFT, IExpression<Data32> RIGHT, IExpression<DataLabel> OFFSET)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
-			return new Opcode(OpcodeValue.JR_LT32, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Branch relative OFFSET if LEFT is less than RIGHT
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opJR_LTF(IExpression<DataFloat> LEFT, IExpression<DataFloat> RIGHT, IExpression<DataLabel> OFFSET)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
-			return new Opcode(OpcodeValue.JR_LTF, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Branch relative OFFSET if LEFT is greater than RIGHT
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opJR_GT8(IExpression<Data8> LEFT, IExpression<Data8> RIGHT, IExpression<DataLabel> OFFSET)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
-			return new Opcode(OpcodeValue.JR_GT8, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Branch relative OFFSET if LEFT is greater than RIGHT
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opJR_GT16(IExpression<Data16> LEFT, IExpression<Data16> RIGHT, IExpression<DataLabel> OFFSET)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
-			return new Opcode(OpcodeValue.JR_GT16, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Branch relative OFFSET if LEFT is greater than RIGHT
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opJR_GT32(IExpression<Data32> LEFT, IExpression<Data32> RIGHT, IExpression<DataLabel> OFFSET)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
-			return new Opcode(OpcodeValue.JR_GT32, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Branch relative OFFSET if LEFT is greater than RIGHT
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opJR_GTF(IExpression<DataFloat> LEFT, IExpression<DataFloat> RIGHT, IExpression<DataLabel> OFFSET)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
-			return new Opcode(OpcodeValue.JR_GTF, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Branch relative OFFSET if LEFT is equal to RIGHT
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opJR_EQ8(IExpression<Data8> LEFT, IExpression<Data8> RIGHT, IExpression<DataLabel> OFFSET)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
-			return new Opcode(OpcodeValue.JR_EQ8, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Branch relative OFFSET if LEFT is equal to RIGHT
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opJR_EQ16(IExpression<Data16> LEFT, IExpression<Data16> RIGHT, IExpression<DataLabel> OFFSET)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
-			return new Opcode(OpcodeValue.JR_EQ16, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Branch relative OFFSET if LEFT is equal to RIGHT
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opJR_EQ32(IExpression<Data32> LEFT, IExpression<Data32> RIGHT, IExpression<DataLabel> OFFSET)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
-			return new Opcode(OpcodeValue.JR_EQ32, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Branch relative OFFSET if LEFT is equal to RIGHT
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opJR_EQF(IExpression<DataFloat> LEFT, IExpression<DataFloat> RIGHT, IExpression<DataLabel> OFFSET)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
-			return new Opcode(OpcodeValue.JR_EQF, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Branch relative OFFSET if LEFT is not equal to RIGHT
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opJR_NEQ8(IExpression<Data8> LEFT, IExpression<Data8> RIGHT, IExpression<DataLabel> OFFSET)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
-			return new Opcode(OpcodeValue.JR_NEQ8, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Branch relative OFFSET if LEFT is not equal to RIGHT
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opJR_NEQ16(IExpression<Data16> LEFT, IExpression<Data16> RIGHT, IExpression<DataLabel> OFFSET)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
-			return new Opcode(OpcodeValue.JR_NEQ16, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Branch relative OFFSET if LEFT is not equal to RIGHT
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opJR_NEQ32(IExpression<Data32> LEFT, IExpression<Data32> RIGHT, IExpression<DataLabel> OFFSET)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
-			return new Opcode(OpcodeValue.JR_NEQ32, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Branch relative OFFSET if LEFT is not equal to RIGHT
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opJR_NEQF(IExpression<DataFloat> LEFT, IExpression<DataFloat> RIGHT, IExpression<DataLabel> OFFSET)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
-			return new Opcode(OpcodeValue.JR_NEQF, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Branch relative OFFSET if LEFT is less than or equal to RIGHT
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opJR_LTEQ8(IExpression<Data8> LEFT, IExpression<Data8> RIGHT, IExpression<DataLabel> OFFSET)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
-			return new Opcode(OpcodeValue.JR_LTEQ8, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Branch relative OFFSET if LEFT is less than or equal to RIGHT
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opJR_LTEQ16(IExpression<Data16> LEFT, IExpression<Data16> RIGHT, IExpression<DataLabel> OFFSET)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
-			return new Opcode(OpcodeValue.JR_LTEQ16, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Branch relative OFFSET if LEFT is less than or equal to RIGHT
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opJR_LTEQ32(IExpression<Data32> LEFT, IExpression<Data32> RIGHT, IExpression<DataLabel> OFFSET)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
-			return new Opcode(OpcodeValue.JR_LTEQ32, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Branch relative OFFSET if LEFT is less than or equal to RIGHT
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opJR_LTEQF(IExpression<DataFloat> LEFT, IExpression<DataFloat> RIGHT, IExpression<DataLabel> OFFSET)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
-			return new Opcode(OpcodeValue.JR_LTEQF, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Branch relative OFFSET if LEFT is greater than or equal to RIGHT
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opJR_GTEQ8(IExpression<Data8> LEFT, IExpression<Data8> RIGHT, IExpression<DataLabel> OFFSET)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
-			return new Opcode(OpcodeValue.JR_GTEQ8, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Branch relative OFFSET if LEFT is greater than or equal to RIGHT
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opJR_GTEQ16(IExpression<Data16> LEFT, IExpression<Data16> RIGHT, IExpression<DataLabel> OFFSET)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
-			return new Opcode(OpcodeValue.JR_GTEQ16, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Branch relative OFFSET if LEFT is greater than or equal to RIGHT
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opJR_GTEQ32(IExpression<Data32> LEFT, IExpression<Data32> RIGHT, IExpression<DataLabel> OFFSET)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
-			return new Opcode(OpcodeValue.JR_GTEQ32, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Branch relative OFFSET if LEFT is greater than or equal to RIGHT
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opJR_GTEQF(IExpression<DataFloat> LEFT, IExpression<DataFloat> RIGHT, IExpression<DataLabel> OFFSET)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
-			parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
-			parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
-			return new Opcode(OpcodeValue.JR_GTEQF, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Info functions entry
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opINFO(INFOSubcommand CMD)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
-			return new Opcode(OpcodeValue.INFO, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// String function entry
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opSTRINGS(STRINGSSubcommand CMD)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
-			return new Opcode(OpcodeValue.STRINGS, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Write VM memory
-		/// </summary>
-		/// <param name="PRGID">Program slot number (must be running)</param>
-		/// <param name="OBJID">Object id (zero means globals)</param>
-		/// <param name="OFFSET">Offset (start from)</param>
-		/// <param name="SIZE">Size (length of array to write)</param>
-		/// <param name="ARRAY">First element of DATA8 array to write</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opMEMORY_WRITE(IExpression<Data16> PRGID, IExpression<Data16> OBJID, IExpression<Data32> OFFSET, IExpression<Data32> SIZE, IExpression<Data8> ARRAY)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
-			parameterList.Add(OBJID ?? throw new ArgumentNullException(nameof(OBJID)));
-			parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
-			parameterList.Add(SIZE ?? throw new ArgumentNullException(nameof(SIZE)));
-			parameterList.Add(ARRAY ?? throw new ArgumentNullException(nameof(ARRAY)));
-			return new Opcode(OpcodeValue.MEMORY_WRITE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Read VM memory
-		/// </summary>
-		/// <param name="PRGID">Program slot number (must be running)</param>
-		/// <param name="OBJID">Object id (zero means globals)</param>
-		/// <param name="OFFSET">Offset (start from)</param>
-		/// <param name="SIZE">Size (length of array to read)</param>
-		/// <param name="ARRAY">First element of DATA8 array to receive data</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opMEMORY_READ(IExpression<Data16> PRGID, IExpression<Data16> OBJID, IExpression<Data32> OFFSET, IExpression<Data32> SIZE, IExpression<Data8> ARRAY)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
-			parameterList.Add(OBJID ?? throw new ArgumentNullException(nameof(OBJID)));
-			parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
-			parameterList.Add(SIZE ?? throw new ArgumentNullException(nameof(SIZE)));
-			parameterList.Add(ARRAY ?? throw new ArgumentNullException(nameof(ARRAY)));
-			return new Opcode(OpcodeValue.MEMORY_READ, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// User Interface flush buffers
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opUI_FLUSH()
-		{
-			var parameterList = new List<IByteCode>();
-			return new Opcode(OpcodeValue.UI_FLUSH, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// User Interface read
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opUI_READ(UI_READSubcommand CMD)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
-			return new Opcode(OpcodeValue.UI_READ, parameterList.ToArray());
-		}
-
-		/// <remarks>
-		/// Dispatch status can change to BUSYBREAK and FAILBREAK
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opUI_WRITE(UI_WRITESubcommand CMD)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
-			return new Opcode(OpcodeValue.UI_WRITE, parameterList.ToArray());
-		}
-
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opUI_BUTTON(UI_BUTTONSubcommand CMD)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
-			return new Opcode(OpcodeValue.UI_BUTTON, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// UI draw
-		/// </summary>
-		/// <remarks>
-		/// Dispatch status can change to BUSYBREAK
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opUI_DRAW(UI_DRAWSubcommand CMD)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
-			return new Opcode(OpcodeValue.UI_DRAW, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Setup timer to wait TIME mS
-		/// </summary>
-		/// <param name="TIME">Time to wait [mS]</param>
-		/// <param name="TIMER">Variable used for timing</param>
-		/// <remarks>
-		/// Dispatch status unchanged
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opTIMER_WAIT(IExpression<Data32> TIME, IExpression<Data32> TIMER)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(TIME ?? throw new ArgumentNullException(nameof(TIME)));
-			parameterList.Add(TIMER ?? throw new ArgumentNullException(nameof(TIMER)));
-			return new Opcode(OpcodeValue.TIMER_WAIT, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Wait for timer ready (wait for timeout)
-		/// </summary>
-		/// <param name="TIMER">Variable used for timing</param>
-		/// <remarks>
-		/// Dispatch status can change to BUSYBREAK
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opTIMER_READY(IExpression<Data32> TIMER)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(TIMER ?? throw new ArgumentNullException(nameof(TIMER)));
-			return new Opcode(OpcodeValue.TIMER_READY, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Read free running timer [mS]
-		/// </summary>
-		/// <param name="TIME">Value</param>
-		/// <remarks>
-		/// Dispatch status unchanged
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opTIMER_READ(IExpression<Data32> TIME)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(TIME ?? throw new ArgumentNullException(nameof(TIME)));
-			return new Opcode(OpcodeValue.TIMER_READ, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Display globals or object locals on terminal
-		/// </summary>
-		/// <remarks>
-		/// Removes it self when done
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opBP0()
-		{
-			var parameterList = new List<IByteCode>();
-			return new Opcode(OpcodeValue.BP0, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Display globals or object locals on terminal
-		/// </summary>
-		/// <remarks>
-		/// Removes it self when done
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opBP1()
-		{
-			var parameterList = new List<IByteCode>();
-			return new Opcode(OpcodeValue.BP1, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Display globals or object locals on terminal
-		/// </summary>
-		/// <remarks>
-		/// Removes it self when done
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opBP2()
-		{
-			var parameterList = new List<IByteCode>();
-			return new Opcode(OpcodeValue.BP2, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Display globals or object locals on terminal
-		/// </summary>
-		/// <remarks>
-		/// Removes it self when done
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opBP3()
-		{
-			var parameterList = new List<IByteCode>();
-			return new Opcode(OpcodeValue.BP3, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Set break point in byte code program
-		/// </summary>
-		/// <param name="PRGID">Program slot number</param>
-		/// <param name="NO">Breakpoint number [0..2] (3 = trigger out on TP4)</param>
-		/// <param name="ADDRESS">Address (Offset from start of image) (0 = remove breakpoint)</param>
-		/// <remarks>
-		/// TP4 is only present on pre-release EV3 hardware
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opBP_SET(IExpression<Data16> PRGID, IExpression<Data8> NO, IExpression<Data32> ADDRESS)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			parameterList.Add(ADDRESS ?? throw new ArgumentNullException(nameof(ADDRESS)));
-			return new Opcode(OpcodeValue.BP_SET, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Math function entry
-		/// </summary>
-		/// <param name="CMD">Specific command parameter</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opMATH(MATHSubcommand CMD)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
-			return new Opcode(OpcodeValue.MATH, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Get random value
-		/// </summary>
-		/// <param name="MIN">Minimum value</param>
-		/// <param name="MAX">Maximum value</param>
-		/// <param name="VALUE">value</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opRANDOM(IExpression<Data16> MIN, IExpression<Data16> MAX, IExpression<Data16> VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(MIN ?? throw new ArgumentNullException(nameof(MIN)));
-			parameterList.Add(MAX ?? throw new ArgumentNullException(nameof(MAX)));
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new Opcode(OpcodeValue.RANDOM, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Read free running timer [uS]
-		/// </summary>
-		/// <param name="TIME">Value</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opTIMER_READ_US(IExpression<Data32> TIME)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(TIME ?? throw new ArgumentNullException(nameof(TIME)));
-			return new Opcode(OpcodeValue.TIMER_READ_US, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Keep alive
-		/// </summary>
-		/// <param name="MINUTES">Number of minutes before sleep</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opKEEP_ALIVE(IExpression<Data8> MINUTES)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(MINUTES ?? throw new ArgumentNullException(nameof(MINUTES)));
-			return new Opcode(OpcodeValue.KEEP_ALIVE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Communication read
-		/// </summary>
-		/// <remarks>
-		/// Dispatch status unchanged
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opCOM_READ(COM_READSubcommand CMD)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
-			return new Opcode(OpcodeValue.COM_READ, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Communication write
-		/// </summary>
-		/// <remarks>
-		/// Dispatch status unchanged
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opCOM_WRITE(COM_WRITESubcommand CMD)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
-			return new Opcode(OpcodeValue.COM_WRITE, parameterList.ToArray());
-		}
-
-		/// <remarks>
-		/// Dispatch status unchanged
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opSOUND(SOUNDSubcommand CMD)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
-			return new Opcode(OpcodeValue.SOUND, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Test if sound busy (playing file or tone
-		/// </summary>
-		/// <param name="BUSY">Sound busy flag (0 = ready, 1 = busy)</param>
-		/// <remarks>
-		/// Dispatch status unchanged
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opSOUND_TEST(IExpression<Data8> BUSY)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(BUSY ?? throw new ArgumentNullException(nameof(BUSY)));
-			return new Opcode(OpcodeValue.SOUND_TEST, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Wait for sound ready (wait until sound finished)
-		/// </summary>
-		/// <remarks>
-		/// Dispatch status can change to BUSYBREAK
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opSOUND_READY()
-		{
-			var parameterList = new List<IByteCode>();
-			return new Opcode(OpcodeValue.SOUND_READY, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Sample devices
-		/// </summary>
-		/// <param name="TIME">Sample time [mS]</param>
-		/// <param name="SAMPLES">Number of samples</param>
-		/// <param name="INIT">DATA16 array (handle) - to start/reset buffer -&gt; fill array with -1 otherwise don't change</param>
-		/// <param name="DEVICES">DATA8 array (handle) with devices to sample</param>
-		/// <param name="TYPES">DATA8 array (handle) with types</param>
-		/// <param name="MODES">DATA8 array (handle) with modes</param>
-		/// <param name="DATASETS">DATA8 array (handle) with data sets</param>
-		/// <param name="VALUES">DATAF array (handle) with values</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opINPUT_SAMPLE(IExpression<Data32> TIME, IExpression<Data16> SAMPLES, IExpression<Data16> INIT, IExpression<Data8> DEVICES, IExpression<Data8> TYPES, IExpression<Data8> MODES, IExpression<Data8> DATASETS, IExpression<DataFloat> VALUES)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(TIME ?? throw new ArgumentNullException(nameof(TIME)));
-			parameterList.Add(SAMPLES ?? throw new ArgumentNullException(nameof(SAMPLES)));
-			parameterList.Add(INIT ?? throw new ArgumentNullException(nameof(INIT)));
-			parameterList.Add(DEVICES ?? throw new ArgumentNullException(nameof(DEVICES)));
-			parameterList.Add(TYPES ?? throw new ArgumentNullException(nameof(TYPES)));
-			parameterList.Add(MODES ?? throw new ArgumentNullException(nameof(MODES)));
-			parameterList.Add(DATASETS ?? throw new ArgumentNullException(nameof(DATASETS)));
-			parameterList.Add(VALUES ?? throw new ArgumentNullException(nameof(VALUES)));
-			return new Opcode(OpcodeValue.INPUT_SAMPLE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Read all available devices on input and output(chain)
-		/// </summary>
-		/// <param name="LENGTH">Maximum number of device types (normally 32)</param>
-		/// <param name="ARRAY">First element of DATA8 array of types (normally 32)</param>
-		/// <param name="CHANGED">Changed status</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opINPUT_DEVICE_LIST(IExpression<Data8> LENGTH, IExpression<Data8> ARRAY, IExpression<Data8> CHANGED)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(ARRAY ?? throw new ArgumentNullException(nameof(ARRAY)));
-			parameterList.Add(CHANGED ?? throw new ArgumentNullException(nameof(CHANGED)));
-			return new Opcode(OpcodeValue.INPUT_DEVICE_LIST, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Read information about device
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opINPUT_DEVICE(INPUT_DEVICESubcommand CMD)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
-			return new Opcode(OpcodeValue.INPUT_DEVICE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Read device value in Percent
-		/// </summary>
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NO">Port number</param>
-		/// <param name="TYPE">Device type id (0 = don't change type)</param>
-		/// <param name="MODE">Device mode [0..7] (-1 = don't change mode)</param>
-		/// <param name="PCT">Percent value from device</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opINPUT_READ(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> TYPE, IExpression<Data8> MODE, IExpression<Data8> PCT)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
-			parameterList.Add(MODE ?? throw new ArgumentNullException(nameof(MODE)));
-			parameterList.Add(PCT ?? throw new ArgumentNullException(nameof(PCT)));
-			return new Opcode(OpcodeValue.INPUT_READ, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Test if device busy (changing type or mode)
-		/// </summary>
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NO">Port number</param>
-		/// <param name="BUSY">Device busy flag (0 = ready, 1 = busy)</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opINPUT_TEST(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> BUSY)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			parameterList.Add(BUSY ?? throw new ArgumentNullException(nameof(BUSY)));
-			return new Opcode(OpcodeValue.INPUT_TEST, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Wait for device ready (wait for valid data)
-		/// </summary>
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NO">Port number</param>
-		/// <remarks>
-		/// Dispatch status can change to BUSYBREAK
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opINPUT_READY(IExpression<Data8> LAYER, IExpression<Data8> NO)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			return new Opcode(OpcodeValue.INPUT_READY, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Read device value in SI units
-		/// </summary>
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NO">Port number</param>
-		/// <param name="TYPE">Device type id (0 = don't change type)</param>
-		/// <param name="MODE">Device mode [0..7] (-1 = don't change mode)</param>
-		/// <param name="SI">SI unit value from device</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opINPUT_READSI(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> TYPE, IExpression<Data8> MODE, IExpression<DataFloat> SI)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
-			parameterList.Add(MODE ?? throw new ArgumentNullException(nameof(MODE)));
-			parameterList.Add(SI ?? throw new ArgumentNullException(nameof(SI)));
-			return new Opcode(OpcodeValue.INPUT_READSI, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Read device value
-		/// </summary>
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NO">Port number</param>
-		/// <param name="TYPE">Device type id (0 = don't change type)</param>
-		/// <param name="MODE">Device mode [0..7] (-1 = don't change mode)</param>
-		/// <param name="FORMAT">Format (PCT, RAW, SI ...)</param>
-		/// <param name="VALUES">Number of return values</param>
-		/// <param name="VALUES_">variable arguments</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opINPUT_READEXT(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> TYPE, IExpression<Data8> MODE, IExpression<Data8> FORMAT, IExpression<Data8> VALUES, params IExpression[] VALUES_)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
-			parameterList.Add(MODE ?? throw new ArgumentNullException(nameof(MODE)));
-			parameterList.Add(FORMAT ?? throw new ArgumentNullException(nameof(FORMAT)));
-			parameterList.Add(VALUES ?? throw new ArgumentNullException(nameof(VALUES)));
-			parameterList.AddRange(VALUES_ ?? throw new ArgumentNullException(nameof(VALUES_)));
-			return new Opcode(OpcodeValue.INPUT_READEXT, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Write data to device (only UART devices)
-		/// </summary>
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NO">Port number</param>
-		/// <param name="BYTES">No of bytes to write [1..32]</param>
-		/// <param name="DATA">First byte in DATA8 array to write</param>
-		/// <remarks>
-		/// Dispatch status can change to BUSYBREAK
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opINPUT_WRITE(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> BYTES, IExpression<Data8> DATA)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			parameterList.Add(BYTES ?? throw new ArgumentNullException(nameof(BYTES)));
-			parameterList.Add(DATA ?? throw new ArgumentNullException(nameof(DATA)));
-			return new Opcode(OpcodeValue.INPUT_WRITE, parameterList.ToArray());
-		}
-
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NO">Port number</param>
-		/// <param name="TYPE"></param>
-		/// <remarks>
-		/// This bytecode is defined but not implemented
-		/// </remarks>
-		[Support(Official = false, Xtended = false, Compat = false)]
-		public static Opcode opOUTPUT_GET_TYPE(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> TYPE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
-			return new Opcode(OpcodeValue.OUTPUT_GET_TYPE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Set output type
-		/// </summary>
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NO">Output no [0..3]</param>
-		/// <param name="TYPE">Device type id from typedata.rcf</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opOUTPUT_SET_TYPE(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> TYPE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
-			return new Opcode(OpcodeValue.OUTPUT_SET_TYPE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Resets the Tacho counts
-		/// </summary>
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NOS">Output bit field [0x00..0x0F]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opOUTPUT_RESET(IExpression<Data8> LAYER, IExpression<Data8> NOS)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NOS ?? throw new ArgumentNullException(nameof(NOS)));
-			return new Opcode(OpcodeValue.OUTPUT_RESET, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Stops the outputs
-		/// </summary>
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NOS">Output bit field [0x00..0x0F]</param>
-		/// <param name="BRAKE">0 = Coast, 1 = BRAKE</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opOUTPUT_STOP(IExpression<Data8> LAYER, IExpression<Data8> NOS, IExpression<Data8> BRAKE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NOS ?? throw new ArgumentNullException(nameof(NOS)));
-			parameterList.Add(BRAKE ?? throw new ArgumentNullException(nameof(BRAKE)));
-			return new Opcode(OpcodeValue.OUTPUT_STOP, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Set power of the outputs
-		/// </summary>
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NOS">Output bit field [0x00..0x0F]</param>
-		/// <param name="POWER">Power [-100..100%]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opOUTPUT_POWER(IExpression<Data8> LAYER, IExpression<Data8> NOS, IExpression<Data8> POWER)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NOS ?? throw new ArgumentNullException(nameof(NOS)));
-			parameterList.Add(POWER ?? throw new ArgumentNullException(nameof(POWER)));
-			return new Opcode(OpcodeValue.OUTPUT_POWER, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Set speed of the outputs
-		/// </summary>
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NOS">Output bit field [0x00..0x0F]</param>
-		/// <param name="SPEED">Speed [-100..100%]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opOUTPUT_SPEED(IExpression<Data8> LAYER, IExpression<Data8> NOS, IExpression<Data8> SPEED)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NOS ?? throw new ArgumentNullException(nameof(NOS)));
-			parameterList.Add(SPEED ?? throw new ArgumentNullException(nameof(SPEED)));
-			return new Opcode(OpcodeValue.OUTPUT_SPEED, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Starts the outputs
-		/// </summary>
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NOS">Output bit field [0x00..0x0F]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opOUTPUT_START(IExpression<Data8> LAYER, IExpression<Data8> NOS)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NOS ?? throw new ArgumentNullException(nameof(NOS)));
-			return new Opcode(OpcodeValue.OUTPUT_START, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Set polarity of the outputs
-		/// </summary>
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NOS">Output bit field [0x00..0x0F]</param>
-		/// <param name="POL">Polarity [-1,0,1]</param>
-		/// <remarks>
-		/// Polarity:
-		///   * -1 makes the motor run backward
-		///   * 1 makes the motor run forward
-		///   * 0 makes the motor run the opposite direction
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opOUTPUT_POLARITY(IExpression<Data8> LAYER, IExpression<Data8> NOS, IExpression<Data8> POL)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NOS ?? throw new ArgumentNullException(nameof(NOS)));
-			parameterList.Add(POL ?? throw new ArgumentNullException(nameof(POL)));
-			return new Opcode(OpcodeValue.OUTPUT_POLARITY, parameterList.ToArray());
-		}
-
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NO">NO - Output no [0..3]</param>
-		/// <param name="SPEED">Speed [-100..100%]</param>
-		/// <param name="TACHO">Tacho pulses [-MAX .. +MAX]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opOUTPUT_READ(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> SPEED, IExpression<Data32> TACHO)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			parameterList.Add(SPEED ?? throw new ArgumentNullException(nameof(SPEED)));
-			parameterList.Add(TACHO ?? throw new ArgumentNullException(nameof(TACHO)));
-			return new Opcode(OpcodeValue.OUTPUT_READ, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Testing if output is not used
-		/// </summary>
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NOS">Output bit field [0x00..0x0F]</param>
-		/// <param name="BUSY">Output busy flag (0 = ready, 1 = Busy)</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opOUTPUT_TEST(IExpression<Data8> LAYER, IExpression<Data8> NOS, IExpression<Data8> BUSY)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NOS ?? throw new ArgumentNullException(nameof(NOS)));
-			parameterList.Add(BUSY ?? throw new ArgumentNullException(nameof(BUSY)));
-			return new Opcode(OpcodeValue.OUTPUT_TEST, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Wait for output ready (wait for completion)
-		/// </summary>
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NOS">Output bit field [0x00..0x0F]</param>
-		/// <remarks>
-		/// cOUTPUT_START command has no effect on this command. Dispatch status can change to BUSYBREAK.
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opOUTPUT_READY(IExpression<Data8> LAYER, IExpression<Data8> NOS)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NOS ?? throw new ArgumentNullException(nameof(NOS)));
-			return new Opcode(OpcodeValue.OUTPUT_READY, parameterList.ToArray());
-		}
-
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NOS">Output bit field [0x00..0x0F]</param>
-		/// <param name="POS"></param>
-		/// <remarks>
-		/// This bytecode is defined but not implemented
-		/// </remarks>
-		[Support(Official = false, Xtended = false, Compat = false)]
-		public static Opcode opOUTPUT_POSITION(IExpression<Data8> LAYER, IExpression<Data8> NOS, IExpression<Data32> POS)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NOS ?? throw new ArgumentNullException(nameof(NOS)));
-			parameterList.Add(POS ?? throw new ArgumentNullException(nameof(POS)));
-			return new Opcode(OpcodeValue.OUTPUT_POSITION, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Set Ramp up, constant and rampdown steps and power of the outputs
-		/// </summary>
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NOS">Output bit field [0x00..0x0F]</param>
-		/// <param name="POWER">Power [-100..100%]</param>
-		/// <param name="STEP1">Tacho pulses [0..MAX]</param>
-		/// <param name="STEP2">Tacho pulses [0..MAX]</param>
-		/// <param name="STEP3">Tacho pulses [0..MAX]</param>
-		/// <param name="BRAKE">0 = Coast, 1 = BRAKE</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opOUTPUT_STEP_POWER(IExpression<Data8> LAYER, IExpression<Data8> NOS, IExpression<Data8> POWER, IExpression<Data32> STEP1, IExpression<Data32> STEP2, IExpression<Data32> STEP3, IExpression<Data8> BRAKE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NOS ?? throw new ArgumentNullException(nameof(NOS)));
-			parameterList.Add(POWER ?? throw new ArgumentNullException(nameof(POWER)));
-			parameterList.Add(STEP1 ?? throw new ArgumentNullException(nameof(STEP1)));
-			parameterList.Add(STEP2 ?? throw new ArgumentNullException(nameof(STEP2)));
-			parameterList.Add(STEP3 ?? throw new ArgumentNullException(nameof(STEP3)));
-			parameterList.Add(BRAKE ?? throw new ArgumentNullException(nameof(BRAKE)));
-			return new Opcode(OpcodeValue.OUTPUT_STEP_POWER, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Set Ramp up, constant and rampdown steps and power of the outputs
-		/// </summary>
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NOS">Output bit field [0x00..0x0F]</param>
-		/// <param name="POWER">Power [-100..100%]</param>
-		/// <param name="TIME1">Time in Ms [0..MAX]</param>
-		/// <param name="TIME2">Time in Ms [0..MAX]</param>
-		/// <param name="TIME3">Time in Ms [0..MAX]</param>
-		/// <param name="BRAKE">0 = Coast, 1 = BRAKE</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opOUTPUT_TIME_POWER(IExpression<Data8> LAYER, IExpression<Data8> NOS, IExpression<Data8> POWER, IExpression<Data32> TIME1, IExpression<Data32> TIME2, IExpression<Data32> TIME3, IExpression<Data8> BRAKE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NOS ?? throw new ArgumentNullException(nameof(NOS)));
-			parameterList.Add(POWER ?? throw new ArgumentNullException(nameof(POWER)));
-			parameterList.Add(TIME1 ?? throw new ArgumentNullException(nameof(TIME1)));
-			parameterList.Add(TIME2 ?? throw new ArgumentNullException(nameof(TIME2)));
-			parameterList.Add(TIME3 ?? throw new ArgumentNullException(nameof(TIME3)));
-			parameterList.Add(BRAKE ?? throw new ArgumentNullException(nameof(BRAKE)));
-			return new Opcode(OpcodeValue.OUTPUT_TIME_POWER, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Set Ramp up, constant and rampdown steps and power of the outputs
-		/// </summary>
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NOS">Output bit field [0x00..0x0F]</param>
-		/// <param name="SPEED">Speed [-100..100%]</param>
-		/// <param name="STEP1">Tacho pulses [0..MAX]</param>
-		/// <param name="STEP2">Tacho pulses [0..MAX]</param>
-		/// <param name="STEP3">Tacho pulses [0..MAX]</param>
-		/// <param name="BRAKE">0 = Coast, 1 = BRAKE</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opOUTPUT_STEP_SPEED(IExpression<Data8> LAYER, IExpression<Data8> NOS, IExpression<Data8> SPEED, IExpression<Data32> STEP1, IExpression<Data32> STEP2, IExpression<Data32> STEP3, IExpression<Data8> BRAKE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NOS ?? throw new ArgumentNullException(nameof(NOS)));
-			parameterList.Add(SPEED ?? throw new ArgumentNullException(nameof(SPEED)));
-			parameterList.Add(STEP1 ?? throw new ArgumentNullException(nameof(STEP1)));
-			parameterList.Add(STEP2 ?? throw new ArgumentNullException(nameof(STEP2)));
-			parameterList.Add(STEP3 ?? throw new ArgumentNullException(nameof(STEP3)));
-			parameterList.Add(BRAKE ?? throw new ArgumentNullException(nameof(BRAKE)));
-			return new Opcode(OpcodeValue.OUTPUT_STEP_SPEED, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Set Ramp up, constant and rampdown steps and power of the outputs
-		/// </summary>
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NOS">Output bit field [0x00..0x0F]</param>
-		/// <param name="SPEED">Speed [-100..100%]</param>
-		/// <param name="TIME1">Time in Ms [0..MAX]</param>
-		/// <param name="TIME2">Time in Ms [0..MAX]</param>
-		/// <param name="TIME3">Time in Ms [0..MAX]</param>
-		/// <param name="BRAKE">0 = Coast, 1 = BRAKE</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opOUTPUT_TIME_SPEED(IExpression<Data8> LAYER, IExpression<Data8> NOS, IExpression<Data8> SPEED, IExpression<Data32> TIME1, IExpression<Data32> TIME2, IExpression<Data32> TIME3, IExpression<Data8> BRAKE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NOS ?? throw new ArgumentNullException(nameof(NOS)));
-			parameterList.Add(SPEED ?? throw new ArgumentNullException(nameof(SPEED)));
-			parameterList.Add(TIME1 ?? throw new ArgumentNullException(nameof(TIME1)));
-			parameterList.Add(TIME2 ?? throw new ArgumentNullException(nameof(TIME2)));
-			parameterList.Add(TIME3 ?? throw new ArgumentNullException(nameof(TIME3)));
-			parameterList.Add(BRAKE ?? throw new ArgumentNullException(nameof(BRAKE)));
-			return new Opcode(OpcodeValue.OUTPUT_TIME_SPEED, parameterList.ToArray());
-		}
-
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NOS">Output bit field [0x00..0x0F]</param>
-		/// <param name="SPEED">Speed [-100..100%]</param>
-		/// <param name="TURN">Turn Ratio [-200..200]</param>
-		/// <param name="STEP">Tacho Pulses [0..MAX]</param>
-		/// <param name="BRAKE">0 = Coast, 1 = BRAKE</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opOUTPUT_STEP_SYNC(IExpression<Data8> LAYER, IExpression<Data8> NOS, IExpression<Data8> SPEED, IExpression<Data16> TURN, IExpression<Data32> STEP, IExpression<Data8> BRAKE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NOS ?? throw new ArgumentNullException(nameof(NOS)));
-			parameterList.Add(SPEED ?? throw new ArgumentNullException(nameof(SPEED)));
-			parameterList.Add(TURN ?? throw new ArgumentNullException(nameof(TURN)));
-			parameterList.Add(STEP ?? throw new ArgumentNullException(nameof(STEP)));
-			parameterList.Add(BRAKE ?? throw new ArgumentNullException(nameof(BRAKE)));
-			return new Opcode(OpcodeValue.OUTPUT_STEP_SYNC, parameterList.ToArray());
-		}
-
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NOS">Output bit field [0x00..0x0F]</param>
-		/// <param name="SPEED">Speed [-100..100%]</param>
-		/// <param name="TURN">Turn Ratio [-200..200]</param>
-		/// <param name="TIME">Time in ms [0..MAX]</param>
-		/// <param name="BRAKE">0 = Coast, 1 = BRAKE</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opOUTPUT_TIME_SYNC(IExpression<Data8> LAYER, IExpression<Data8> NOS, IExpression<Data8> SPEED, IExpression<Data16> TURN, IExpression<Data32> TIME, IExpression<Data8> BRAKE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NOS ?? throw new ArgumentNullException(nameof(NOS)));
-			parameterList.Add(SPEED ?? throw new ArgumentNullException(nameof(SPEED)));
-			parameterList.Add(TURN ?? throw new ArgumentNullException(nameof(TURN)));
-			parameterList.Add(TIME ?? throw new ArgumentNullException(nameof(TIME)));
-			parameterList.Add(BRAKE ?? throw new ArgumentNullException(nameof(BRAKE)));
-			return new Opcode(OpcodeValue.OUTPUT_TIME_SYNC, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Clearing tacho count when used as sensor
-		/// </summary>
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NOS">Output bit field [0x00..0x0F]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opOUTPUT_CLR_COUNT(IExpression<Data8> LAYER, IExpression<Data8> NOS)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NOS ?? throw new ArgumentNullException(nameof(NOS)));
-			return new Opcode(OpcodeValue.OUTPUT_CLR_COUNT, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Getting tacho count when used as sensor - values are in shared memory
-		/// </summary>
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NOS">Output bit field [0x00..0x0F]</param>
-		/// <param name="TACHO">Tacho pulses [-MAX .. +MAX]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opOUTPUT_GET_COUNT(IExpression<Data8> LAYER, IExpression<Data8> NOS, IExpression<Data32> TACHO)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NOS ?? throw new ArgumentNullException(nameof(NOS)));
-			parameterList.Add(TACHO ?? throw new ArgumentNullException(nameof(TACHO)));
-			return new Opcode(OpcodeValue.OUTPUT_GET_COUNT, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Program stop
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opOUTPUT_PRG_STOP()
-		{
-			var parameterList = new List<IByteCode>();
-			return new Opcode(OpcodeValue.OUTPUT_PRG_STOP, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Memory file entry
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opFILE(FILESubcommand CMD)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
-			return new Opcode(OpcodeValue.FILE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Array entry
-		/// </summary>
-		/// <remarks>
-		/// Dispatch status can change to BUSYBREAK or FAILBREAK
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opARRAY(ARRAYSubcommand CMD)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
-			return new Opcode(OpcodeValue.ARRAY, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Array element write
-		/// </summary>
-		/// <param name="HANDLE">Array handle</param>
-		/// <param name="INDEX">Index to first byte to write</param>
-		/// <param name="VALUE">Value to write - type depends on type of array</param>
-		/// <remarks>
-		/// Dispatch status can change to FAILBREAK
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opARRAY_WRITE(IExpression<Data16> HANDLE, IExpression<Data32> INDEX, IExpression VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
-			parameterList.Add(INDEX ?? throw new ArgumentNullException(nameof(INDEX)));
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new Opcode(OpcodeValue.ARRAY_WRITE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Array element read
-		/// </summary>
-		/// <param name="HANDLE">Array handle</param>
-		/// <param name="INDEX">Index to first byte to write</param>
-		/// <param name="VALUE">Value to read - type depends on type of array</param>
-		/// <remarks>
-		/// Dispatch status can change to FAILBREAK
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opARRAY_READ(IExpression<Data16> HANDLE, IExpression<Data32> INDEX, IExpression VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
-			parameterList.Add(INDEX ?? throw new ArgumentNullException(nameof(INDEX)));
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new Opcode(OpcodeValue.ARRAY_READ, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Array element append
-		/// </summary>
-		/// <param name="HANDLE">Array handle</param>
-		/// <param name="VALUE">Value (new element) to append - type depends on type of array</param>
-		/// <remarks>
-		/// Dispatch status can change to FAILBREAK
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opARRAY_APPEND(IExpression<Data16> HANDLE, IExpression VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new Opcode(OpcodeValue.ARRAY_APPEND, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Get memory usage
-		/// </summary>
-		/// <param name="TOTAL">Total memory [KB]</param>
-		/// <param name="FREE">Free memory [KB]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opMEMORY_USAGE(IExpression<Data32> TOTAL, IExpression<Data32> FREE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(TOTAL ?? throw new ArgumentNullException(nameof(TOTAL)));
-			parameterList.Add(FREE ?? throw new ArgumentNullException(nameof(FREE)));
-			return new Opcode(OpcodeValue.MEMORY_USAGE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Memory filename entry
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opFILENAME(FILENAMESubcommand CMD)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
-			return new Opcode(OpcodeValue.FILENAME, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Read 8 bit value from SOURCE[INDEX] to DESTINATION
-		/// </summary>
-		/// <param name="SOURCE">First value in array of values</param>
-		/// <param name="INDEX">Index to array member to read</param>
-		/// <param name="DESTINATION">Variable to receive read value</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opREAD8(IExpression<Data8> SOURCE, IExpression<Data8> INDEX, IExpression<Data8> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
-			parameterList.Add(INDEX ?? throw new ArgumentNullException(nameof(INDEX)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.READ8, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Read 16 bit value from SOURCE[INDEX] to DESTINATION
-		/// </summary>
-		/// <param name="SOURCE">First value in array of values</param>
-		/// <param name="INDEX">Index to array member to read</param>
-		/// <param name="DESTINATION">Variable to receive read value</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opREAD16(IExpression<Data16> SOURCE, IExpression<Data8> INDEX, IExpression<Data16> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
-			parameterList.Add(INDEX ?? throw new ArgumentNullException(nameof(INDEX)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.READ16, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Read 32 bit value from SOURCE[INDEX] to DESTINATION
-		/// </summary>
-		/// <param name="SOURCE">First value in array of values</param>
-		/// <param name="INDEX">Index to array member to read</param>
-		/// <param name="DESTINATION">Variable to receive read value</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opREAD32(IExpression<Data32> SOURCE, IExpression<Data8> INDEX, IExpression<Data32> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
-			parameterList.Add(INDEX ?? throw new ArgumentNullException(nameof(INDEX)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.READ32, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Read floating point value from SOURCE[INDEX] to DESTINATION
-		/// </summary>
-		/// <param name="SOURCE">First value in array of values</param>
-		/// <param name="INDEX">Index to array member to read</param>
-		/// <param name="DESTINATION">Variable to receive read value</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opREADF(IExpression<DataFloat> SOURCE, IExpression<Data8> INDEX, IExpression<DataFloat> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
-			parameterList.Add(INDEX ?? throw new ArgumentNullException(nameof(INDEX)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.READF, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Write 8 bit value from SOURCE to DESTINATION[INDEX]
-		/// </summary>
-		/// <param name="SOURCE">Variable to write</param>
-		/// <param name="INDEX">Index to array member to write</param>
-		/// <param name="DESTINATION">Array to receive write value</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opWRITE8(IExpression<Data8> SOURCE, IExpression<Data8> INDEX, IExpression<Data8> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
-			parameterList.Add(INDEX ?? throw new ArgumentNullException(nameof(INDEX)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.WRITE8, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Write 16 bit value from SOURCE to DESTINATION[INDEX]
-		/// </summary>
-		/// <param name="SOURCE">Variable to write</param>
-		/// <param name="INDEX">Index to array member to write</param>
-		/// <param name="DESTINATION">Array to receive write value</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opWRITE16(IExpression<Data16> SOURCE, IExpression<Data8> INDEX, IExpression<Data16> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
-			parameterList.Add(INDEX ?? throw new ArgumentNullException(nameof(INDEX)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.WRITE16, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Write 32 bit value from SOURCE to DESTINATION[INDEX]
-		/// </summary>
-		/// <param name="SOURCE">Variable to write</param>
-		/// <param name="INDEX">Index to array member to write</param>
-		/// <param name="DESTINATION">Array to receive write value</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opWRITE32(IExpression<Data32> SOURCE, IExpression<Data8> INDEX, IExpression<Data32> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
-			parameterList.Add(INDEX ?? throw new ArgumentNullException(nameof(INDEX)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.WRITE32, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Write floating point value from SOURCE to DESTINATION[INDEX]
-		/// </summary>
-		/// <param name="SOURCE">Variable to write</param>
-		/// <param name="INDEX">Index to array member to write</param>
-		/// <param name="DESTINATION">Array to receive write value</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opWRITEF(IExpression<DataFloat> SOURCE, IExpression<Data8> INDEX, IExpression<DataFloat> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
-			parameterList.Add(INDEX ?? throw new ArgumentNullException(nameof(INDEX)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new Opcode(OpcodeValue.WRITEF, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Test if communication is busy
-		/// </summary>
-		/// <param name="HARDWARE">Hardware transport layer</param>
-		/// <param name="NAME">Name of the remote/own device</param>
-		/// <remarks>
-		/// Dispatch status may be set to BUSYBREAK. If name is 0 then own adapter status is evaluated.
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opCOM_READY(IExpression<Data8> HARDWARE, IExpression<Data8> NAME)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
-			parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
-			return new Opcode(OpcodeValue.COM_READY, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// This code does not exist in normal program
-		/// </summary>
-		/// <remarks>
-		/// Dispatch status changes to INSTRBREAK
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opCOM_READDATA(IExpression<Data8> VALUE1, IExpression<Data8> VALUE2, IExpression<Data16> VALUE3, IExpression<Data8> VALUE4)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(VALUE1 ?? throw new ArgumentNullException(nameof(VALUE1)));
-			parameterList.Add(VALUE2 ?? throw new ArgumentNullException(nameof(VALUE2)));
-			parameterList.Add(VALUE3 ?? throw new ArgumentNullException(nameof(VALUE3)));
-			parameterList.Add(VALUE4 ?? throw new ArgumentNullException(nameof(VALUE4)));
-			return new Opcode(OpcodeValue.COM_READDATA, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// This code does not exist in normal program
-		/// </summary>
-		/// <remarks>
-		/// Dispatch status changes to INSTRBREAK
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opCOM_WRITEDATA(IExpression<Data8> VALUE1, IExpression<Data8> VALUE2, IExpression<Data16> VALUE3, IExpression<Data8> VALUE4)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(VALUE1 ?? throw new ArgumentNullException(nameof(VALUE1)));
-			parameterList.Add(VALUE2 ?? throw new ArgumentNullException(nameof(VALUE2)));
-			parameterList.Add(VALUE3 ?? throw new ArgumentNullException(nameof(VALUE3)));
-			parameterList.Add(VALUE4 ?? throw new ArgumentNullException(nameof(VALUE4)));
-			return new Opcode(OpcodeValue.COM_WRITEDATA, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Communication get entry
-		/// </summary>
-		/// <remarks>
-		/// Dispatch status can return FAILBREAK
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opCOM_GET(COM_GETSubcommand CMD)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
-			return new Opcode(OpcodeValue.COM_GET, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Communication set entry
-		/// </summary>
-		/// <remarks>
-		/// Dispatch status can return FAILBREAK
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opCOM_SET(COM_SETSubcommand CMD)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
-			return new Opcode(OpcodeValue.COM_SET, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Test if communication is busy
-		/// </summary>
-		/// <param name="HARDWARE">Hardware transport layer</param>
-		/// <param name="NAME">Name of the remote/own device</param>
-		/// <param name="BUSY">Busy flag</param>
-		/// <remarks>
-		/// Dispatch status is set to NOBREAK. If name is 0 then own adapter busy status is returned.
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opCOM_TEST(IExpression<Data8> HARDWARE, IExpression<Data8> NAME, IExpression<Data8> BUSY)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
-			parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
-			parameterList.Add(BUSY ?? throw new ArgumentNullException(nameof(BUSY)));
-			return new Opcode(OpcodeValue.COM_TEST, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Removes a know remote device from the brick
-		/// </summary>
-		/// <param name="HARDWARE"></param>
-		/// <param name="REMOTE_NAME">Pointer to remote brick name</param>
-		/// <remarks>
-		/// Dispatch status can return FAILBREAK
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opCOM_REMOVE(IExpression<Data8> HARDWARE, IExpression<Data8> REMOTE_NAME)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
-			parameterList.Add(REMOTE_NAME ?? throw new ArgumentNullException(nameof(REMOTE_NAME)));
-			return new Opcode(OpcodeValue.COM_REMOVE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Sends a file or folder to remote brick.
-		/// </summary>
-		/// <param name="HARDWARE"></param>
-		/// <param name="REMOTE_NAME">Pointer to remote brick name</param>
-		/// <param name="FILE_NAME">File/folder name to send</param>
-		/// <param name="FILE_TYPE">File or folder type to send</param>
-		/// <remarks>
-		/// Dispatch status can return FAILBREAK
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opCOM_WRITEFILE(IExpression<Data8> HARDWARE, IExpression<Data8> REMOTE_NAME, IExpression<Data8> FILE_NAME, IExpression<Data8> FILE_TYPE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
-			parameterList.Add(REMOTE_NAME ?? throw new ArgumentNullException(nameof(REMOTE_NAME)));
-			parameterList.Add(FILE_NAME ?? throw new ArgumentNullException(nameof(FILE_NAME)));
-			parameterList.Add(FILE_TYPE ?? throw new ArgumentNullException(nameof(FILE_TYPE)));
-			return new Opcode(OpcodeValue.COM_WRITEFILE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Open a mail box on the brick
-		/// </summary>
-		/// <param name="NO">Reference ID for the mailbox. Maximum number of mailboxes is 30</param>
-		/// <param name="BOXNAME">Zero terminated string with the mailbox name</param>
-		/// <param name="TYPES">Data type of the content of the mailbox</param>
-		/// <param name="FIFOSIZE">Not used</param>
-		/// <param name="VALUES">Number of values of the type (specified by TYPE).</param>
-		/// <remarks>
-		/// If data type DATA_S is selected then it requires that a zero terminated string is sent. Maximum mailbox size is 250 bytes. I.e. if type is string (DATA_S) then there can only be 1 string of maximum 250 bytes (incl. zero termination), or if array (DATA_A), then array size cannot be larger than 250 bytes.
-		/// Dispatch status can return FAILBREAK
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opMAILBOX_OPEN(IExpression<Data8> NO, IExpression<Data8> BOXNAME, IExpression<Data8> TYPES, IExpression<Data8> FIFOSIZE, IExpression<Data8> VALUES)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			parameterList.Add(BOXNAME ?? throw new ArgumentNullException(nameof(BOXNAME)));
-			parameterList.Add(TYPES ?? throw new ArgumentNullException(nameof(TYPES)));
-			parameterList.Add(FIFOSIZE ?? throw new ArgumentNullException(nameof(FIFOSIZE)));
-			parameterList.Add(VALUES ?? throw new ArgumentNullException(nameof(VALUES)));
-			return new Opcode(OpcodeValue.MAILBOX_OPEN, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Write to mailbox in remote brick
-		/// </summary>
-		/// <param name="BRICKNAME">Zero terminated string name of the receiving brick</param>
-		/// <param name="HARDWARE">Transportation media</param>
-		/// <param name="BOXNAME">Zero terminated string name of the receiving mailbox</param>
-		/// <param name="TYPE">Data type of the values</param>
-		/// <param name="VALUES">Number of values of the specified type to send</param>
-		/// <param name="VALUES_">variable arguments</param>
-		/// <remarks>
-		/// If Brick name is left empty (0) then all connected devices will receive the mailbox message. If string type (DATA_S) data is to be transmitted then a zero terminated string is expected. If array type data (DATA_A) is to be transmitted then the number of bytes to be sent is equal to the array size.
-		/// Dispatch status can return FAILBREAK.
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opMAILBOX_WRITE(IExpression<Data8> BRICKNAME, IExpression<Data8> HARDWARE, IExpression<Data8> BOXNAME, IExpression<Data8> TYPE, IExpression<Data8> VALUES, params IExpression[] VALUES_)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(BRICKNAME ?? throw new ArgumentNullException(nameof(BRICKNAME)));
-			parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
-			parameterList.Add(BOXNAME ?? throw new ArgumentNullException(nameof(BOXNAME)));
-			parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
-			parameterList.Add(VALUES ?? throw new ArgumentNullException(nameof(VALUES)));
-			parameterList.AddRange(VALUES_ ?? throw new ArgumentNullException(nameof(VALUES_)));
-			return new Opcode(OpcodeValue.MAILBOX_WRITE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Read data from mailbox specified by NO
-		/// </summary>
-		/// <param name="NO">Messagebox ID of the message box you want to read</param>
-		/// <param name="LENGTH">Maximum bytes to be read</param>
-		/// <param name="VALUES">Number of value to read</param>
-		/// <param name="VALUES_">variable arguments</param>
-		/// <remarks>
-		/// Returns (Type specified in open) VALUE - Data from the message box The type of Value is specified by mailbox open byte code.
-		/// Dispatch status can return FAILBREAK.
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opMAILBOX_READ(IExpression<Data8> NO, IExpression<Data8> LENGTH, IExpression<Data8> VALUES, params IExpression[] VALUES_)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(VALUES ?? throw new ArgumentNullException(nameof(VALUES)));
-			parameterList.AddRange(VALUES_ ?? throw new ArgumentNullException(nameof(VALUES_)));
-			return new Opcode(OpcodeValue.MAILBOX_READ, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Tests if new message has been read
-		/// </summary>
-		/// <param name="NO">Reference ID mailbox number</param>
-		/// <param name="BUSY">If Busy = TRUE then no new messages are received</param>
-		/// <remarks>
-		/// Dispatch status can return FAILBREAK
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opMAILBOX_TEST(IExpression<Data8> NO, IExpression<Data8> BUSY)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			parameterList.Add(BUSY ?? throw new ArgumentNullException(nameof(BUSY)));
-			return new Opcode(OpcodeValue.MAILBOX_TEST, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Waiting from message to be read
-		/// </summary>
-		/// <param name="NO">Reference ID mailbox number</param>
-		/// <remarks>
-		/// Dispatch status can return FAILBREAK
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opMAILBOX_READY(IExpression<Data8> NO)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			return new Opcode(OpcodeValue.MAILBOX_READY, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Closes mailbox indicated by NO
-		/// </summary>
-		/// <param name="NO">Reference ID mailbox number</param>
-		/// <remarks>
-		/// Dispatch status can return FAILBREAK
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opMAILBOX_CLOSE(IExpression<Data8> NO)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			return new Opcode(OpcodeValue.MAILBOX_CLOSE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Set the connection type for a specific port
-		/// </summary>
-		/// <param name="LAYER">Chain layer number [0..3]</param>
-		/// <param name="NO">Port number</param>
-		/// <param name="CONN">Connection type (CONN_NXT_IIC, CONN_NXT_DUMB or CONN_INPUT_DUMB)</param>
-		/// <remarks>
-		/// Note that this won't do much if the auto-id has not been disabled
-		/// </remarks>
-		[Support(Official = false, Xtended = true, Compat = true)]
-		public static Opcode opINPUT_SET_CONN(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> CONN)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			parameterList.Add(CONN ?? throw new ArgumentNullException(nameof(CONN)));
-			return new Opcode(OpcodeValue.INPUT_SET_CONN, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Read I2C data from specified port
-		/// </summary>
-		/// <param name="LAYER">Chain layer number [0..3]</param>
-		/// <param name="NO">Port number</param>
-		/// <param name="RDLNG">No of bytes to read</param>
-		/// <param name="RDDATA">DATA8 array (handle) to read into</param>
-		/// <param name="RESULT">Write/read result (OK, FAIL, BUSY, STOP)</param>
-		[Support(Official = false, Xtended = true, Compat = true)]
-		public static Opcode opINPUT_IIC_READ(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> RDLNG, IExpression<Data8> RDDATA, IExpression<Data8> RESULT)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			parameterList.Add(RDLNG ?? throw new ArgumentNullException(nameof(RDLNG)));
-			parameterList.Add(RDDATA ?? throw new ArgumentNullException(nameof(RDDATA)));
-			parameterList.Add(RESULT ?? throw new ArgumentNullException(nameof(RESULT)));
-			return new Opcode(OpcodeValue.INPUT_IIC_READ, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Read I2C status of specified port
-		/// </summary>
-		/// <param name="LAYER">Chain layer number [0..3]</param>
-		/// <param name="NO">Port number</param>
-		/// <param name="RESULT">Current I2C bus status (OK, FAIL, BUSY, STOP)</param>
-		[Support(Official = false, Xtended = true, Compat = true)]
-		public static Opcode opINPUT_IIC_STATUS(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> RESULT)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			parameterList.Add(RESULT ?? throw new ArgumentNullException(nameof(RESULT)));
-			return new Opcode(OpcodeValue.INPUT_IIC_STATUS, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Write I2C data to specified port
-		/// </summary>
-		/// <param name="LAYER">Chain layer number [0..3]</param>
-		/// <param name="NO">Port number</param>
-		/// <param name="WRLNG">No of bytes to write</param>
-		/// <param name="WRDATA">DATA8 array (handle) of data to write</param>
-		/// <param name="RDLNG">No of bytes to read</param>
-		/// <param name="RESULT">Write/read result (OK, FAIL, BUSY, STOP)</param>
-		[Support(Official = false, Xtended = true, Compat = true)]
-		public static Opcode opINPUT_IIC_WRITE(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> WRLNG, IExpression<Data8> WRDATA, IExpression<Data8> RDLNG, IExpression<Data8> RESULT)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			parameterList.Add(WRLNG ?? throw new ArgumentNullException(nameof(WRLNG)));
-			parameterList.Add(WRDATA ?? throw new ArgumentNullException(nameof(WRDATA)));
-			parameterList.Add(RDLNG ?? throw new ArgumentNullException(nameof(RDLNG)));
-			parameterList.Add(RESULT ?? throw new ArgumentNullException(nameof(RESULT)));
-			return new Opcode(OpcodeValue.INPUT_IIC_WRITE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Enabled or disable auto-id for a specific sensor port
-		/// </summary>
-		/// <param name="LAYER">Chain layer number [0..3]</param>
-		/// <param name="NO">Port number</param>
-		/// <param name="ENABLE">Boolean (0 disabled, 1 enable)</param>
-		[Support(Official = false, Xtended = true, Compat = true)]
-		public static Opcode opINPUT_SET_AUTOID(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> ENABLE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			parameterList.Add(ENABLE ?? throw new ArgumentNullException(nameof(ENABLE)));
-			return new Opcode(OpcodeValue.INPUT_SET_AUTOID, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Returns the size of the mailbox.
-		/// </summary>
-		/// <param name="NO">Reference ID mailbox number</param>
-		/// <param name="SIZE">Size in bytes of the contents of mailbox NO</param>
-		[Support(Official = false, Xtended = true, Compat = true)]
-		public static Opcode opMAILBOX_SIZE(IExpression<Data8> NO, IExpression<Data8> SIZE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			parameterList.Add(SIZE ?? throw new ArgumentNullException(nameof(SIZE)));
-			return new Opcode(OpcodeValue.MAILBOX_SIZE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Get md5 sum of a file
-		/// </summary>
-		/// <param name="NAME">File name</param>
-		/// <param name="MD5SUM">First byte in md5 sum (byte array)</param>
-		/// <param name="SUCCESS">Success flag (0 = no, 1 = yes)</param>
-		/// <remarks>
-		/// Dispatch status unchanged
-		/// </remarks>
-		[Support(Official = false, Xtended = true, Compat = true)]
-		public static Opcode opFILE_MD5SUM(IExpression<DataString> NAME, IExpression<Data8> MD5SUM, IExpression<Data8> SUCCESS)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
-			parameterList.Add(MD5SUM ?? throw new ArgumentNullException(nameof(MD5SUM)));
-			parameterList.Add(SUCCESS ?? throw new ArgumentNullException(nameof(SUCCESS)));
-			return new Opcode(OpcodeValue.FILE_MD5SUM, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Load the selected VM
-		/// </summary>
-		/// <param name="VMINDEX">VM Index, Robotc = 0, Labview = 1</param>
-		/// <param name="RESULT">OK if VM loaded ok FAIL if it did not.</param>
-		[Support(Official = false, Xtended = true, Compat = true)]
-		public static Opcode opDYNLOAD_VMLOAD(IExpression<Data8> VMINDEX, IExpression<Data8> RESULT)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(VMINDEX ?? throw new ArgumentNullException(nameof(VMINDEX)));
-			parameterList.Add(RESULT ?? throw new ArgumentNullException(nameof(RESULT)));
-			return new Opcode(OpcodeValue.DYNLOAD_VMLOAD, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Clean up the dynamic VM loading system
-		/// </summary>
-		/// <remarks>
-		/// Calls the VM's exit_vm() function to tidy up
-		/// </remarks>
-		[Support(Official = false, Xtended = true, Compat = true)]
-		public static Opcode opDYNLOAD_VMEXIT()
-		{
-			var parameterList = new List<IByteCode>();
-			return new Opcode(OpcodeValue.DYNLOAD_VMEXIT, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Execute Entry Point function 0 in Third Party VM
-		/// </summary>
-		/// <param name="CMD">Sub command to be executed</param>
-		/// <param name="LENGTH_IN">Amount of data passed to this opcode</param>
-		/// <param name="LENGTH_OUT">Amount of data returned</param>
-		/// <param name="VALUE">Data from opcode</param>
-		[Support(Official = false, Xtended = true, Compat = true)]
-		public static Opcode opDYNLOAD_ENTRY_0(IExpression<Data8> CMD, IExpression<Data8> LENGTH_IN, IExpression<Data16> LENGTH_OUT, IExpression VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
-			parameterList.Add(LENGTH_IN ?? throw new ArgumentNullException(nameof(LENGTH_IN)));
-			parameterList.Add(LENGTH_OUT ?? throw new ArgumentNullException(nameof(LENGTH_OUT)));
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new Opcode(OpcodeValue.DYNLOAD_ENTRY_0, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Execute Entry Point function 1 in Third Party VM
-		/// </summary>
-		/// <param name="CMD">Sub command to be executed</param>
-		/// <param name="LENGTH_IN">Amount of data passed to this opcode</param>
-		/// <param name="LENGTH_OUT">Amount of data returned</param>
-		/// <param name="VALUE">Data from opcode</param>
-		[Support(Official = false, Xtended = true, Compat = true)]
-		public static Opcode opDYNLOAD_ENTRY_1(IExpression<Data8> CMD, IExpression<Data8> LENGTH_IN, IExpression<Data16> LENGTH_OUT, IExpression VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
-			parameterList.Add(LENGTH_IN ?? throw new ArgumentNullException(nameof(LENGTH_IN)));
-			parameterList.Add(LENGTH_OUT ?? throw new ArgumentNullException(nameof(LENGTH_OUT)));
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new Opcode(OpcodeValue.DYNLOAD_ENTRY_1, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Execute Entry Point function 2 in Third Party VM
-		/// </summary>
-		/// <param name="CMD">Sub command to be executed</param>
-		/// <param name="LENGTH_IN">Amount of data passed to this opcode</param>
-		/// <param name="LENGTH_OUT">Amount of data returned</param>
-		/// <param name="VALUE">Data from opcode</param>
-		[Support(Official = false, Xtended = true, Compat = true)]
-		public static Opcode opDYNLOAD_ENTRY_2(IExpression<Data8> CMD, IExpression<Data8> LENGTH_IN, IExpression<Data16> LENGTH_OUT, IExpression VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
-			parameterList.Add(LENGTH_IN ?? throw new ArgumentNullException(nameof(LENGTH_IN)));
-			parameterList.Add(LENGTH_OUT ?? throw new ArgumentNullException(nameof(LENGTH_OUT)));
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new Opcode(OpcodeValue.DYNLOAD_ENTRY_2, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Execute Entry Point function 3 in Third Party VM
-		/// </summary>
-		/// <param name="CMD">Sub command to be executed</param>
-		/// <param name="LENGTH_IN">Amount of data passed to this opcode</param>
-		/// <param name="LENGTH_OUT">Amount of data returned</param>
-		/// <param name="VALUE">Data from opcode</param>
-		[Support(Official = false, Xtended = true, Compat = true)]
-		public static Opcode opDYNLOAD_ENTRY_3(IExpression<Data8> CMD, IExpression<Data8> LENGTH_IN, IExpression<Data16> LENGTH_OUT, IExpression VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
-			parameterList.Add(LENGTH_IN ?? throw new ArgumentNullException(nameof(LENGTH_IN)));
-			parameterList.Add(LENGTH_OUT ?? throw new ArgumentNullException(nameof(LENGTH_OUT)));
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new Opcode(OpcodeValue.DYNLOAD_ENTRY_3, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Execute Entry Point function 4 in Third Party VM
-		/// </summary>
-		/// <param name="CMD">Sub command to be executed</param>
-		/// <param name="LENGTH_IN">Amount of data passed to this opcode</param>
-		/// <param name="LENGTH_OUT">Amount of data returned</param>
-		/// <param name="VALUE">Data from opcode</param>
-		[Support(Official = false, Xtended = true, Compat = true)]
-		public static Opcode opDYNLOAD_ENTRY_4(IExpression<Data8> CMD, IExpression<Data8> LENGTH_IN, IExpression<Data16> LENGTH_OUT, IExpression VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
-			parameterList.Add(LENGTH_IN ?? throw new ArgumentNullException(nameof(LENGTH_IN)));
-			parameterList.Add(LENGTH_OUT ?? throw new ArgumentNullException(nameof(LENGTH_OUT)));
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new Opcode(OpcodeValue.DYNLOAD_ENTRY_4, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Execute Entry Point function 5 in Third Party VM
-		/// </summary>
-		/// <param name="CMD">Sub command to be executed</param>
-		/// <param name="LENGTH_IN">Amount of data passed to this opcode</param>
-		/// <param name="LENGTH_OUT">Amount of data returned</param>
-		/// <param name="VALUE">Data from opcode</param>
-		[Support(Official = false, Xtended = true, Compat = true)]
-		public static Opcode opDYNLOAD_ENTRY_5(IExpression<Data8> CMD, IExpression<Data8> LENGTH_IN, IExpression<Data16> LENGTH_OUT, IExpression VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
-			parameterList.Add(LENGTH_IN ?? throw new ArgumentNullException(nameof(LENGTH_IN)));
-			parameterList.Add(LENGTH_OUT ?? throw new ArgumentNullException(nameof(LENGTH_OUT)));
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new Opcode(OpcodeValue.DYNLOAD_ENTRY_5, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Execute Entry Point function 6 in Third Party VM
-		/// </summary>
-		/// <param name="CMD">Sub command to be executed</param>
-		/// <param name="LENGTH_IN">Amount of data passed to this opcode</param>
-		/// <param name="LENGTH_OUT">Amount of data returned</param>
-		/// <param name="VALUE">Data from opcode</param>
-		[Support(Official = false, Xtended = true, Compat = true)]
-		public static Opcode opDYNLOAD_ENTRY_6(IExpression<Data8> CMD, IExpression<Data8> LENGTH_IN, IExpression<Data16> LENGTH_OUT, IExpression VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
-			parameterList.Add(LENGTH_IN ?? throw new ArgumentNullException(nameof(LENGTH_IN)));
-			parameterList.Add(LENGTH_OUT ?? throw new ArgumentNullException(nameof(LENGTH_OUT)));
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new Opcode(OpcodeValue.DYNLOAD_ENTRY_6, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Execute Entry Point function 7 in Third Party VM
-		/// </summary>
-		/// <param name="CMD">Sub command to be executed</param>
-		/// <param name="LENGTH_IN">Amount of data passed to this opcode</param>
-		/// <param name="LENGTH_OUT">Amount of data returned</param>
-		/// <param name="VALUE">Data from opcode</param>
-		[Support(Official = false, Xtended = true, Compat = true)]
-		public static Opcode opDYNLOAD_ENTRY_7(IExpression<Data8> CMD, IExpression<Data8> LENGTH_IN, IExpression<Data16> LENGTH_OUT, IExpression VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
-			parameterList.Add(LENGTH_IN ?? throw new ArgumentNullException(nameof(LENGTH_IN)));
-			parameterList.Add(LENGTH_OUT ?? throw new ArgumentNullException(nameof(LENGTH_OUT)));
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new Opcode(OpcodeValue.DYNLOAD_ENTRY_7, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Execute Entry Point function 8 in Third Party VM
-		/// </summary>
-		/// <param name="CMD">Sub command to be executed</param>
-		/// <param name="LENGTH_IN">Amount of data passed to this opcode</param>
-		/// <param name="LENGTH_OUT">Amount of data returned</param>
-		/// <param name="VALUE">Data from opcode</param>
-		[Support(Official = false, Xtended = true, Compat = true)]
-		public static Opcode opDYNLOAD_ENTRY_8(IExpression<Data8> CMD, IExpression<Data8> LENGTH_IN, IExpression<Data16> LENGTH_OUT, IExpression VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
-			parameterList.Add(LENGTH_IN ?? throw new ArgumentNullException(nameof(LENGTH_IN)));
-			parameterList.Add(LENGTH_OUT ?? throw new ArgumentNullException(nameof(LENGTH_OUT)));
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new Opcode(OpcodeValue.DYNLOAD_ENTRY_8, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Execute Entry Point function 9 in Third Party VM
-		/// </summary>
-		/// <param name="CMD">Sub command to be executed</param>
-		/// <param name="LENGTH_IN">Amount of data passed to this opcode</param>
-		/// <param name="LENGTH_OUT">Amount of data returned</param>
-		/// <param name="VALUE">Data from opcode</param>
-		[Support(Official = false, Xtended = true, Compat = true)]
-		public static Opcode opDYNLOAD_ENTRY_9(IExpression<Data8> CMD, IExpression<Data8> LENGTH_IN, IExpression<Data16> LENGTH_OUT, IExpression VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
-			parameterList.Add(LENGTH_IN ?? throw new ArgumentNullException(nameof(LENGTH_IN)));
-			parameterList.Add(LENGTH_OUT ?? throw new ArgumentNullException(nameof(LENGTH_OUT)));
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new Opcode(OpcodeValue.DYNLOAD_ENTRY_9, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Get the index of the currently loaded VM
-		/// </summary>
-		/// <param name="RESULT">VM Index, Robotc = 0, Labview = 1, -1 for no loaded VM</param>
-		[Support(Official = false, Xtended = true, Compat = true)]
-		public static Opcode opDYNLOAD_GET_VM(IExpression<Data8> RESULT)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(RESULT ?? throw new ArgumentNullException(nameof(RESULT)));
-			return new Opcode(OpcodeValue.DYNLOAD_GET_VM, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// System test functions entry
-		/// </summary>
-		/// <remarks>
-		/// This set of commands are for test only as they change behaviour in some driver modules. When test is open every command keeps the test byte codes enabled for 10 seconds.
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static Opcode opTST(TSTSubcommand CMD)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
-			return new Opcode(OpcodeValue.TST, parameterList.ToArray());
-		}
-
-		/// <param name="PRGID">Program slot number</param>
-		/// <param name="OBJID">Object id</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static PROGRAM_INFOSubcommand cmdOBJ_STOP(IExpression<Data16> PRGID, IExpression<Data16> OBJID)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
-			parameterList.Add(OBJID ?? throw new ArgumentNullException(nameof(OBJID)));
-			return new PROGRAM_INFOSubcommand(PROGRAM_INFOSubcommandValue.OBJ_STOP, parameterList.ToArray());
-		}
-
-		/// <param name="PRGID">Program slot number</param>
-		/// <param name="OBJID">Object id</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static PROGRAM_INFOSubcommand cmdOBJ_START(IExpression<Data16> PRGID, IExpression<Data16> OBJID)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
-			parameterList.Add(OBJID ?? throw new ArgumentNullException(nameof(OBJID)));
-			return new PROGRAM_INFOSubcommand(PROGRAM_INFOSubcommandValue.OBJ_START, parameterList.ToArray());
-		}
-
-		/// <param name="PRGID">Program slot number</param>
-		/// <param name="DATA">Program status</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static PROGRAM_INFOSubcommand cmdGET_STATUS(IExpression<Data16> PRGID, IExpression<Data8> DATA)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
-			parameterList.Add(DATA ?? throw new ArgumentNullException(nameof(DATA)));
-			return new PROGRAM_INFOSubcommand(PROGRAM_INFOSubcommandValue.GET_STATUS, parameterList.ToArray());
-		}
-
-		/// <param name="PRGID">Program slot number</param>
-		/// <param name="DATA">Program speed [instr/S]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static PROGRAM_INFOSubcommand cmdGET_SPEED(IExpression<Data16> PRGID, IExpression<Data32> DATA)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
-			parameterList.Add(DATA ?? throw new ArgumentNullException(nameof(DATA)));
-			return new PROGRAM_INFOSubcommand(PROGRAM_INFOSubcommandValue.GET_SPEED, parameterList.ToArray());
-		}
-
-		/// <param name="PRGID">Program slot number</param>
-		/// <param name="DATA">Program result [OK, BUSY, FAIL]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static PROGRAM_INFOSubcommand cmdGET_PRGRESULT(IExpression<Data16> PRGID, IExpression<Data8> DATA)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
-			parameterList.Add(DATA ?? throw new ArgumentNullException(nameof(DATA)));
-			return new PROGRAM_INFOSubcommand(PROGRAM_INFOSubcommandValue.GET_PRGRESULT, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Set number of instructions before VMThread change
-		/// </summary>
-		/// <param name="PRGID">Program slot number</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static PROGRAM_INFOSubcommand cmdSET_INSTR(IExpression<Data16> PRGID)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
-			return new PROGRAM_INFOSubcommand(PROGRAM_INFOSubcommandValue.SET_INSTR, parameterList.ToArray());
-		}
-
-		/// <param name="PRGID">Program slot number</param>
-		/// <param name="NAME">Program name</param>
-		[Support(Official = false, Xtended = true, Compat = true)]
-		public static PROGRAM_INFOSubcommand cmdGET_PRGNAME(IExpression<Data16> PRGID, IExpression<Data8> NAME)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
-			parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
-			return new PROGRAM_INFOSubcommand(PROGRAM_INFOSubcommandValue.GET_PRGNAME, parameterList.ToArray());
-		}
-
-		/// <param name="NUMBER">Error number</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static INFOSubcommand cmdSET_ERROR(IExpression<Data8> NUMBER)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(NUMBER ?? throw new ArgumentNullException(nameof(NUMBER)));
-			return new INFOSubcommand(INFOSubcommandValue.SET_ERROR, parameterList.ToArray());
-		}
-
-		/// <param name="NUMBER">Error number</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static INFOSubcommand cmdGET_ERROR(IExpression<Data8> NUMBER)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(NUMBER ?? throw new ArgumentNullException(nameof(NUMBER)));
-			return new INFOSubcommand(INFOSubcommandValue.GET_ERROR, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Convert error number to text string
-		/// </summary>
-		/// <param name="NUMBER">Error number</param>
-		/// <param name="LENGTH">Maximal length of string returned (-1 = no check)</param>
-		/// <param name="DESTINATION">Message</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static INFOSubcommand cmdERRORTEXT(IExpression<Data8> NUMBER, IExpression<Data8> LENGTH, IExpression<DataString> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(NUMBER ?? throw new ArgumentNullException(nameof(NUMBER)));
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new INFOSubcommand(INFOSubcommandValue.ERRORTEXT, parameterList.ToArray());
-		}
-
-		/// <param name="VALUE">Volume [0..100%]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static INFOSubcommand cmdGET_VOLUME(IExpression<Data8> VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new INFOSubcommand(INFOSubcommandValue.GET_VOLUME, parameterList.ToArray());
-		}
-
-		/// <param name="VALUE">Volume [0..100%]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static INFOSubcommand cmdSET_VOLUME(IExpression<Data8> VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new INFOSubcommand(INFOSubcommandValue.SET_VOLUME, parameterList.ToArray());
-		}
-
-		/// <param name="VALUE">Minutes to sleep [0..120min] (0 = never)</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static INFOSubcommand cmdGET_MINUTES(IExpression<Data8> VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new INFOSubcommand(INFOSubcommandValue.GET_MINUTES, parameterList.ToArray());
-		}
-
-		/// <param name="VALUE">Minutes to sleep [0..120min] (0 = never)</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static INFOSubcommand cmdSET_MINUTES(IExpression<Data8> VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new INFOSubcommand(INFOSubcommandValue.SET_MINUTES, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Get size of string (not including zero termination)
-		/// </summary>
-		/// <param name="SOURCE1">String variable or handle to string</param>
-		/// <param name="SIZE">Size</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static STRINGSSubcommand cmdGET_SIZE(IExpression<DataString> SOURCE1, IExpression<Data16> SIZE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(SIZE ?? throw new ArgumentNullException(nameof(SIZE)));
-			return new STRINGSSubcommand(STRINGSSubcommandValue.GET_SIZE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Add two strings (SOURCE1 + SOURCE2 -&gt; DESTINATION)
-		/// </summary>
-		/// <param name="SOURCE1">String variable or handle to string</param>
-		/// <param name="SOURCE2">String variable or handle to string</param>
-		/// <param name="DESTINATION">String variable or handle to string</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static STRINGSSubcommand cmdADD(IExpression<DataString> SOURCE1, IExpression<DataString> SOURCE2, IExpression<DataString> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new STRINGSSubcommand(STRINGSSubcommandValue.ADD, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Compare two strings
-		/// </summary>
-		/// <param name="SOURCE1">String variable or handle to string</param>
-		/// <param name="SOURCE2">String variable or handle to string</param>
-		/// <param name="RESULT">Result (0 = not equal, 1 = equal)</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static STRINGSSubcommand cmdCOMPARE(IExpression<DataString> SOURCE1, IExpression<DataString> SOURCE2, IExpression<Data8> RESULT)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
-			parameterList.Add(RESULT ?? throw new ArgumentNullException(nameof(RESULT)));
-			return new STRINGSSubcommand(STRINGSSubcommandValue.COMPARE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Duplicate a string (SOURCE1 -&gt; DESTINATION)
-		/// </summary>
-		/// <param name="SOURCE1">String variable or handle to string</param>
-		/// <param name="DESTINATION">String variable or handle to string</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static STRINGSSubcommand cmdDUPLICATE(IExpression<DataString> SOURCE1, IExpression<DataString> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new STRINGSSubcommand(STRINGSSubcommandValue.DUPLICATE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Convert floating point value to a string (strips trailing zeroes)
-		/// </summary>
-		/// <param name="VALUE">Value to write (if "nan" op to 4 dashes is returned: "----")</param>
-		/// <param name="FIGURES">Total number of figures inclusive decimal point (FIGURES &lt; 0 -&gt; Left adjusted)</param>
-		/// <param name="DECIMALS">Number of decimals</param>
-		/// <param name="DESTINATION">String variable or handle to string</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static STRINGSSubcommand cmdVALUE_TO_STRING(IExpression<DataFloat> VALUE, IExpression<Data8> FIGURES, IExpression<Data8> DECIMALS, IExpression<DataString> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			parameterList.Add(FIGURES ?? throw new ArgumentNullException(nameof(FIGURES)));
-			parameterList.Add(DECIMALS ?? throw new ArgumentNullException(nameof(DECIMALS)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new STRINGSSubcommand(STRINGSSubcommandValue.VALUE_TO_STRING, parameterList.ToArray());
-		}
-
-		/// <param name="SOURCE1">String variable or handle to string</param>
-		/// <param name="DESTINATION">Value</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static STRINGSSubcommand cmdSTRING_TO_VALUE(IExpression<DataString> SOURCE1, IExpression<DataFloat> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new STRINGSSubcommand(STRINGSSubcommandValue.STRING_TO_VALUE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Strip a string for spaces (SOURCE1 -&gt; DESTINATION)
-		/// </summary>
-		/// <param name="SOURCE1">String variable or handle to string</param>
-		/// <param name="DESTINATION">String variable or handle to string</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static STRINGSSubcommand cmdSTRIP(IExpression<DataString> SOURCE1, IExpression<DataString> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new STRINGSSubcommand(STRINGSSubcommandValue.STRIP, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Convert integer value to a string
-		/// </summary>
-		/// <param name="VALUE">Value to write</param>
-		/// <param name="FIGURES">Total number of figures</param>
-		/// <param name="DESTINATION">String variable or handle to string</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static STRINGSSubcommand cmdNUMBER_TO_STRING(IExpression<Data16> VALUE, IExpression<Data8> FIGURES, IExpression<DataString> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			parameterList.Add(FIGURES ?? throw new ArgumentNullException(nameof(FIGURES)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new STRINGSSubcommand(STRINGSSubcommandValue.NUMBER_TO_STRING, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Return DESTINATION: a substring from SOURCE1 that starts were SOURCE2 ends
-		/// </summary>
-		/// <param name="SOURCE1">String variable or handle to string</param>
-		/// <param name="SOURCE2">String variable or handle to string</param>
-		/// <param name="DESTINATION">String variable or handle to string</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static STRINGSSubcommand cmdSUB(IExpression<DataString> SOURCE1, IExpression<DataString> SOURCE2, IExpression<DataString> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
-			parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new STRINGSSubcommand(STRINGSSubcommandValue.SUB, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Convert floating point value to a formatted string
-		/// </summary>
-		/// <param name="VALUE">Value to write</param>
-		/// <param name="FORMAT">Format string variable or handle to string</param>
-		/// <param name="SIZE">Total size of destination string</param>
-		/// <param name="DESTINATION">String variable or handle to string</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static STRINGSSubcommand cmdVALUE_FORMATTED(IExpression<DataFloat> VALUE, IExpression<DataString> FORMAT, IExpression<Data8> SIZE, IExpression<DataString> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			parameterList.Add(FORMAT ?? throw new ArgumentNullException(nameof(FORMAT)));
-			parameterList.Add(SIZE ?? throw new ArgumentNullException(nameof(SIZE)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new STRINGSSubcommand(STRINGSSubcommandValue.VALUE_FORMATTED, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Convert integer number to a formatted string
-		/// </summary>
-		/// <param name="VALUE">Number to write</param>
-		/// <param name="FORMAT">Format string variable or handle to string</param>
-		/// <param name="SIZE">Total size of destination string</param>
-		/// <param name="DESTINATION">String variable or handle to string</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static STRINGSSubcommand cmdNUMBER_FORMATTED(IExpression<Data32> VALUE, IExpression<DataString> FORMAT, IExpression<Data8> SIZE, IExpression<DataString> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			parameterList.Add(FORMAT ?? throw new ArgumentNullException(nameof(FORMAT)));
-			parameterList.Add(SIZE ?? throw new ArgumentNullException(nameof(SIZE)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new STRINGSSubcommand(STRINGSSubcommandValue.NUMBER_FORMATTED, parameterList.ToArray());
-		}
-
-		/// <param name="VALUE">Battery voltage [V]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_READSubcommand cmdGET_VBATT(IExpression<DataFloat> VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new UI_READSubcommand(UI_READSubcommandValue.GET_VBATT, parameterList.ToArray());
-		}
-
-		/// <param name="VALUE">Battery current [A]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_READSubcommand cmdGET_IBATT(IExpression<DataFloat> VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new UI_READSubcommand(UI_READSubcommandValue.GET_IBATT, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Get os version string
-		/// </summary>
-		/// <param name="LENGTH">Maximal length of string returned (-1 = no check)</param>
-		/// <param name="DESTINATION">String variable or handle to string</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_READSubcommand cmdGET_OS_VERS(IExpression<Data8> LENGTH, IExpression<DataString> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new UI_READSubcommand(UI_READSubcommandValue.GET_OS_VERS, parameterList.ToArray());
-		}
-
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_READSubcommand cmdGET_EVENT(IExpression<Data8> EVENT)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(EVENT ?? throw new ArgumentNullException(nameof(EVENT)));
-			return new UI_READSubcommand(UI_READSubcommandValue.GET_EVENT, parameterList.ToArray());
-		}
-
-		/// <param name="VALUE">Battery temperature rise [C]</param>
-		/// <remarks>
-		/// This returns 0 on all known hardware. The EV3 has code to estimate battery temperature, but it is disabled.
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_READSubcommand cmdGET_TBATT(IExpression<DataFloat> VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new UI_READSubcommand(UI_READSubcommandValue.GET_TBATT, parameterList.ToArray());
-		}
-
-		/// <param name="IINT">Integrated battery current [A]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_READSubcommand cmdGET_IINT(IExpression<DataFloat> IINT)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(IINT ?? throw new ArgumentNullException(nameof(IINT)));
-			return new UI_READSubcommand(UI_READSubcommandValue.GET_IINT, parameterList.ToArray());
-		}
-
-		/// <param name="VALUE">Motor current [A]</param>
-		/// <remarks>
-		/// Only pre-release EV3 hardware returns a real value. Returns 0 on all known devices (they lack the necessary hardware).
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_READSubcommand cmdGET_IMOTOR(IExpression<DataFloat> VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new UI_READSubcommand(UI_READSubcommandValue.GET_IMOTOR, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Get string from terminal
-		/// </summary>
-		/// <param name="LENGTH">Maximal length of string returned</param>
-		/// <param name="DESTINATION">String variable or handle to string</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_READSubcommand cmdGET_STRING(IExpression<Data8> LENGTH, IExpression<DataString> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new UI_READSubcommand(UI_READSubcommandValue.GET_STRING, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Get hardware version string
-		/// </summary>
-		/// <param name="LENGTH">Maximal length of string returned (-1 = no check)</param>
-		/// <param name="DESTINATION">String variable or handle to string</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_READSubcommand cmdGET_HW_VERS(IExpression<Data8> LENGTH, IExpression<DataString> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new UI_READSubcommand(UI_READSubcommandValue.GET_HW_VERS, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Get firmware version string
-		/// </summary>
-		/// <param name="LENGTH">Maximal length of string returned (-1 = no check)</param>
-		/// <param name="DESTINATION">String variable or handle to string</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_READSubcommand cmdGET_FW_VERS(IExpression<Data8> LENGTH, IExpression<DataString> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new UI_READSubcommand(UI_READSubcommandValue.GET_FW_VERS, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Get firmware build string
-		/// </summary>
-		/// <param name="LENGTH">Maximal length of string returned (-1 = no check)</param>
-		/// <param name="DESTINATION">String variable or handle to string</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_READSubcommand cmdGET_FW_BUILD(IExpression<Data8> LENGTH, IExpression<DataString> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new UI_READSubcommand(UI_READSubcommandValue.GET_FW_BUILD, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Get os build string
-		/// </summary>
-		/// <param name="LENGTH">Maximal length of string returned (-1 = no check)</param>
-		/// <param name="DESTINATION">String variable or handle to string</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_READSubcommand cmdGET_OS_BUILD(IExpression<Data8> LENGTH, IExpression<DataString> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new UI_READSubcommand(UI_READSubcommandValue.GET_OS_BUILD, parameterList.ToArray());
-		}
-
-		/// <param name="VALUE">Address from lms_cmdin</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_READSubcommand cmdGET_ADDRESS(IExpression<Data32> VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new UI_READSubcommand(UI_READSubcommandValue.GET_ADDRESS, parameterList.ToArray());
-		}
-
-		/// <param name="LENGTH">Maximal code stream length</param>
-		/// <param name="IMAGE">Address of image</param>
-		/// <param name="GLOBAL">Address of global variables</param>
-		/// <param name="FLAG">Flag tells if image is ready</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_READSubcommand cmdGET_CODE(IExpression<Data32> LENGTH, IExpression<Data32> IMAGE, IExpression<Data32> GLOBAL, IExpression<Data8> FLAG)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(IMAGE ?? throw new ArgumentNullException(nameof(IMAGE)));
-			parameterList.Add(GLOBAL ?? throw new ArgumentNullException(nameof(GLOBAL)));
-			parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
-			return new UI_READSubcommand(UI_READSubcommandValue.GET_CODE, parameterList.ToArray());
-		}
-
-		/// <param name="VALUE">Key value from lms_cmdin (0 = no key)</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_READSubcommand cmdKEY(IExpression<Data8> VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new UI_READSubcommand(UI_READSubcommandValue.KEY, parameterList.ToArray());
-		}
-
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_READSubcommand cmdGET_SHUTDOWN(IExpression<Data8> FLAG)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
-			return new UI_READSubcommand(UI_READSubcommandValue.GET_SHUTDOWN, parameterList.ToArray());
-		}
-
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_READSubcommand cmdGET_WARNING(IExpression<Data8> WARNINGS)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(WARNINGS ?? throw new ArgumentNullException(nameof(WARNINGS)));
-			return new UI_READSubcommand(UI_READSubcommandValue.GET_WARNING, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Get battery level in %
-		/// </summary>
-		/// <param name="PCT">Battery level [0..100]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_READSubcommand cmdGET_LBATT(IExpression<Data8> PCT)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(PCT ?? throw new ArgumentNullException(nameof(PCT)));
-			return new UI_READSubcommand(UI_READSubcommandValue.GET_LBATT, parameterList.ToArray());
-		}
-
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_READSubcommand cmdTEXTBOX_READ(IExpression<Data8> TEXT, IExpression<Data32> SIZE, IExpression<Data8> DEL, IExpression<Data8> LENGTH, IExpression<Data16> LINE, IExpression<Data8> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(TEXT ?? throw new ArgumentNullException(nameof(TEXT)));
-			parameterList.Add(SIZE ?? throw new ArgumentNullException(nameof(SIZE)));
-			parameterList.Add(DEL ?? throw new ArgumentNullException(nameof(DEL)));
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(LINE ?? throw new ArgumentNullException(nameof(LINE)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new UI_READSubcommand(UI_READSubcommandValue.TEXTBOX_READ, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Get version string
-		/// </summary>
-		/// <param name="LENGTH">Maximal length of string returned (-1 = no check)</param>
-		/// <param name="DESTINATION">String variable or handle to string</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_READSubcommand cmdGET_VERSION(IExpression<Data8> LENGTH, IExpression<DataString> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new UI_READSubcommand(UI_READSubcommandValue.GET_VERSION, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Get IP address string
-		/// </summary>
-		/// <param name="LENGTH">Maximal length of string returned (-1 = no check)</param>
-		/// <param name="DESTINATION">String variable or handle to string</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_READSubcommand cmdGET_IP(IExpression<Data8> LENGTH, IExpression<DataString> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new UI_READSubcommand(UI_READSubcommandValue.GET_IP, parameterList.ToArray());
-		}
-
-		/// <param name="VBATT">Battery voltage [V]</param>
-		/// <param name="IBATT">Battery current [A]</param>
-		/// <param name="IINT">Integrated battery current [A]</param>
-		/// <param name="IMOTOR">Motor current [A]</param>
-		/// <remarks>
-		/// All known hardware returns 0 for IMOTOR.
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_READSubcommand cmdGET_POWER(IExpression<DataFloat> VBATT, IExpression<DataFloat> IBATT, IExpression<DataFloat> IINT, IExpression<DataFloat> IMOTOR)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(VBATT ?? throw new ArgumentNullException(nameof(VBATT)));
-			parameterList.Add(IBATT ?? throw new ArgumentNullException(nameof(IBATT)));
-			parameterList.Add(IINT ?? throw new ArgumentNullException(nameof(IINT)));
-			parameterList.Add(IMOTOR ?? throw new ArgumentNullException(nameof(IMOTOR)));
-			return new UI_READSubcommand(UI_READSubcommandValue.GET_POWER, parameterList.ToArray());
-		}
-
-		/// <param name="STATE">SD card present [0..1]</param>
-		/// <param name="TOTAL">Kbytes in total</param>
-		/// <param name="FREE">Kbytes free</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_READSubcommand cmdGET_SDCARD(IExpression<Data8> STATE, IExpression<Data32> TOTAL, IExpression<Data32> FREE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(STATE ?? throw new ArgumentNullException(nameof(STATE)));
-			parameterList.Add(TOTAL ?? throw new ArgumentNullException(nameof(TOTAL)));
-			parameterList.Add(FREE ?? throw new ArgumentNullException(nameof(FREE)));
-			return new UI_READSubcommand(UI_READSubcommandValue.GET_SDCARD, parameterList.ToArray());
-		}
-
-		/// <param name="STATE">USB stick present [0..1]</param>
-		/// <param name="TOTAL">Kbytes in total</param>
-		/// <param name="FREE">Kbytes free</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_READSubcommand cmdGET_USBSTICK(IExpression<Data8> STATE, IExpression<Data32> TOTAL, IExpression<Data32> FREE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(STATE ?? throw new ArgumentNullException(nameof(STATE)));
-			parameterList.Add(TOTAL ?? throw new ArgumentNullException(nameof(TOTAL)));
-			parameterList.Add(FREE ?? throw new ArgumentNullException(nameof(FREE)));
-			return new UI_READSubcommand(UI_READSubcommandValue.GET_USBSTICK, parameterList.ToArray());
-		}
-
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_WRITESubcommand cmdWRITE_FLUSH()
-		{
-			var parameterList = new List<IByteCode>();
-			return new UI_WRITESubcommand(UI_WRITESubcommandValue.WRITE_FLUSH, parameterList.ToArray());
-		}
-
-		/// <param name="VALUE">Value to write</param>
-		/// <param name="FIGURES">Total number of figures inclusive decimal point</param>
-		/// <param name="DECIMALS">Number of decimals</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_WRITESubcommand cmdFLOATVALUE(IExpression<DataFloat> VALUE, IExpression<Data8> FIGURES, IExpression<Data8> DECIMALS)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			parameterList.Add(FIGURES ?? throw new ArgumentNullException(nameof(FIGURES)));
-			parameterList.Add(DECIMALS ?? throw new ArgumentNullException(nameof(DECIMALS)));
-			return new UI_WRITESubcommand(UI_WRITESubcommandValue.FLOATVALUE, parameterList.ToArray());
-		}
-
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_WRITESubcommand cmdSTAMP(IExpression<Data8> VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new UI_WRITESubcommand(UI_WRITESubcommandValue.STAMP, parameterList.ToArray());
-		}
-
-		/// <param name="STRING">String</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_WRITESubcommand cmdPUT_STRING(IExpression<DataString> STRING)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(STRING ?? throw new ArgumentNullException(nameof(STRING)));
-			return new UI_WRITESubcommand(UI_WRITESubcommandValue.PUT_STRING, parameterList.ToArray());
-		}
-
-		/// <param name="VALUE">Value to write</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_WRITESubcommand cmdVALUE8(IExpression<Data8> VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new UI_WRITESubcommand(UI_WRITESubcommandValue.VALUE8, parameterList.ToArray());
-		}
-
-		/// <param name="VALUE">Value to write</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_WRITESubcommand cmdVALUE16(IExpression<Data16> VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new UI_WRITESubcommand(UI_WRITESubcommandValue.VALUE16, parameterList.ToArray());
-		}
-
-		/// <param name="VALUE">Value to write</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_WRITESubcommand cmdVALUE32(IExpression<Data32> VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new UI_WRITESubcommand(UI_WRITESubcommandValue.VALUE32, parameterList.ToArray());
-		}
-
-		/// <param name="VALUE">Value to write</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_WRITESubcommand cmdVALUEF(IExpression<DataFloat> VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new UI_WRITESubcommand(UI_WRITESubcommandValue.VALUEF, parameterList.ToArray());
-		}
-
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_WRITESubcommand cmdADDRESS(IExpression<Data32> VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new UI_WRITESubcommand(UI_WRITESubcommandValue.ADDRESS, parameterList.ToArray());
-		}
-
-		/// <param name="ARRAY">First byte in byte array to write</param>
-		/// <param name="LENGTH">Length of array</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_WRITESubcommand cmdCODE(IExpression<Data8> ARRAY, IExpression<Data32> LENGTH)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(ARRAY ?? throw new ArgumentNullException(nameof(ARRAY)));
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			return new UI_WRITESubcommand(UI_WRITESubcommandValue.CODE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Send to brick when file down load is completed (plays sound and updates the UI browser)
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_WRITESubcommand cmdDOWNLOAD_END()
-		{
-			var parameterList = new List<IByteCode>();
-			return new UI_WRITESubcommand(UI_WRITESubcommandValue.DOWNLOAD_END, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Set or clear screen block status (if screen blocked - all graphical screen action are disabled)
-		/// </summary>
-		/// <param name="STATUS">Value [0 = normal,1 = blocked]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_WRITESubcommand cmdSCREEN_BLOCK(IExpression<Data8> STATUS)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(STATUS ?? throw new ArgumentNullException(nameof(STATUS)));
-			return new UI_WRITESubcommand(UI_WRITESubcommandValue.SCREEN_BLOCK, parameterList.ToArray());
-		}
-
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_WRITESubcommand cmdALLOW_PULSE(IExpression<Data8> VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new UI_WRITESubcommand(UI_WRITESubcommandValue.ALLOW_PULSE, parameterList.ToArray());
-		}
-
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_WRITESubcommand cmdSET_PULSE(IExpression<Data8> VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new UI_WRITESubcommand(UI_WRITESubcommandValue.SET_PULSE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Append line of text at the bottom of a text box
-		/// </summary>
-		/// <param name="TEXT">Text box text (must be zero terminated)</param>
-		/// <param name="SIZE">Maximal text size (including zero termination)</param>
-		/// <param name="DEL">Delimiter code</param>
-		/// <param name="SOURCE">String variable or handle to string to append</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_WRITESubcommand cmdTEXTBOX_APPEND(IExpression<DataString> TEXT, IExpression<Data32> SIZE, IExpression<Data8> DEL, IExpression<DataString> SOURCE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(TEXT ?? throw new ArgumentNullException(nameof(TEXT)));
-			parameterList.Add(SIZE ?? throw new ArgumentNullException(nameof(SIZE)));
-			parameterList.Add(DEL ?? throw new ArgumentNullException(nameof(DEL)));
-			parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
-			return new UI_WRITESubcommand(UI_WRITESubcommandValue.TEXTBOX_APPEND, parameterList.ToArray());
-		}
-
-		/// <param name="VALUE">Value [0,1]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_WRITESubcommand cmdSET_BUSY(IExpression<Data8> VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new UI_WRITESubcommand(UI_WRITESubcommandValue.SET_BUSY, parameterList.ToArray());
-		}
-
-		/// <param name="STATE">Value [0 = low,1 = high]</param>
-		/// <remarks>
-		/// This was only available on pre-release EV3 hardware.
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_WRITESubcommand cmdSET_TESTPIN(IExpression<Data8> STATE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(STATE ?? throw new ArgumentNullException(nameof(STATE)));
-			return new UI_WRITESubcommand(UI_WRITESubcommandValue.SET_TESTPIN, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Start the "Mindstorms" "run" screen
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_WRITESubcommand cmdINIT_RUN()
-		{
-			var parameterList = new List<IByteCode>();
-			return new UI_WRITESubcommand(UI_WRITESubcommandValue.INIT_RUN, parameterList.ToArray());
-		}
-
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_WRITESubcommand cmdUPDATE_RUN()
-		{
-			var parameterList = new List<IByteCode>();
-			return new UI_WRITESubcommand(UI_WRITESubcommandValue.UPDATE_RUN, parameterList.ToArray());
-		}
-
-		/// <param name="PATTERN">LED Pattern</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_WRITESubcommand cmdLED(IExpression<Data8> PATTERN)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(PATTERN ?? throw new ArgumentNullException(nameof(PATTERN)));
-			return new UI_WRITESubcommand(UI_WRITESubcommandValue.LED, parameterList.ToArray());
-		}
-
-		/// <param name="VALUE">Value [0,1]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_WRITESubcommand cmdPOWER(IExpression<Data8> VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new UI_WRITESubcommand(UI_WRITESubcommandValue.POWER, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Update tick to scroll graph horizontally in memory when drawing graph in "scope" mode
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_WRITESubcommand cmdGRAPH_SAMPLE()
-		{
-			var parameterList = new List<IByteCode>();
-			return new UI_WRITESubcommand(UI_WRITESubcommandValue.GRAPH_SAMPLE, parameterList.ToArray());
-		}
-
-		/// <param name="STATE">Value [0 = Off,1 = On]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_WRITESubcommand cmdTERMINAL(IExpression<Data8> STATE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(STATE ?? throw new ArgumentNullException(nameof(STATE)));
-			return new UI_WRITESubcommand(UI_WRITESubcommandValue.TERMINAL, parameterList.ToArray());
-		}
-
-		/// <param name="BUTTON"></param>
-		/// <param name="STATE">Button has been pressed (0 = no, 1 = yes)</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_BUTTONSubcommand cmdSHORTPRESS(IExpression<Data8> BUTTON, IExpression<Data8> STATE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(BUTTON ?? throw new ArgumentNullException(nameof(BUTTON)));
-			parameterList.Add(STATE ?? throw new ArgumentNullException(nameof(STATE)));
-			return new UI_BUTTONSubcommand(UI_BUTTONSubcommandValue.SHORTPRESS, parameterList.ToArray());
-		}
-
-		/// <param name="BUTTON"></param>
-		/// <param name="STATE">Button has been pressed (0 = no, 1 = yes)</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_BUTTONSubcommand cmdLONGPRESS(IExpression<Data8> BUTTON, IExpression<Data8> STATE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(BUTTON ?? throw new ArgumentNullException(nameof(BUTTON)));
-			parameterList.Add(STATE ?? throw new ArgumentNullException(nameof(STATE)));
-			return new UI_BUTTONSubcommand(UI_BUTTONSubcommandValue.LONGPRESS, parameterList.ToArray());
-		}
-
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_BUTTONSubcommand cmdWAIT_FOR_PRESS()
-		{
-			var parameterList = new List<IByteCode>();
-			return new UI_BUTTONSubcommand(UI_BUTTONSubcommandValue.WAIT_FOR_PRESS, parameterList.ToArray());
-		}
-
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_BUTTONSubcommand cmdFLUSH()
-		{
-			var parameterList = new List<IByteCode>();
-			return new UI_BUTTONSubcommand(UI_BUTTONSubcommandValue.FLUSH, parameterList.ToArray());
-		}
-
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_BUTTONSubcommand cmdPRESS(IExpression<Data8> BUTTON)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(BUTTON ?? throw new ArgumentNullException(nameof(BUTTON)));
-			return new UI_BUTTONSubcommand(UI_BUTTONSubcommandValue.PRESS, parameterList.ToArray());
-		}
-
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_BUTTONSubcommand cmdRELEASE(IExpression<Data8> BUTTON)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(BUTTON ?? throw new ArgumentNullException(nameof(BUTTON)));
-			return new UI_BUTTONSubcommand(UI_BUTTONSubcommandValue.RELEASE, parameterList.ToArray());
-		}
-
-		/// <param name="VALUE">Horizontal arrows data (-1 = left, +1 = right, 0 = not pressed)</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_BUTTONSubcommand cmdGET_HORZ(IExpression<Data16> VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new UI_BUTTONSubcommand(UI_BUTTONSubcommandValue.GET_HORZ, parameterList.ToArray());
-		}
-
-		/// <param name="VALUE">Vertical arrows data (-1 = up, +1 = down, 0 = not pressed)</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_BUTTONSubcommand cmdGET_VERT(IExpression<Data16> VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new UI_BUTTONSubcommand(UI_BUTTONSubcommandValue.GET_VERT, parameterList.ToArray());
-		}
-
-		/// <param name="BUTTON"></param>
-		/// <param name="STATE">Button is pressed (0 = no, 1 = yes)</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_BUTTONSubcommand cmdPRESSED(IExpression<Data8> BUTTON, IExpression<Data8> STATE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(BUTTON ?? throw new ArgumentNullException(nameof(BUTTON)));
-			parameterList.Add(STATE ?? throw new ArgumentNullException(nameof(STATE)));
-			return new UI_BUTTONSubcommand(UI_BUTTONSubcommandValue.PRESSED, parameterList.ToArray());
-		}
-
-		/// <param name="BLOCKED">Set UI back button blocked flag (0 = not blocked, 1 = blocked)</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_BUTTONSubcommand cmdSET_BACK_BLOCK(IExpression<Data8> BLOCKED)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(BLOCKED ?? throw new ArgumentNullException(nameof(BLOCKED)));
-			return new UI_BUTTONSubcommand(UI_BUTTONSubcommandValue.SET_BACK_BLOCK, parameterList.ToArray());
-		}
-
-		/// <param name="BLOCKED">Get UI back button blocked flag (0 = not blocked, 1 = blocked)</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_BUTTONSubcommand cmdGET_BACK_BLOCK(IExpression<Data8> BLOCKED)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(BLOCKED ?? throw new ArgumentNullException(nameof(BLOCKED)));
-			return new UI_BUTTONSubcommand(UI_BUTTONSubcommandValue.GET_BACK_BLOCK, parameterList.ToArray());
-		}
-
-		/// <param name="BUTTON"></param>
-		/// <param name="STATE">Button has been hold down(0 = no, 1 = yes)</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_BUTTONSubcommand cmdTESTSHORTPRESS(IExpression<Data8> BUTTON, IExpression<Data8> STATE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(BUTTON ?? throw new ArgumentNullException(nameof(BUTTON)));
-			parameterList.Add(STATE ?? throw new ArgumentNullException(nameof(STATE)));
-			return new UI_BUTTONSubcommand(UI_BUTTONSubcommandValue.TESTSHORTPRESS, parameterList.ToArray());
-		}
-
-		/// <param name="BUTTON"></param>
-		/// <param name="STATE">Button has been hold down(0 = no, 1 = yes)</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_BUTTONSubcommand cmdTESTLONGPRESS(IExpression<Data8> BUTTON, IExpression<Data8> STATE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(BUTTON ?? throw new ArgumentNullException(nameof(BUTTON)));
-			parameterList.Add(STATE ?? throw new ArgumentNullException(nameof(STATE)));
-			return new UI_BUTTONSubcommand(UI_BUTTONSubcommandValue.TESTLONGPRESS, parameterList.ToArray());
-		}
-
-		/// <param name="BUTTON"></param>
-		/// <param name="STATE">Button has been pressed (0 = no, 1 = yes)</param>
-		[Support(Official = true, Xtended = true, Compat = false)]
-		public static UI_BUTTONSubcommand cmdGET_BUMBED(IExpression<Data8> BUTTON, IExpression<Data8> STATE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(BUTTON ?? throw new ArgumentNullException(nameof(BUTTON)));
-			parameterList.Add(STATE ?? throw new ArgumentNullException(nameof(STATE)));
-			return new UI_BUTTONSubcommand(UI_BUTTONSubcommandValue.GET_BUMBED, parameterList.ToArray());
-		}
-
-		/// <param name="BUTTON"></param>
-		/// <param name="STATE">Button has been pressed (0 = no, 1 = yes)</param>
-		/// <remarks>
-		/// Renamed from GET_BUMBED
-		/// </remarks>
-		[Support(Official = false, Xtended = false, Compat = true)]
-		public static UI_BUTTONSubcommand cmdGET_BUMPED(IExpression<Data8> BUTTON, IExpression<Data8> STATE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(BUTTON ?? throw new ArgumentNullException(nameof(BUTTON)));
-			parameterList.Add(STATE ?? throw new ArgumentNullException(nameof(STATE)));
-			return new UI_BUTTONSubcommand(UI_BUTTONSubcommandValue.GET_BUMPED, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Get and clear click sound request (internal use only)
-		/// </summary>
-		/// <param name="CLICK">Click sound request (0 = no, 1 = yes)</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_BUTTONSubcommand cmdGET_CLICK(IExpression<Data8> CLICK)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(CLICK ?? throw new ArgumentNullException(nameof(CLICK)));
-			return new UI_BUTTONSubcommand(UI_BUTTONSubcommandValue.GET_CLICK, parameterList.ToArray());
-		}
-
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_DRAWSubcommand cmdUPDATE()
-		{
-			var parameterList = new List<IByteCode>();
-			return new UI_DRAWSubcommand(UI_DRAWSubcommandValue.UPDATE, parameterList.ToArray());
-		}
-
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_DRAWSubcommand cmdCLEAN()
-		{
-			var parameterList = new List<IByteCode>();
-			return new UI_DRAWSubcommand(UI_DRAWSubcommandValue.CLEAN, parameterList.ToArray());
-		}
-
-		/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
-		/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
-		/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_DRAWSubcommand cmdPIXEL(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
-			parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
-			parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
-			return new UI_DRAWSubcommand(UI_DRAWSubcommandValue.PIXEL, parameterList.ToArray());
-		}
-
-		/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
-		/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
-		/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
-		/// <param name="X1">X end [0..LCD_WIDTH]</param>
-		/// <param name="Y1 ">Y end [0..LCD_HEIGHT]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_DRAWSubcommand cmdLINE(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<Data16> X1, IExpression<Data16> Y1 )
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
-			parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
-			parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
-			parameterList.Add(X1 ?? throw new ArgumentNullException(nameof(X1)));
-			parameterList.Add(Y1  ?? throw new ArgumentNullException(nameof(Y1 )));
-			return new UI_DRAWSubcommand(UI_DRAWSubcommandValue.LINE, parameterList.ToArray());
-		}
-
-		/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
-		/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
-		/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
-		/// <param name="R">Radius</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_DRAWSubcommand cmdCIRCLE(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<Data16> R)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
-			parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
-			parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
-			parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
-			return new UI_DRAWSubcommand(UI_DRAWSubcommandValue.CIRCLE, parameterList.ToArray());
-		}
-
-		/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
-		/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
-		/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
-		/// <param name="STRING">Text to draw</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_DRAWSubcommand cmdTEXT(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<DataString> STRING)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
-			parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
-			parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
-			parameterList.Add(STRING ?? throw new ArgumentNullException(nameof(STRING)));
-			return new UI_DRAWSubcommand(UI_DRAWSubcommandValue.TEXT, parameterList.ToArray());
-		}
-
-		/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
-		/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
-		/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
-		/// <param name="TYPE">Icon type (pool)</param>
-		/// <param name="NO">Icon number</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_DRAWSubcommand cmdICON(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<Data8> TYPE, IExpression<Data8> NO)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
-			parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
-			parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
-			parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			return new UI_DRAWSubcommand(UI_DRAWSubcommandValue.ICON, parameterList.ToArray());
-		}
-
-		/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
-		/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
-		/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
-		/// <param name="IP">Address of picture</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_DRAWSubcommand cmdPICTURE(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<Data32> IP)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
-			parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
-			parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
-			parameterList.Add(IP ?? throw new ArgumentNullException(nameof(IP)));
-			return new UI_DRAWSubcommand(UI_DRAWSubcommandValue.PICTURE, parameterList.ToArray());
-		}
-
-		/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
-		/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
-		/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
-		/// <param name="VALUE">Value to write</param>
-		/// <param name="FIGURES">Total number of figures inclusive decimal point</param>
-		/// <param name="DECIMALS">Number of decimals</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_DRAWSubcommand cmdVALUE(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<DataFloat> VALUE, IExpression<Data8> FIGURES, IExpression<Data8> DECIMALS)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
-			parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
-			parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			parameterList.Add(FIGURES ?? throw new ArgumentNullException(nameof(FIGURES)));
-			parameterList.Add(DECIMALS ?? throw new ArgumentNullException(nameof(DECIMALS)));
-			return new UI_DRAWSubcommand(UI_DRAWSubcommandValue.VALUE, parameterList.ToArray());
-		}
-
-		/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
-		/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
-		/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
-		/// <param name="X1">X size [0..LCD_WIDTH - X0]</param>
-		/// <param name="Y1 ">Y size [0..LCD_HEIGHT - Y0]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_DRAWSubcommand cmdFILLRECT(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<Data16> X1, IExpression<Data16> Y1 )
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
-			parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
-			parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
-			parameterList.Add(X1 ?? throw new ArgumentNullException(nameof(X1)));
-			parameterList.Add(Y1  ?? throw new ArgumentNullException(nameof(Y1 )));
-			return new UI_DRAWSubcommand(UI_DRAWSubcommandValue.FILLRECT, parameterList.ToArray());
-		}
-
-		/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
-		/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
-		/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
-		/// <param name="X1">X size [0..LCD_WIDTH - X0]</param>
-		/// <param name="Y1 ">Y size [0..LCD_HEIGHT - Y0]</param>
-		[Support(Official = true, Xtended = false, Compat = false)]
-		public static UI_DRAWSubcommand cmdRECT(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<Data16> X1, IExpression<Data16> Y1 )
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
-			parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
-			parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
-			parameterList.Add(X1 ?? throw new ArgumentNullException(nameof(X1)));
-			parameterList.Add(Y1  ?? throw new ArgumentNullException(nameof(Y1 )));
-			return new UI_DRAWSubcommand(UI_DRAWSubcommandValue.RECT, parameterList.ToArray());
-		}
-
-		/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
-		/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
-		/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
-		/// <param name="X1">X size [0..LCD_WIDTH - X0]</param>
-		/// <param name="Y1 ">Y size [0..LCD_HEIGHT - Y0]</param>
-		/// <remarks>
-		/// renamed from RECT
-		/// </remarks>
-		[Support(Official = false, Xtended = true, Compat = true)]
-		public static UI_DRAWSubcommand cmdRECTANGLE(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<Data16> X1, IExpression<Data16> Y1 )
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
-			parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
-			parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
-			parameterList.Add(X1 ?? throw new ArgumentNullException(nameof(X1)));
-			parameterList.Add(Y1  ?? throw new ArgumentNullException(nameof(Y1 )));
-			return new UI_DRAWSubcommand(UI_DRAWSubcommandValue.RECTANGLE, parameterList.ToArray());
-		}
-
-		/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
-		/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
-		/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
-		/// <param name="ICON1">First icon</param>
-		/// <param name="ICON2">Second icon</param>
-		/// <param name="ICON3">Third icon</param>
-		/// <param name="STRING">Notification text</param>
-		/// <param name="STATE">State 0 = INIT</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_DRAWSubcommand cmdNOTIFICATION(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<Data8> ICON1, IExpression<Data8> ICON2, IExpression<Data8> ICON3, IExpression<DataString> STRING, IExpression<Data8> STATE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
-			parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
-			parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
-			parameterList.Add(ICON1 ?? throw new ArgumentNullException(nameof(ICON1)));
-			parameterList.Add(ICON2 ?? throw new ArgumentNullException(nameof(ICON2)));
-			parameterList.Add(ICON3 ?? throw new ArgumentNullException(nameof(ICON3)));
-			parameterList.Add(STRING ?? throw new ArgumentNullException(nameof(STRING)));
-			parameterList.Add(STATE ?? throw new ArgumentNullException(nameof(STATE)));
-			return new UI_DRAWSubcommand(UI_DRAWSubcommandValue.NOTIFICATION, parameterList.ToArray());
-		}
-
-		/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
-		/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
-		/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
-		/// <param name="ICON1">First icon</param>
-		/// <param name="ICON2">Second icon</param>
-		/// <param name="STRING">Question text</param>
-		/// <param name="STATE">State 0 = NO, 1 = OK</param>
-		/// <param name="OK">Answer 0 = NO, 1 = OK, -1 = SKIP</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_DRAWSubcommand cmdQUESTION(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<Data8> ICON1, IExpression<Data8> ICON2, IExpression<DataString> STRING, IExpression<Data8> STATE, IExpression<Data8> OK)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
-			parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
-			parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
-			parameterList.Add(ICON1 ?? throw new ArgumentNullException(nameof(ICON1)));
-			parameterList.Add(ICON2 ?? throw new ArgumentNullException(nameof(ICON2)));
-			parameterList.Add(STRING ?? throw new ArgumentNullException(nameof(STRING)));
-			parameterList.Add(STATE ?? throw new ArgumentNullException(nameof(STATE)));
-			parameterList.Add(OK ?? throw new ArgumentNullException(nameof(OK)));
-			return new UI_DRAWSubcommand(UI_DRAWSubcommandValue.QUESTION, parameterList.ToArray());
-		}
-
-		/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
-		/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
-		/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
-		/// <param name="ICON"></param>
-		/// <param name="LENGTH">Maximal string length</param>
-		/// <param name="DEFAULT">Default string (0 = none)</param>
-		/// <param name="CHARSET">Internal use (must be a variable initialised by a "valid character set")</param>
-		/// <param name="STRING">Keyboard input</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_DRAWSubcommand cmdKEYBOARD(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<Data8> ICON, IExpression<Data8> LENGTH, IExpression<DataString> DEFAULT, IExpression<Data8> CHARSET, IExpression<DataString> STRING)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
-			parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
-			parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
-			parameterList.Add(ICON ?? throw new ArgumentNullException(nameof(ICON)));
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(DEFAULT ?? throw new ArgumentNullException(nameof(DEFAULT)));
-			parameterList.Add(CHARSET ?? throw new ArgumentNullException(nameof(CHARSET)));
-			parameterList.Add(STRING ?? throw new ArgumentNullException(nameof(STRING)));
-			return new UI_DRAWSubcommand(UI_DRAWSubcommandValue.KEYBOARD, parameterList.ToArray());
-		}
-
-		/// <param name="TYPE">Browser Types Avaliable</param>
-		/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
-		/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
-		/// <param name="X1">X size [0..LCD_WIDTH]</param>
-		/// <param name="Y1">Y size [0..LCD_HEIGHT]</param>
-		/// <param name="LENGTH">Maximal string length</param>
-		/// <param name="ITEM_TYPE">Item type (folder, byte code file, sound file, ...)(must be a zero initialised variable)</param>
-		/// <param name="STRING">Selected item name</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_DRAWSubcommand cmdBROWSE(IExpression<Data8> TYPE, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<Data16> X1, IExpression<Data16> Y1, IExpression<Data8> LENGTH, IExpression<Data8> ITEM_TYPE, IExpression<DataString> STRING)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
-			parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
-			parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
-			parameterList.Add(X1 ?? throw new ArgumentNullException(nameof(X1)));
-			parameterList.Add(Y1 ?? throw new ArgumentNullException(nameof(Y1)));
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(ITEM_TYPE ?? throw new ArgumentNullException(nameof(ITEM_TYPE)));
-			parameterList.Add(STRING ?? throw new ArgumentNullException(nameof(STRING)));
-			return new UI_DRAWSubcommand(UI_DRAWSubcommandValue.BROWSE, parameterList.ToArray());
-		}
-
-		/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
-		/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
-		/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
-		/// <param name="X1">X size [0..LCD_WIDTH]</param>
-		/// <param name="Y1">Y size [0..LCD_HEIGHT]</param>
-		/// <param name="MIN">Minimum value</param>
-		/// <param name="MAX">Maximum value</param>
-		/// <param name="ACT">Actual value</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_DRAWSubcommand cmdVERTBAR(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<Data16> X1, IExpression<Data16> Y1, IExpression<Data16> MIN, IExpression<Data16> MAX, IExpression<Data16> ACT)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
-			parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
-			parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
-			parameterList.Add(X1 ?? throw new ArgumentNullException(nameof(X1)));
-			parameterList.Add(Y1 ?? throw new ArgumentNullException(nameof(Y1)));
-			parameterList.Add(MIN ?? throw new ArgumentNullException(nameof(MIN)));
-			parameterList.Add(MAX ?? throw new ArgumentNullException(nameof(MAX)));
-			parameterList.Add(ACT ?? throw new ArgumentNullException(nameof(ACT)));
-			return new UI_DRAWSubcommand(UI_DRAWSubcommandValue.VERTBAR, parameterList.ToArray());
-		}
-
-		/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
-		/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
-		/// <param name="X1">X size [0..LCD_WIDTH]</param>
-		/// <param name="Y1 ">Y size [0..LCD_HEIGHT]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_DRAWSubcommand cmdINVERSERECT(IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<Data16> X1, IExpression<Data16> Y1 )
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
-			parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
-			parameterList.Add(X1 ?? throw new ArgumentNullException(nameof(X1)));
-			parameterList.Add(Y1  ?? throw new ArgumentNullException(nameof(Y1 )));
-			return new UI_DRAWSubcommand(UI_DRAWSubcommandValue.INVERSERECT, parameterList.ToArray());
-		}
-
-		/// <param name="TYPE">Font type [0..2] font will change to 0 when UPDATE is called</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_DRAWSubcommand cmdSELECT_FONT(IExpression<Data8> TYPE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
-			return new UI_DRAWSubcommand(UI_DRAWSubcommandValue.SELECT_FONT, parameterList.ToArray());
-		}
-
-		/// <param name="ENABLE">Enable top status line (0 = disabled, 1 = enabled)</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_DRAWSubcommand cmdTOPLINE(IExpression<Data8> ENABLE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(ENABLE ?? throw new ArgumentNullException(nameof(ENABLE)));
-			return new UI_DRAWSubcommand(UI_DRAWSubcommandValue.TOPLINE, parameterList.ToArray());
-		}
-
-		/// <param name="COLOR">Color [BG_COLOR..FG_COLOR] (Color != BG_COLOR and FG_COLOR -&gt; test pattern)</param>
-		/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
-		/// <param name="Y1">X size [0..LCD_HEIGHT]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_DRAWSubcommand cmdFILLWINDOW(IExpression<Data8> COLOR, IExpression<Data16> Y0, IExpression<Data16> Y1)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
-			parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
-			parameterList.Add(Y1 ?? throw new ArgumentNullException(nameof(Y1)));
-			return new UI_DRAWSubcommand(UI_DRAWSubcommandValue.FILLWINDOW, parameterList.ToArray());
-		}
-
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_DRAWSubcommand cmdSCROLL(IExpression<Data16> Y)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(Y ?? throw new ArgumentNullException(nameof(Y)));
-			return new UI_DRAWSubcommand(UI_DRAWSubcommandValue.SCROLL, parameterList.ToArray());
-		}
-
-		/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
-		/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
-		/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
-		/// <param name="X1">X end [0..LCD_WIDTH]</param>
-		/// <param name="Y1 ">Y end [0..LCD_HEIGHT]</param>
-		/// <param name="ON ">On pixels</param>
-		/// <param name="OFF ">Off pixels</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_DRAWSubcommand cmdDOTLINE(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<Data16> X1, IExpression<Data16> Y1 , IExpression<Data16> ON , IExpression<Data16> OFF )
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
-			parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
-			parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
-			parameterList.Add(X1 ?? throw new ArgumentNullException(nameof(X1)));
-			parameterList.Add(Y1  ?? throw new ArgumentNullException(nameof(Y1 )));
-			parameterList.Add(ON  ?? throw new ArgumentNullException(nameof(ON )));
-			parameterList.Add(OFF  ?? throw new ArgumentNullException(nameof(OFF )));
-			return new UI_DRAWSubcommand(UI_DRAWSubcommandValue.DOTLINE, parameterList.ToArray());
-		}
-
-		/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
-		/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
-		/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
-		/// <param name="VALUE">Value to write</param>
-		/// <param name="FIGURES">Total number of figures inclusive decimal point</param>
-		/// <param name="DECIMALS">Number of decimals</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_DRAWSubcommand cmdVIEW_VALUE(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<DataFloat> VALUE, IExpression<Data8> FIGURES, IExpression<Data8> DECIMALS)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
-			parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
-			parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			parameterList.Add(FIGURES ?? throw new ArgumentNullException(nameof(FIGURES)));
-			parameterList.Add(DECIMALS ?? throw new ArgumentNullException(nameof(DECIMALS)));
-			return new UI_DRAWSubcommand(UI_DRAWSubcommandValue.VIEW_VALUE, parameterList.ToArray());
-		}
-
-		/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
-		/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
-		/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
-		/// <param name="VALUE">Value to write</param>
-		/// <param name="FIGURES">Total number of figures inclusive decimal point</param>
-		/// <param name="DECIMALS">Number of decimals</param>
-		/// <param name="LENGTH">Maximal string length</param>
-		/// <param name="STRING">Text to draw</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_DRAWSubcommand cmdVIEW_UNIT(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<DataFloat> VALUE, IExpression<Data8> FIGURES, IExpression<Data8> DECIMALS, IExpression<Data8> LENGTH, IExpression<DataString> STRING)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
-			parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
-			parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			parameterList.Add(FIGURES ?? throw new ArgumentNullException(nameof(FIGURES)));
-			parameterList.Add(DECIMALS ?? throw new ArgumentNullException(nameof(DECIMALS)));
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(STRING ?? throw new ArgumentNullException(nameof(STRING)));
-			return new UI_DRAWSubcommand(UI_DRAWSubcommandValue.VIEW_UNIT, parameterList.ToArray());
-		}
-
-		/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
-		/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
-		/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
-		/// <param name="R">Radius</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_DRAWSubcommand cmdFILLCIRCLE(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<Data16> R)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
-			parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
-			parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
-			parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
-			return new UI_DRAWSubcommand(UI_DRAWSubcommandValue.FILLCIRCLE, parameterList.ToArray());
-		}
-
-		/// <param name="NO">Level number</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_DRAWSubcommand cmdSTORE(IExpression<Data8> NO)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			return new UI_DRAWSubcommand(UI_DRAWSubcommandValue.STORE, parameterList.ToArray());
-		}
-
-		/// <param name="NO">Level number (N=0 -&gt; Saved screen just before run)</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_DRAWSubcommand cmdRESTORE(IExpression<Data8> NO)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			return new UI_DRAWSubcommand(UI_DRAWSubcommandValue.RESTORE, parameterList.ToArray());
-		}
-
-		/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
-		/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
-		/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
-		/// <param name="STATE">State 0 = INIT</param>
-		/// <param name="ICONS">bitfield with icons</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_DRAWSubcommand cmdICON_QUESTION(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<Data8> STATE, IExpression<Data32> ICONS)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
-			parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
-			parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
-			parameterList.Add(STATE ?? throw new ArgumentNullException(nameof(STATE)));
-			parameterList.Add(ICONS ?? throw new ArgumentNullException(nameof(ICONS)));
-			return new UI_DRAWSubcommand(UI_DRAWSubcommandValue.ICON_QUESTION, parameterList.ToArray());
-		}
-
-		/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
-		/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
-		/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
-		/// <param name="NAME">File name</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_DRAWSubcommand cmdBMPFILE(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<DataString> NAME)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
-			parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
-			parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
-			parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
-			return new UI_DRAWSubcommand(UI_DRAWSubcommandValue.BMPFILE, parameterList.ToArray());
-		}
-
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_DRAWSubcommand cmdPOPUP(IExpression<Data8> OPEN)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(OPEN ?? throw new ArgumentNullException(nameof(OPEN)));
-			return new UI_DRAWSubcommand(UI_DRAWSubcommandValue.POPUP, parameterList.ToArray());
-		}
-
-		/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
-		/// <param name="X1">X size [0..LCD_WIDTH - X0]</param>
-		/// <param name="ITEMS">Number of datasets in arrays</param>
-		/// <param name="OFFSET">DATA16 array (handle) containing Y start cord [0..LCD_HEIGHT]</param>
-		/// <param name="SPAN">DATA16 array (handle) containing Y size [0..(LCD_HEIGHT - hOFFSET[])]</param>
-		/// <param name="MIN">DATAF array (handle) containing min values</param>
-		/// <param name="MAX">DATAF array (handle) containing max values</param>
-		/// <param name="SAMPLE">DATAF array (handle) containing sample values</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_DRAWSubcommand cmdGRAPH_SETUP(IExpression<Data16> X0, IExpression<Data16> X1, IExpression<Data16> ITEMS, IExpression<Data16> OFFSET, IExpression<Data8> SPAN, IExpression<Data16> MIN, IExpression<Data16> MAX, IExpression<Data16> SAMPLE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
-			parameterList.Add(X1 ?? throw new ArgumentNullException(nameof(X1)));
-			parameterList.Add(ITEMS ?? throw new ArgumentNullException(nameof(ITEMS)));
-			parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
-			parameterList.Add(SPAN ?? throw new ArgumentNullException(nameof(SPAN)));
-			parameterList.Add(MIN ?? throw new ArgumentNullException(nameof(MIN)));
-			parameterList.Add(MAX ?? throw new ArgumentNullException(nameof(MAX)));
-			parameterList.Add(SAMPLE ?? throw new ArgumentNullException(nameof(SAMPLE)));
-			return new UI_DRAWSubcommand(UI_DRAWSubcommandValue.GRAPH_SETUP, parameterList.ToArray());
-		}
-
-		/// <param name="VIEW">Dataset number to view (0=all)</param>
-		/// <param name="ACTUAL"></param>
-		/// <param name="LOWEST"></param>
-		/// <param name="HIGHEST"></param>
-		/// <param name="AVERAGE"></param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_DRAWSubcommand cmdGRAPH_DRAW(IExpression<Data8> VIEW, IExpression<DataFloat> ACTUAL, IExpression<DataFloat> LOWEST, IExpression<DataFloat> HIGHEST, IExpression<DataFloat> AVERAGE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(VIEW ?? throw new ArgumentNullException(nameof(VIEW)));
-			parameterList.Add(ACTUAL ?? throw new ArgumentNullException(nameof(ACTUAL)));
-			parameterList.Add(LOWEST ?? throw new ArgumentNullException(nameof(LOWEST)));
-			parameterList.Add(HIGHEST ?? throw new ArgumentNullException(nameof(HIGHEST)));
-			parameterList.Add(AVERAGE ?? throw new ArgumentNullException(nameof(AVERAGE)));
-			return new UI_DRAWSubcommand(UI_DRAWSubcommandValue.GRAPH_DRAW, parameterList.ToArray());
-		}
-
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static UI_DRAWSubcommand cmdTEXTBOX(IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<Data16> X1, IExpression<Data16> Y1, IExpression<Data8> TEXT, IExpression<Data32> SIZE, IExpression<Data8> DEL, IExpression<Data8> LINE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
-			parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
-			parameterList.Add(X1 ?? throw new ArgumentNullException(nameof(X1)));
-			parameterList.Add(Y1 ?? throw new ArgumentNullException(nameof(Y1)));
-			parameterList.Add(TEXT ?? throw new ArgumentNullException(nameof(TEXT)));
-			parameterList.Add(SIZE ?? throw new ArgumentNullException(nameof(SIZE)));
-			parameterList.Add(DEL ?? throw new ArgumentNullException(nameof(DEL)));
-			parameterList.Add(LINE ?? throw new ArgumentNullException(nameof(LINE)));
-			return new UI_DRAWSubcommand(UI_DRAWSubcommandValue.TEXTBOX, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// e^x            r = expf(x)
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static MATHSubcommand cmdEXP(IExpression<DataFloat> X, IExpression<DataFloat> R)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
-			parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
-			return new MATHSubcommand(MATHSubcommandValue.EXP, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Modulo         r = fmod(x,y)
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static MATHSubcommand cmdMOD(IExpression<DataFloat> X, IExpression<DataFloat> Y, IExpression<DataFloat> R)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
-			parameterList.Add(Y ?? throw new ArgumentNullException(nameof(Y)));
-			parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
-			return new MATHSubcommand(MATHSubcommandValue.MOD, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Floor          r = floor(x)
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static MATHSubcommand cmdFLOOR(IExpression<DataFloat> X, IExpression<DataFloat> R)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
-			parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
-			return new MATHSubcommand(MATHSubcommandValue.FLOOR, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Ceiling        r = ceil(x)
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static MATHSubcommand cmdCEIL(IExpression<DataFloat> X, IExpression<DataFloat> R)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
-			parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
-			return new MATHSubcommand(MATHSubcommandValue.CEIL, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Round          r = round(x)
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static MATHSubcommand cmdROUND(IExpression<DataFloat> X, IExpression<DataFloat> R)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
-			parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
-			return new MATHSubcommand(MATHSubcommandValue.ROUND, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Absolute       r = fabs(x)
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static MATHSubcommand cmdABS(IExpression<DataFloat> X, IExpression<DataFloat> R)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
-			parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
-			return new MATHSubcommand(MATHSubcommandValue.ABS, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Negate         r = 0.0 - x
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static MATHSubcommand cmdNEGATE(IExpression<DataFloat> X, IExpression<DataFloat> R)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
-			parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
-			return new MATHSubcommand(MATHSubcommandValue.NEGATE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Squareroot     r = sqrt(x)
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static MATHSubcommand cmdSQRT(IExpression<DataFloat> X, IExpression<DataFloat> R)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
-			parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
-			return new MATHSubcommand(MATHSubcommandValue.SQRT, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Log            r = log10(x)
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static MATHSubcommand cmdLOG(IExpression<DataFloat> X, IExpression<DataFloat> R)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
-			parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
-			return new MATHSubcommand(MATHSubcommandValue.LOG, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Ln             r = log(x)
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static MATHSubcommand cmdLN(IExpression<DataFloat> X, IExpression<DataFloat> R)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
-			parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
-			return new MATHSubcommand(MATHSubcommandValue.LN, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Sin (R = sinf(X))
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static MATHSubcommand cmdSIN(IExpression<DataFloat> X, IExpression<DataFloat> R)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
-			parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
-			return new MATHSubcommand(MATHSubcommandValue.SIN, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Cos (R = cos(X))
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static MATHSubcommand cmdCOS(IExpression<DataFloat> X, IExpression<DataFloat> R)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
-			parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
-			return new MATHSubcommand(MATHSubcommandValue.COS, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Tan (R = tanf(X))
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static MATHSubcommand cmdTAN(IExpression<DataFloat> X, IExpression<DataFloat> R)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
-			parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
-			return new MATHSubcommand(MATHSubcommandValue.TAN, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// ASin (R = asinf(X))
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static MATHSubcommand cmdASIN(IExpression<DataFloat> X, IExpression<DataFloat> R)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
-			parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
-			return new MATHSubcommand(MATHSubcommandValue.ASIN, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// ACos (R = acos(X))
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static MATHSubcommand cmdACOS(IExpression<DataFloat> X, IExpression<DataFloat> R)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
-			parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
-			return new MATHSubcommand(MATHSubcommandValue.ACOS, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// ATan (R = atanf(X))
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static MATHSubcommand cmdATAN(IExpression<DataFloat> X, IExpression<DataFloat> R)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
-			parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
-			return new MATHSubcommand(MATHSubcommandValue.ATAN, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Modulo DATA8   r = x % y
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static MATHSubcommand cmdMOD8(IExpression<Data8> X, IExpression<Data8> Y, IExpression<Data8> R)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
-			parameterList.Add(Y ?? throw new ArgumentNullException(nameof(Y)));
-			parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
-			return new MATHSubcommand(MATHSubcommandValue.MOD8, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Modulo DATA16  r = x % y
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static MATHSubcommand cmdMOD16(IExpression<Data16> X, IExpression<Data16> Y, IExpression<Data16> R)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
-			parameterList.Add(Y ?? throw new ArgumentNullException(nameof(Y)));
-			parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
-			return new MATHSubcommand(MATHSubcommandValue.MOD16, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Modulo DATA32  r = x % y
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static MATHSubcommand cmdMOD32(IExpression<Data32> X, IExpression<Data32> Y, IExpression<Data32> R)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
-			parameterList.Add(Y ?? throw new ArgumentNullException(nameof(Y)));
-			parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
-			return new MATHSubcommand(MATHSubcommandValue.MOD32, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Exponent       r = powf(x,y)
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static MATHSubcommand cmdPOW(IExpression<DataFloat> X, IExpression<DataFloat> Y, IExpression<DataFloat> R)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
-			parameterList.Add(Y ?? throw new ArgumentNullException(nameof(Y)));
-			parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
-			return new MATHSubcommand(MATHSubcommandValue.POW, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Truncate       r = (float)((int)(x * pow(y))) / pow(y)
-		/// </summary>
-		/// <param name="X">Value</param>
-		/// <param name="P">Precision [0..9]</param>
-		/// <param name="R">Result</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static MATHSubcommand cmdTRUNC(IExpression<DataFloat> X, IExpression<Data8> P, IExpression<DataFloat> R)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
-			parameterList.Add(P ?? throw new ArgumentNullException(nameof(P)));
-			parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
-			return new MATHSubcommand(MATHSubcommandValue.TRUNC, parameterList.ToArray());
-		}
-
-		/// <param name="LENGTH">Maximal code stream length</param>
-		/// <param name="IMAGE">Address of image</param>
-		/// <param name="GLOBAL">Address of global variables</param>
-		/// <param name="FLAG">Flag that tells if image is ready</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static COM_READSubcommand cmdCOMMAND(IExpression<Data32> LENGTH, IExpression<Data32> IMAGE, IExpression<Data32> GLOBAL, IExpression<Data8> FLAG)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(IMAGE ?? throw new ArgumentNullException(nameof(IMAGE)));
-			parameterList.Add(GLOBAL ?? throw new ArgumentNullException(nameof(GLOBAL)));
-			parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
-			return new COM_READSubcommand(COM_READSubcommandValue.COMMAND, parameterList.ToArray());
-		}
-
-		/// <param name="IMAGE">Address of image</param>
-		/// <param name="GLOBAL">Address of global variables</param>
-		/// <param name="STATUS">Status</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static COM_WRITESubcommand cmdREPLY(IExpression<Data32> IMAGE, IExpression<Data32> GLOBAL, IExpression<Data8> STATUS)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(IMAGE ?? throw new ArgumentNullException(nameof(IMAGE)));
-			parameterList.Add(GLOBAL ?? throw new ArgumentNullException(nameof(GLOBAL)));
-			parameterList.Add(STATUS ?? throw new ArgumentNullException(nameof(STATUS)));
-			return new COM_WRITESubcommand(COM_WRITESubcommandValue.REPLY, parameterList.ToArray());
-		}
-
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static SOUNDSubcommand cmdBREAK()
-		{
-			var parameterList = new List<IByteCode>();
-			return new SOUNDSubcommand(SOUNDSubcommandValue.BREAK, parameterList.ToArray());
-		}
-
-		/// <param name="VOLUME">Volume [0..100]</param>
-		/// <param name="FREQUENCY">Frequency [Hz]</param>
-		/// <param name="DURATION">Duration [mS]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static SOUNDSubcommand cmdTONE(IExpression<Data8> VOLUME, IExpression<Data16> FREQUENCY, IExpression<Data16> DURATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(VOLUME ?? throw new ArgumentNullException(nameof(VOLUME)));
-			parameterList.Add(FREQUENCY ?? throw new ArgumentNullException(nameof(FREQUENCY)));
-			parameterList.Add(DURATION ?? throw new ArgumentNullException(nameof(DURATION)));
-			return new SOUNDSubcommand(SOUNDSubcommandValue.TONE, parameterList.ToArray());
-		}
-
-		/// <param name="VOLUME">Volume [0..100]</param>
-		/// <param name="NAME">File name</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static SOUNDSubcommand cmdPLAY(IExpression<Data8> VOLUME, IExpression<DataString> NAME)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(VOLUME ?? throw new ArgumentNullException(nameof(VOLUME)));
-			parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
-			return new SOUNDSubcommand(SOUNDSubcommandValue.PLAY, parameterList.ToArray());
-		}
-
-		/// <param name="VOLUME">Volume [0..100]</param>
-		/// <param name="NAME">File name</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static SOUNDSubcommand cmdREPEAT(IExpression<Data8> VOLUME, IExpression<DataString> NAME)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(VOLUME ?? throw new ArgumentNullException(nameof(VOLUME)));
-			parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
-			return new SOUNDSubcommand(SOUNDSubcommandValue.REPEAT, parameterList.ToArray());
-		}
-
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static SOUNDSubcommand cmdSERVICE()
-		{
-			var parameterList = new List<IByteCode>();
-			return new SOUNDSubcommand(SOUNDSubcommandValue.SERVICE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Insert type in table
-		/// </summary>
-		/// <param name="TYPEDATA">String variable or handle to string containing type data</param>
-		/// <param name="FORCE">Force type insert even if present (0 = don't force, 1 = force)</param>
-		/// <param name="ERROR">Error if not Third Party type (0 = no error, 1 = error or known)</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static INPUT_DEVICESubcommand cmdINSERT_TYPE(IExpression<DataString> TYPEDATA, IExpression<Data8> FORCE, IExpression<Data8> ERROR)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(TYPEDATA ?? throw new ArgumentNullException(nameof(TYPEDATA)));
-			parameterList.Add(FORCE ?? throw new ArgumentNullException(nameof(FORCE)));
-			parameterList.Add(ERROR ?? throw new ArgumentNullException(nameof(ERROR)));
-			return new INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.INSERT_TYPE, parameterList.ToArray());
-		}
-
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NO">Port number</param>
-		/// <param name="DATASETS">Number of data sets</param>
-		/// <param name="FORMAT">Format [0..3]</param>
-		/// <param name="MODES">Number of modes [1..8]</param>
-		/// <param name="VIEWS">Number of views [1..8]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static INPUT_DEVICESubcommand cmdGET_FORMAT(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> DATASETS, IExpression<Data8> FORMAT, IExpression<Data8> MODES, IExpression<Data8> VIEWS)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			parameterList.Add(DATASETS ?? throw new ArgumentNullException(nameof(DATASETS)));
-			parameterList.Add(FORMAT ?? throw new ArgumentNullException(nameof(FORMAT)));
-			parameterList.Add(MODES ?? throw new ArgumentNullException(nameof(MODES)));
-			parameterList.Add(VIEWS ?? throw new ArgumentNullException(nameof(VIEWS)));
-			return new INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.GET_FORMAT, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Apply new minimum and maximum raw value for device type to be used in scaling PCT and SI
-		/// </summary>
-		/// <param name="TYPE">Device type id from typedata.rcf</param>
-		/// <param name="MODE">Device mode [0..7]</param>
-		/// <param name="CAL_MIN">32 bit raw minimum value (Zero)</param>
-		/// <param name="CAL_MAX">32 bit raw maximum value (Full scale)</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static INPUT_DEVICESubcommand cmdCAL_MINMAX(IExpression<Data8> TYPE, IExpression<Data8> MODE, IExpression<Data32> CAL_MIN, IExpression<Data32> CAL_MAX)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
-			parameterList.Add(MODE ?? throw new ArgumentNullException(nameof(MODE)));
-			parameterList.Add(CAL_MIN ?? throw new ArgumentNullException(nameof(CAL_MIN)));
-			parameterList.Add(CAL_MAX ?? throw new ArgumentNullException(nameof(CAL_MAX)));
-			return new INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.CAL_MINMAX, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Apply the default minimum and maximum raw value for device type to be used in scaling PCT and SI
-		/// </summary>
-		/// <param name="TYPE">Device type id from typedata.rcf</param>
-		/// <param name="MODE">Device mode [0..7]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static INPUT_DEVICESubcommand cmdCAL_DEFAULT(IExpression<Data8> TYPE, IExpression<Data8> MODE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
-			parameterList.Add(MODE ?? throw new ArgumentNullException(nameof(MODE)));
-			return new INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.CAL_DEFAULT, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Get device type and mode
-		/// </summary>
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NO">Port number</param>
-		/// <param name="TYPE">Device type id from typedata.rcf</param>
-		/// <param name="MODE">Device mode [0..7]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static INPUT_DEVICESubcommand cmdGET_TYPEMODE(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> TYPE, IExpression<Data8> MODE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
-			parameterList.Add(MODE ?? throw new ArgumentNullException(nameof(MODE)));
-			return new INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.GET_TYPEMODE, parameterList.ToArray());
-		}
-
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NO">Port number</param>
-		/// <param name="LENGTH">Maximal length of string returned (-1 = no check)</param>
-		/// <param name="DESTINATION">String variable or handle to string</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static INPUT_DEVICESubcommand cmdGET_SYMBOL(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> LENGTH, IExpression<DataString> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.GET_SYMBOL, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Apply new minimum raw value for device type to be used in scaling PCT and SI
-		/// </summary>
-		/// <param name="TYPE">Device type id from typedata.rcf</param>
-		/// <param name="MODE">Device mode [0..7]</param>
-		/// <param name="CAL_MIN">32 bit raw minimum value (Zero)</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static INPUT_DEVICESubcommand cmdCAL_MIN(IExpression<Data8> TYPE, IExpression<Data8> MODE, IExpression<Data32> CAL_MIN)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
-			parameterList.Add(MODE ?? throw new ArgumentNullException(nameof(MODE)));
-			parameterList.Add(CAL_MIN ?? throw new ArgumentNullException(nameof(CAL_MIN)));
-			return new INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.CAL_MIN, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Apply new maximum raw value for device type to be used in scaling PCT and SI
-		/// </summary>
-		/// <param name="TYPE">Device type id from typedata.rcf</param>
-		/// <param name="MODE">Device mode [0..7]</param>
-		/// <param name="CAL_MAX">32 bit SI maximum value (Full scale)</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static INPUT_DEVICESubcommand cmdCAL_MAX(IExpression<Data8> TYPE, IExpression<Data8> MODE, IExpression<Data32> CAL_MAX)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
-			parameterList.Add(MODE ?? throw new ArgumentNullException(nameof(MODE)));
-			parameterList.Add(CAL_MAX ?? throw new ArgumentNullException(nameof(CAL_MAX)));
-			return new INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.CAL_MAX, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Generic setup/read IIC sensors
-		/// </summary>
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NO">Port number</param>
-		/// <param name="REPEAT">Repeat setup/read "REPEAT" times (0 = infinite)</param>
-		/// <param name="TIME">Time between repeats [10..1000mS] (0 = 10)</param>
-		/// <param name="WRITE_LEN">No of bytes to write</param>
-		/// <param name="WRITE_DATA">DATA8 array (handle) of data to write</param>
-		/// <param name="READ_LEN">No of bytes to read</param>
-		/// <param name="READ_DATA">DATA8 array (handle) to read into</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static INPUT_DEVICESubcommand cmdSETUP(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> REPEAT, IExpression<Data16> TIME, IExpression<Data8> WRITE_LEN, IExpression<Data8> WRITE_DATA, IExpression<Data8> READ_LEN, IExpression<Data8> READ_DATA)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			parameterList.Add(REPEAT ?? throw new ArgumentNullException(nameof(REPEAT)));
-			parameterList.Add(TIME ?? throw new ArgumentNullException(nameof(TIME)));
-			parameterList.Add(WRITE_LEN ?? throw new ArgumentNullException(nameof(WRITE_LEN)));
-			parameterList.Add(WRITE_DATA ?? throw new ArgumentNullException(nameof(WRITE_DATA)));
-			parameterList.Add(READ_LEN ?? throw new ArgumentNullException(nameof(READ_LEN)));
-			parameterList.Add(READ_DATA ?? throw new ArgumentNullException(nameof(READ_DATA)));
-			return new INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.SETUP, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Clear all devices (e.c. counters, angle, ...)
-		/// </summary>
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static INPUT_DEVICESubcommand cmdCLR_ALL(IExpression<Data8> LAYER)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			return new INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.CLR_ALL, parameterList.ToArray());
-		}
-
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NO">Port number</param>
-		/// <param name="VALUE">32 bit raw value</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static INPUT_DEVICESubcommand cmdGET_RAW(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data32> VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.GET_RAW, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Get device connection type (for test)
-		/// </summary>
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NO">Port number</param>
-		/// <param name="CONN">Connection type</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static INPUT_DEVICESubcommand cmdGET_CONNECTION(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> CONN)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			parameterList.Add(CONN ?? throw new ArgumentNullException(nameof(CONN)));
-			return new INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.GET_CONNECTION, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Stop all devices (e.c. motors, ...)
-		/// </summary>
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static INPUT_DEVICESubcommand cmdSTOP_ALL(IExpression<Data8> LAYER)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			return new INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.STOP_ALL, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Set new type and mode on existing devices
-		/// </summary>
-		/// <param name="TYPE">Existing type</param>
-		/// <param name="MODE">Existing mode</param>
-		/// <param name="NEWTYPE">New type</param>
-		/// <param name="NEWMODE">New mode</param>
-		/// <param name="ERROR">Error if not Third Party type (0 = no error, 1 = error or not found)</param>
-		/// <remarks>
-		/// if TYPE==NEWTYPE and MODE==NEWMODE -&gt; ERROR will be 0 if exists and nothing is changed
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static INPUT_DEVICESubcommand cmdSET_TYPEMODE(IExpression<Data8> TYPE, IExpression<Data8> MODE, IExpression<Data8> NEWTYPE, IExpression<Data8> NEWMODE, IExpression<Data8> ERROR)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
-			parameterList.Add(MODE ?? throw new ArgumentNullException(nameof(MODE)));
-			parameterList.Add(NEWTYPE ?? throw new ArgumentNullException(nameof(NEWTYPE)));
-			parameterList.Add(NEWMODE ?? throw new ArgumentNullException(nameof(NEWMODE)));
-			parameterList.Add(ERROR ?? throw new ArgumentNullException(nameof(ERROR)));
-			return new INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.SET_TYPEMODE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Generic setup/read IIC sensors with result
-		/// </summary>
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NO">Port number</param>
-		/// <param name="WRLNG">No of bytes to write</param>
-		/// <param name="WRDATA">DATA8 array  (handle) of data to write</param>
-		/// <param name="RDLNG">No of bytes to read (if negative -&gt; byte order is reversed)</param>
-		/// <param name="RDDATA">DATA8 array  (handle) to read into</param>
-		/// <param name="RESULT">Write/read result (OK, FAIL)</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static INPUT_DEVICESubcommand cmdREADY_IIC(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> WRLNG, IExpression<Data8> WRDATA, IExpression<Data8> RDLNG, IExpression<Data8> RDDATA, IExpression<Data8> RESULT)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			parameterList.Add(WRLNG ?? throw new ArgumentNullException(nameof(WRLNG)));
-			parameterList.Add(WRDATA ?? throw new ArgumentNullException(nameof(WRDATA)));
-			parameterList.Add(RDLNG ?? throw new ArgumentNullException(nameof(RDLNG)));
-			parameterList.Add(RDDATA ?? throw new ArgumentNullException(nameof(RDDATA)));
-			parameterList.Add(RESULT ?? throw new ArgumentNullException(nameof(RESULT)));
-			return new INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.READY_IIC, parameterList.ToArray());
-		}
-
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NO">Port number</param>
-		/// <param name="LENGTH">Maximal length of string returned (-1 = no check)</param>
-		/// <param name="DESTINATION">String variable or handle to string</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static INPUT_DEVICESubcommand cmdGET_NAME(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> LENGTH, IExpression<DataString> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.GET_NAME, parameterList.ToArray());
-		}
-
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NO">Port number</param>
-		/// <param name="MODE">Mode</param>
-		/// <param name="LENGTH">Maximal length of string returned (-1 = no check)</param>
-		/// <param name="DESTINATION">String variable or handle to string</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static INPUT_DEVICESubcommand cmdGET_MODENAME(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> MODE, IExpression<Data8> LENGTH, IExpression<DataString> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			parameterList.Add(MODE ?? throw new ArgumentNullException(nameof(MODE)));
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.GET_MODENAME, parameterList.ToArray());
-		}
-
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NO">Port number</param>
-		/// <param name="TYPE">Device type id (0 = don't change type)</param>
-		/// <param name="VALUE"></param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static INPUT_DEVICESubcommand cmdSET_RAW(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> TYPE, IExpression<Data32> VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.SET_RAW, parameterList.ToArray());
-		}
-
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NO">Port number</param>
-		/// <param name="FIGURES">Total number of figures (inclusive decimal point and decimals)</param>
-		/// <param name="DECIMALS">Number of decimals</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static INPUT_DEVICESubcommand cmdGET_FIGURES(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> FIGURES, IExpression<Data8> DECIMALS)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			parameterList.Add(FIGURES ?? throw new ArgumentNullException(nameof(FIGURES)));
-			parameterList.Add(DECIMALS ?? throw new ArgumentNullException(nameof(DECIMALS)));
-			return new INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.GET_FIGURES, parameterList.ToArray());
-		}
-
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NO">Port number</param>
-		/// <param name="VALUE">Positive changes since last clear</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static INPUT_DEVICESubcommand cmdGET_CHANGES(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<DataFloat> VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.GET_CHANGES, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Clear changes and bumps
-		/// </summary>
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NO">Port number</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static INPUT_DEVICESubcommand cmdCLR_CHANGES(IExpression<Data8> LAYER, IExpression<Data8> NO)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			return new INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.CLR_CHANGES, parameterList.ToArray());
-		}
-
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NO">Port number</param>
-		/// <param name="TYPE">Device type id (0 = don't change type)</param>
-		/// <param name="MODE">Device mode [0..7] (-1 = don't change mode)</param>
-		/// <param name="VALUES">Number of return values</param>
-		/// <param name="VALUES_">variable arguments</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static INPUT_DEVICESubcommand cmdREADY_PCT(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> TYPE, IExpression<Data8> MODE, IExpression<Data8> VALUES, params IExpression[] VALUES_)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
-			parameterList.Add(MODE ?? throw new ArgumentNullException(nameof(MODE)));
-			parameterList.Add(VALUES ?? throw new ArgumentNullException(nameof(VALUES)));
-			parameterList.AddRange(VALUES_ ?? throw new ArgumentNullException(nameof(VALUES_)));
-			return new INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.READY_PCT, parameterList.ToArray());
-		}
-
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NO">Port number</param>
-		/// <param name="TYPE">Device type id (0 = don't change type)</param>
-		/// <param name="MODE">Device mode [0..7] (-1 = don't change mode)</param>
-		/// <param name="VALUES">Number of return values</param>
-		/// <param name="VALUES_">variable arguments</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static INPUT_DEVICESubcommand cmdREADY_RAW(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> TYPE, IExpression<Data8> MODE, IExpression<Data8> VALUES, params IExpression[] VALUES_)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
-			parameterList.Add(MODE ?? throw new ArgumentNullException(nameof(MODE)));
-			parameterList.Add(VALUES ?? throw new ArgumentNullException(nameof(VALUES)));
-			parameterList.AddRange(VALUES_ ?? throw new ArgumentNullException(nameof(VALUES_)));
-			return new INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.READY_RAW, parameterList.ToArray());
-		}
-
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NO">Port number</param>
-		/// <param name="TYPE">Device type id (0 = don't change type)</param>
-		/// <param name="MODE">Device mode [0..7] (-1 = don't change mode)</param>
-		/// <param name="VALUES">Number of return values</param>
-		/// <param name="VALUES_">variable arguments</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static INPUT_DEVICESubcommand cmdREADY_SI(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> TYPE, IExpression<Data8> MODE, IExpression<Data8> VALUES, params IExpression[] VALUES_)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
-			parameterList.Add(MODE ?? throw new ArgumentNullException(nameof(MODE)));
-			parameterList.Add(VALUES ?? throw new ArgumentNullException(nameof(VALUES)));
-			parameterList.AddRange(VALUES_ ?? throw new ArgumentNullException(nameof(VALUES_)));
-			return new INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.READY_SI, parameterList.ToArray());
-		}
-
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NO">Port number</param>
-		/// <param name="MIN">Min SI value</param>
-		/// <param name="MAX">Max SI value</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static INPUT_DEVICESubcommand cmdGET_MINMAX(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<DataFloat> MIN, IExpression<DataFloat> MAX)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			parameterList.Add(MIN ?? throw new ArgumentNullException(nameof(MIN)));
-			parameterList.Add(MAX ?? throw new ArgumentNullException(nameof(MAX)));
-			return new INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.GET_MINMAX, parameterList.ToArray());
-		}
-
-		/// <param name="LAYER">Daisy chain layer number [0..3]</param>
-		/// <param name="NO">Port number</param>
-		/// <param name="VALUE">Negative changes since last clear</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static INPUT_DEVICESubcommand cmdGET_BUMPS(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<DataFloat> VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
-			parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.GET_BUMPS, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Create file or open for append
-		/// </summary>
-		/// <param name="NAME">File name</param>
-		/// <param name="HANDLE">Handle to file</param>
-		/// <remarks>
-		/// if name starts with '~','/' or '.' it is not from current folder
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILESubcommand cmdOPEN_APPEND(IExpression<DataString> NAME, IExpression<Data16> HANDLE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
-			parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
-			return new FILESubcommand(FILESubcommandValue.OPEN_APPEND, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Open file for read
-		/// </summary>
-		/// <param name="NAME">File name</param>
-		/// <param name="HANDLE">Handle to file</param>
-		/// <param name="SIZE">File size (0 = not found)</param>
-		/// <remarks>
-		/// if name starts with '~','/' or '.' it is not from current folder
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILESubcommand cmdOPEN_READ(IExpression<DataString> NAME, IExpression<Data16> HANDLE, IExpression<Data32> SIZE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
-			parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
-			parameterList.Add(SIZE ?? throw new ArgumentNullException(nameof(SIZE)));
-			return new FILESubcommand(FILESubcommandValue.OPEN_READ, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Create file for write
-		/// </summary>
-		/// <param name="NAME">File name</param>
-		/// <param name="HANDLE">Handle to file</param>
-		/// <remarks>
-		/// if name starts with '~','/' or '.' it is not from current folder
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILESubcommand cmdOPEN_WRITE(IExpression<DataString> NAME, IExpression<Data16> HANDLE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
-			parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
-			return new FILESubcommand(FILESubcommandValue.OPEN_WRITE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Read floating point value from file
-		/// </summary>
-		/// <param name="HANDLE">Handle to file</param>
-		/// <param name="DEL">Delimiter code</param>
-		/// <param name="VALUE">Value read</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILESubcommand cmdREAD_VALUE(IExpression<Data16> HANDLE, IExpression<Data8> DEL, IExpression<DataFloat> VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
-			parameterList.Add(DEL ?? throw new ArgumentNullException(nameof(DEL)));
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new FILESubcommand(FILESubcommandValue.READ_VALUE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Write floating point value to file
-		/// </summary>
-		/// <param name="HANDLE">Handle to file</param>
-		/// <param name="DEL">Delimiter code</param>
-		/// <param name="VALUE">Value to write</param>
-		/// <param name="FIGURES">Total number of figures inclusive decimal point</param>
-		/// <param name="DECIMALS">Number of decimals</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILESubcommand cmdWRITE_VALUE(IExpression<Data16> HANDLE, IExpression<Data8> DEL, IExpression<DataFloat> VALUE, IExpression<Data8> FIGURES, IExpression<Data8> DECIMALS)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
-			parameterList.Add(DEL ?? throw new ArgumentNullException(nameof(DEL)));
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			parameterList.Add(FIGURES ?? throw new ArgumentNullException(nameof(FIGURES)));
-			parameterList.Add(DECIMALS ?? throw new ArgumentNullException(nameof(DECIMALS)));
-			return new FILESubcommand(FILESubcommandValue.WRITE_VALUE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Read text from file
-		/// </summary>
-		/// <param name="HANDLE">Handle to file</param>
-		/// <param name="DEL">Delimiter code</param>
-		/// <param name="LENGTH">Maximal string length</param>
-		/// <param name="TEXT">Text to read</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILESubcommand cmdREAD_TEXT(IExpression<Data16> HANDLE, IExpression<Data8> DEL, IExpression<Data16> LENGTH, IExpression<DataString> TEXT)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
-			parameterList.Add(DEL ?? throw new ArgumentNullException(nameof(DEL)));
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(TEXT ?? throw new ArgumentNullException(nameof(TEXT)));
-			return new FILESubcommand(FILESubcommandValue.READ_TEXT, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Write text to file
-		/// </summary>
-		/// <param name="HANDLE">Handle to file</param>
-		/// <param name="DEL">Delimiter code</param>
-		/// <param name="TEXT">Text to write</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILESubcommand cmdWRITE_TEXT(IExpression<Data16> HANDLE, IExpression<Data8> DEL, IExpression<DataString> TEXT)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
-			parameterList.Add(DEL ?? throw new ArgumentNullException(nameof(DEL)));
-			parameterList.Add(TEXT ?? throw new ArgumentNullException(nameof(TEXT)));
-			return new FILESubcommand(FILESubcommandValue.WRITE_TEXT, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Close file
-		/// </summary>
-		/// <param name="HANDLE">Handle to file</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILESubcommand cmdCLOSE(IExpression<Data16> HANDLE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
-			return new FILESubcommand(FILESubcommandValue.CLOSE, parameterList.ToArray());
-		}
-
-		/// <param name="PRGID">Program id</param>
-		/// <param name="NAME">Image name</param>
-		/// <param name="SIZE">Size</param>
-		/// <param name="IP">Address of image</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILESubcommand cmdLOAD_IMAGE(IExpression<Data16> PRGID, IExpression<DataString> NAME, IExpression<Data32> SIZE, IExpression<Data32> IP)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
-			parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
-			parameterList.Add(SIZE ?? throw new ArgumentNullException(nameof(SIZE)));
-			parameterList.Add(IP ?? throw new ArgumentNullException(nameof(IP)));
-			return new FILESubcommand(FILESubcommandValue.LOAD_IMAGE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Get handle from filename
-		/// </summary>
-		/// <param name="NAME">File name</param>
-		/// <param name="HANDLE">Handle to file</param>
-		/// <param name="WRITE">Open for write / append (0 = no, 1 = yes)</param>
-		/// <remarks>
-		/// if name starts with '~','/' or '.' it is not from current folder
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILESubcommand cmdGET_HANDLE(IExpression<DataString> NAME, IExpression<Data16> HANDLE, IExpression<Data8> WRITE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
-			parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
-			parameterList.Add(WRITE ?? throw new ArgumentNullException(nameof(WRITE)));
-			return new FILESubcommand(FILESubcommandValue.GET_HANDLE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Make folder if not present
-		/// </summary>
-		/// <param name="NAME">Folder name</param>
-		/// <param name="SUCCESS">Success (0 = no, 1 = yes)</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILESubcommand cmdMAKE_FOLDER(IExpression<DataString> NAME, IExpression<Data8> SUCCESS)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
-			parameterList.Add(SUCCESS ?? throw new ArgumentNullException(nameof(SUCCESS)));
-			return new FILESubcommand(FILESubcommandValue.MAKE_FOLDER, parameterList.ToArray());
-		}
-
-		/// <param name="SIZE">Size of pool</param>
-		/// <param name="HANDLE">Handle to file</param>
-		/// <param name="IP">Address of image</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILESubcommand cmdGET_POOL(IExpression<Data32> SIZE, IExpression<Data16> HANDLE, IExpression<Data32> IP)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SIZE ?? throw new ArgumentNullException(nameof(SIZE)));
-			parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
-			parameterList.Add(IP ?? throw new ArgumentNullException(nameof(IP)));
-			return new FILESubcommand(FILESubcommandValue.GET_POOL, parameterList.ToArray());
-		}
-
-		/// <param name="TIME">Sync time used in data log files</param>
-		/// <param name="TICK">Sync tick used in data log files</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILESubcommand cmdSET_LOG_SYNC_TIME(IExpression<Data32> TIME, IExpression<Data32> TICK)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(TIME ?? throw new ArgumentNullException(nameof(TIME)));
-			parameterList.Add(TICK ?? throw new ArgumentNullException(nameof(TICK)));
-			return new FILESubcommand(FILESubcommandValue.SET_LOG_SYNC_TIME, parameterList.ToArray());
-		}
-
-		/// <param name="NAME">Folder name (ex "../prjs/")</param>
-		/// <param name="ITEMS">No of sub folders</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILESubcommand cmdGET_FOLDERS(IExpression<DataString> NAME, IExpression<Data8> ITEMS)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
-			parameterList.Add(ITEMS ?? throw new ArgumentNullException(nameof(ITEMS)));
-			return new FILESubcommand(FILESubcommandValue.GET_FOLDERS, parameterList.ToArray());
-		}
-
-		/// <param name="TIME">Sync time used in data log files</param>
-		/// <param name="TICK">Sync tick used in data log files</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILESubcommand cmdGET_LOG_SYNC_TIME(IExpression<Data32> TIME, IExpression<Data32> TICK)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(TIME ?? throw new ArgumentNullException(nameof(TIME)));
-			parameterList.Add(TICK ?? throw new ArgumentNullException(nameof(TICK)));
-			return new FILESubcommand(FILESubcommandValue.GET_LOG_SYNC_TIME, parameterList.ToArray());
-		}
-
-		/// <param name="NAME">Folder name (ex "../prjs/")</param>
-		/// <param name="ITEM">Sub folder index [1..ITEMS]</param>
-		/// <param name="LENGTH">Maximal string length</param>
-		/// <param name="STRING">Subfolder name</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILESubcommand cmdGET_SUBFOLDER_NAME(IExpression<DataString> NAME, IExpression<Data8> ITEM, IExpression<Data8> LENGTH, IExpression<DataString> STRING)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
-			parameterList.Add(ITEM ?? throw new ArgumentNullException(nameof(ITEM)));
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(STRING ?? throw new ArgumentNullException(nameof(STRING)));
-			return new FILESubcommand(FILESubcommandValue.GET_SUBFOLDER_NAME, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Write time slot samples to file
-		/// </summary>
-		/// <param name="HANDLE">Handle to file</param>
-		/// <param name="TIME">Relative time in mS</param>
-		/// <param name="ITEMS">Total number of values in this time slot</param>
-		/// <param name="VALUES">DATAF array (handle) containing values</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILESubcommand cmdWRITE_LOG(IExpression<Data16> HANDLE, IExpression<Data32> TIME, IExpression<Data8> ITEMS, IExpression<DataFloat> VALUES)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
-			parameterList.Add(TIME ?? throw new ArgumentNullException(nameof(TIME)));
-			parameterList.Add(ITEMS ?? throw new ArgumentNullException(nameof(ITEMS)));
-			parameterList.Add(VALUES ?? throw new ArgumentNullException(nameof(VALUES)));
-			return new FILESubcommand(FILESubcommandValue.WRITE_LOG, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Close data log file
-		/// </summary>
-		/// <param name="HANDLE">Handle to file</param>
-		/// <param name="NAME">File name</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILESubcommand cmdCLOSE_LOG(IExpression<Data16> HANDLE, IExpression<DataString> NAME)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
-			parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
-			return new FILESubcommand(FILESubcommandValue.CLOSE_LOG, parameterList.ToArray());
-		}
-
-		/// <param name="NAME">Image name</param>
-		/// <param name="PRGID">Program id</param>
-		/// <param name="ITEM">Sub folder index [1..ITEMS]</param>
-		/// <param name="IP">Address of image</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILESubcommand cmdGET_IMAGE(IExpression<DataString> NAME, IExpression<Data16> PRGID, IExpression<Data8> ITEM, IExpression<Data32> IP)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
-			parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
-			parameterList.Add(ITEM ?? throw new ArgumentNullException(nameof(ITEM)));
-			parameterList.Add(IP ?? throw new ArgumentNullException(nameof(IP)));
-			return new FILESubcommand(FILESubcommandValue.GET_IMAGE, parameterList.ToArray());
-		}
-
-		/// <param name="NAME">Name</param>
-		/// <param name="STRING">Item name</param>
-		/// <param name="ITEM">Sub folder index [1..ITEMS]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILESubcommand cmdGET_ITEM(IExpression<DataString> NAME, IExpression<DataString> STRING, IExpression<Data8> ITEM)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
-			parameterList.Add(STRING ?? throw new ArgumentNullException(nameof(STRING)));
-			parameterList.Add(ITEM ?? throw new ArgumentNullException(nameof(ITEM)));
-			return new FILESubcommand(FILESubcommandValue.GET_ITEM, parameterList.ToArray());
-		}
-
-		/// <param name="ITEMS">Number of files in cache</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILESubcommand cmdGET_CACHE_FILES(IExpression<Data8> ITEMS)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(ITEMS ?? throw new ArgumentNullException(nameof(ITEMS)));
-			return new FILESubcommand(FILESubcommandValue.GET_CACHE_FILES, parameterList.ToArray());
-		}
-
-		/// <param name="STRING">File Name</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILESubcommand cmdPUT_CACHE_FILE(IExpression<DataString> STRING)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(STRING ?? throw new ArgumentNullException(nameof(STRING)));
-			return new FILESubcommand(FILESubcommandValue.PUT_CACHE_FILE, parameterList.ToArray());
-		}
-
-		/// <param name="ITEM">Cache index [1..ITEMS]</param>
-		/// <param name="LENGTH">Maximal string length</param>
-		/// <param name="STRING">File name</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILESubcommand cmdGET_CACHE_FILE(IExpression<Data8> ITEM, IExpression<Data8> LENGTH, IExpression<DataString> STRING)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(ITEM ?? throw new ArgumentNullException(nameof(ITEM)));
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(STRING ?? throw new ArgumentNullException(nameof(STRING)));
-			return new FILESubcommand(FILESubcommandValue.GET_CACHE_FILE, parameterList.ToArray());
-		}
-
-		/// <param name="STRING">File name</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILESubcommand cmdDEL_CACHE_FILE(IExpression<DataString> STRING)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(STRING ?? throw new ArgumentNullException(nameof(STRING)));
-			return new FILESubcommand(FILESubcommandValue.DEL_CACHE_FILE, parameterList.ToArray());
-		}
-
-		/// <param name="NAME">Folder name (ex "../prjs/")</param>
-		/// <param name="ITEM">Sub folder index [1..ITEMS]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILESubcommand cmdDEL_SUBFOLDER(IExpression<DataString> NAME, IExpression<Data8> ITEM)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
-			parameterList.Add(ITEM ?? throw new ArgumentNullException(nameof(ITEM)));
-			return new FILESubcommand(FILESubcommandValue.DEL_SUBFOLDER, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Get the current open log filename
-		/// </summary>
-		/// <param name="LENGTH">Max string length (don't care if NAME is a HND)</param>
-		/// <param name="NAME">File name (character string or HND)</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILESubcommand cmdGET_LOG_NAME(IExpression<Data8> LENGTH, IExpression<DataString> NAME)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
-			return new FILESubcommand(FILESubcommandValue.GET_LOG_NAME, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Create file for data logging
-		/// </summary>
-		/// <param name="NAME">File name</param>
-		/// <param name="syncedTime"></param>
-		/// <param name="syncedTick"></param>
-		/// <param name="nowTick"></param>
-		/// <param name="sample_interval_in_ms"></param>
-		/// <param name="duration_in_ms"></param>
-		/// <param name="SDATA">Sensor type data</param>
-		/// <param name="HANDLE">Handle to file</param>
-		/// <remarks>
-		/// if name starts with '~','/' or '.' it is not from current folder
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILESubcommand cmdOPEN_LOG(IExpression<DataString> NAME, IExpression<Data32> syncedTime, IExpression<Data32> syncedTick, IExpression<Data32> nowTick, IExpression<Data32> sample_interval_in_ms, IExpression<Data32> duration_in_ms, IExpression<DataString> SDATA, IExpression<Data16> HANDLE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
-			parameterList.Add(syncedTime ?? throw new ArgumentNullException(nameof(syncedTime)));
-			parameterList.Add(syncedTick ?? throw new ArgumentNullException(nameof(syncedTick)));
-			parameterList.Add(nowTick ?? throw new ArgumentNullException(nameof(nowTick)));
-			parameterList.Add(sample_interval_in_ms ?? throw new ArgumentNullException(nameof(sample_interval_in_ms)));
-			parameterList.Add(duration_in_ms ?? throw new ArgumentNullException(nameof(duration_in_ms)));
-			parameterList.Add(SDATA ?? throw new ArgumentNullException(nameof(SDATA)));
-			parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
-			return new FILESubcommand(FILESubcommandValue.OPEN_LOG, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Read a number of bytes from file
-		/// </summary>
-		/// <param name="HANDLE">Handle to file</param>
-		/// <param name="BYTES">Number of bytes to read</param>
-		/// <param name="DESTINATION">First byte in byte stream</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILESubcommand cmdREAD_BYTES(IExpression<Data16> HANDLE, IExpression<Data16> BYTES, IExpression<Data8> DESTINATION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
-			parameterList.Add(BYTES ?? throw new ArgumentNullException(nameof(BYTES)));
-			parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
-			return new FILESubcommand(FILESubcommandValue.READ_BYTES, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Write a number of bytes to file
-		/// </summary>
-		/// <param name="HANDLE">Handle to file</param>
-		/// <param name="BYTES">Number of bytes to write</param>
-		/// <param name="SOURCE">First byte in byte stream to write</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILESubcommand cmdWRITE_BYTES(IExpression<Data16> HANDLE, IExpression<Data16> BYTES, IExpression<Data8> SOURCE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
-			parameterList.Add(BYTES ?? throw new ArgumentNullException(nameof(BYTES)));
-			parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
-			return new FILESubcommand(FILESubcommandValue.WRITE_BYTES, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Delete file
-		/// </summary>
-		/// <param name="NAME">File name</param>
-		/// <remarks>
-		/// if name starts with '~','/' or '.' it is not from current folder
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILESubcommand cmdREMOVE(IExpression<DataString> NAME)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
-			return new FILESubcommand(FILESubcommandValue.REMOVE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Move file SOURCE to DEST
-		/// </summary>
-		/// <param name="SOURCE">Source file name</param>
-		/// <param name="DEST">Destination file name</param>
-		/// <remarks>
-		/// if name starts with '~','/' or '.' it is not from current folder
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILESubcommand cmdMOVE(IExpression<DataString> SOURCE, IExpression<DataString> DEST)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
-			parameterList.Add(DEST ?? throw new ArgumentNullException(nameof(DEST)));
-			return new FILESubcommand(FILESubcommandValue.MOVE, parameterList.ToArray());
-		}
-
-		/// <param name="HANDLE">Array handle</param>
-		[Support(Official = true, Xtended = false, Compat = false)]
-		public static ARRAYSubcommand cmdDELETE(IExpression<Data16> HANDLE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
-			return new ARRAYSubcommand(ARRAYSubcommandValue.DELETE, parameterList.ToArray());
-		}
-
-		/// <param name="HANDLE">Array handle</param>
-		/// <remarks>
-		/// renamed from DELETE
-		/// </remarks>
-		[Support(Official = false, Xtended = true, Compat = true)]
-		public static ARRAYSubcommand cmdDESTROY(IExpression<Data16> HANDLE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
-			return new ARRAYSubcommand(ARRAYSubcommandValue.DESTROY, parameterList.ToArray());
-		}
-
-		/// <param name="ELEMENTS">Number of elements</param>
-		/// <param name="HANDLE">Array handle</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static ARRAYSubcommand cmdCREATE8(IExpression<Data32> ELEMENTS, IExpression<Data16> HANDLE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(ELEMENTS ?? throw new ArgumentNullException(nameof(ELEMENTS)));
-			parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
-			return new ARRAYSubcommand(ARRAYSubcommandValue.CREATE8, parameterList.ToArray());
-		}
-
-		/// <param name="ELEMENTS">Number of elements</param>
-		/// <param name="HANDLE">Array handle</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static ARRAYSubcommand cmdCREATE16(IExpression<Data32> ELEMENTS, IExpression<Data16> HANDLE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(ELEMENTS ?? throw new ArgumentNullException(nameof(ELEMENTS)));
-			parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
-			return new ARRAYSubcommand(ARRAYSubcommandValue.CREATE16, parameterList.ToArray());
-		}
-
-		/// <param name="ELEMENTS">Number of elements</param>
-		/// <param name="HANDLE">Array handle</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static ARRAYSubcommand cmdCREATE32(IExpression<Data32> ELEMENTS, IExpression<Data16> HANDLE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(ELEMENTS ?? throw new ArgumentNullException(nameof(ELEMENTS)));
-			parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
-			return new ARRAYSubcommand(ARRAYSubcommandValue.CREATE32, parameterList.ToArray());
-		}
-
-		/// <param name="ELEMENTS">Number of elements</param>
-		/// <param name="HANDLE">Array handle</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static ARRAYSubcommand cmdCREATEF(IExpression<Data32> ELEMENTS, IExpression<Data16> HANDLE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(ELEMENTS ?? throw new ArgumentNullException(nameof(ELEMENTS)));
-			parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
-			return new ARRAYSubcommand(ARRAYSubcommandValue.CREATEF, parameterList.ToArray());
-		}
-
-		/// <param name="HANDLE">Array handle</param>
-		/// <param name="ELEMENTS">Total number of elements</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static ARRAYSubcommand cmdRESIZE(IExpression<Data16> HANDLE, IExpression<Data32> ELEMENTS)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
-			parameterList.Add(ELEMENTS ?? throw new ArgumentNullException(nameof(ELEMENTS)));
-			return new ARRAYSubcommand(ARRAYSubcommandValue.RESIZE, parameterList.ToArray());
-		}
-
-		/// <param name="HANDLE">Array handle</param>
-		/// <param name="VALUE">Value to write - type depends on type of array</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static ARRAYSubcommand cmdFILL(IExpression<Data16> HANDLE, IExpression VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new ARRAYSubcommand(ARRAYSubcommandValue.FILL, parameterList.ToArray());
-		}
-
-		/// <param name="HSOURCE">Source array Handle</param>
-		/// <param name="HDEST">Destination array handle</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static ARRAYSubcommand cmdCOPY(IExpression<Data16> HSOURCE, IExpression<Data16> HDEST)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HSOURCE ?? throw new ArgumentNullException(nameof(HSOURCE)));
-			parameterList.Add(HDEST ?? throw new ArgumentNullException(nameof(HDEST)));
-			return new ARRAYSubcommand(ARRAYSubcommandValue.COPY, parameterList.ToArray());
-		}
-
-		/// <param name="HANDLE">Array handle</param>
-		/// <param name="INDEX">Index to element to write</param>
-		/// <param name="ELEMENTS">Number of elements to write</param>
-		/// <param name="VALUES">First value to write - type must be equal to the array type</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static ARRAYSubcommand cmdINIT8(IExpression<Data16> HANDLE, IExpression<Data32> INDEX, IExpression<Data32> ELEMENTS, params IExpression<Data8>[] VALUES)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
-			parameterList.Add(INDEX ?? throw new ArgumentNullException(nameof(INDEX)));
-			parameterList.Add(ELEMENTS ?? throw new ArgumentNullException(nameof(ELEMENTS)));
-			parameterList.AddRange(VALUES ?? throw new ArgumentNullException(nameof(VALUES)));
-			return new ARRAYSubcommand(ARRAYSubcommandValue.INIT8, parameterList.ToArray());
-		}
-
-		/// <param name="HANDLE">Array handle</param>
-		/// <param name="INDEX">Index to element to write</param>
-		/// <param name="ELEMENTS">Number of elements to write</param>
-		/// <param name="VALUES">First value to write - type must be equal to the array type</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static ARRAYSubcommand cmdINIT16(IExpression<Data16> HANDLE, IExpression<Data32> INDEX, IExpression<Data32> ELEMENTS, params IExpression<Data16>[] VALUES)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
-			parameterList.Add(INDEX ?? throw new ArgumentNullException(nameof(INDEX)));
-			parameterList.Add(ELEMENTS ?? throw new ArgumentNullException(nameof(ELEMENTS)));
-			parameterList.AddRange(VALUES ?? throw new ArgumentNullException(nameof(VALUES)));
-			return new ARRAYSubcommand(ARRAYSubcommandValue.INIT16, parameterList.ToArray());
-		}
-
-		/// <param name="HANDLE">Array handle</param>
-		/// <param name="INDEX">Index to element to write</param>
-		/// <param name="ELEMENTS">Number of elements to write</param>
-		/// <param name="VALUES">First value to write - type must be equal to the array type</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static ARRAYSubcommand cmdINIT32(IExpression<Data16> HANDLE, IExpression<Data32> INDEX, IExpression<Data32> ELEMENTS, params IExpression<Data32>[] VALUES)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
-			parameterList.Add(INDEX ?? throw new ArgumentNullException(nameof(INDEX)));
-			parameterList.Add(ELEMENTS ?? throw new ArgumentNullException(nameof(ELEMENTS)));
-			parameterList.AddRange(VALUES ?? throw new ArgumentNullException(nameof(VALUES)));
-			return new ARRAYSubcommand(ARRAYSubcommandValue.INIT32, parameterList.ToArray());
-		}
-
-		/// <param name="HANDLE">Array handle</param>
-		/// <param name="INDEX">Index to element to write</param>
-		/// <param name="ELEMENTS">Number of elements to write</param>
-		/// <param name="VALUES">First value to write - type must be equal to the array type</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static ARRAYSubcommand cmdINITF(IExpression<Data16> HANDLE, IExpression<Data32> INDEX, IExpression<Data32> ELEMENTS, params IExpression<DataFloat>[] VALUES)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
-			parameterList.Add(INDEX ?? throw new ArgumentNullException(nameof(INDEX)));
-			parameterList.Add(ELEMENTS ?? throw new ArgumentNullException(nameof(ELEMENTS)));
-			parameterList.AddRange(VALUES ?? throw new ArgumentNullException(nameof(VALUES)));
-			return new ARRAYSubcommand(ARRAYSubcommandValue.INITF, parameterList.ToArray());
-		}
-
-		/// <param name="HANDLE">Array handle</param>
-		/// <param name="ELEMENTS">Total number of elements in array</param>
-		[Support(Official = true, Xtended = false, Compat = false)]
-		public static ARRAYSubcommand cmdSIZE(IExpression<Data16> HANDLE, IExpression<Data32> ELEMENTS)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
-			parameterList.Add(ELEMENTS ?? throw new ArgumentNullException(nameof(ELEMENTS)));
-			return new ARRAYSubcommand(ARRAYSubcommandValue.SIZE, parameterList.ToArray());
-		}
-
-		/// <param name="HANDLE">Array handle</param>
-		/// <param name="ELEMENTS">Total number of elements in array</param>
-		/// <remarks>
-		/// Renamed from SIZE
-		/// </remarks>
-		[Support(Official = false, Xtended = true, Compat = true)]
-		public static ARRAYSubcommand cmdSET_SIZE(IExpression<Data16> HANDLE, IExpression<Data32> ELEMENTS)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
-			parameterList.Add(ELEMENTS ?? throw new ArgumentNullException(nameof(ELEMENTS)));
-			return new ARRAYSubcommand(ARRAYSubcommandValue.SET_SIZE, parameterList.ToArray());
-		}
-
-		/// <param name="PRGID">Program slot number (must be running)</param>
-		/// <param name="HANDLE">Array handle</param>
-		/// <param name="INDEX">Index to first byte to read</param>
-		/// <param name="BYTES">Number of bytes to read</param>
-		/// <param name="ARRAY">First byte of array to receive data</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static ARRAYSubcommand cmdREAD_CONTENT(IExpression<Data16> PRGID, IExpression<Data16> HANDLE, IExpression<Data32> INDEX, IExpression<Data32> BYTES, IExpression<Data8> ARRAY)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
-			parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
-			parameterList.Add(INDEX ?? throw new ArgumentNullException(nameof(INDEX)));
-			parameterList.Add(BYTES ?? throw new ArgumentNullException(nameof(BYTES)));
-			parameterList.Add(ARRAY ?? throw new ArgumentNullException(nameof(ARRAY)));
-			return new ARRAYSubcommand(ARRAYSubcommandValue.READ_CONTENT, parameterList.ToArray());
-		}
-
-		/// <param name="PRGID">Program slot number (must be running)</param>
-		/// <param name="HANDLE">Array handle</param>
-		/// <param name="INDEX">Index to first byte to write</param>
-		/// <param name="BYTES">Number of bytes to write</param>
-		/// <param name="ARRAY">First byte of array to deliver data</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static ARRAYSubcommand cmdWRITE_CONTENT(IExpression<Data16> PRGID, IExpression<Data16> HANDLE, IExpression<Data32> INDEX, IExpression<Data32> BYTES, IExpression<Data8> ARRAY)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
-			parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
-			parameterList.Add(INDEX ?? throw new ArgumentNullException(nameof(INDEX)));
-			parameterList.Add(BYTES ?? throw new ArgumentNullException(nameof(BYTES)));
-			parameterList.Add(ARRAY ?? throw new ArgumentNullException(nameof(ARRAY)));
-			return new ARRAYSubcommand(ARRAYSubcommandValue.WRITE_CONTENT, parameterList.ToArray());
-		}
-
-		/// <param name="PRGID">Program slot number (must be running)</param>
-		/// <param name="HANDLE">Array handle</param>
-		/// <param name="BYTES">Number of bytes in array</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static ARRAYSubcommand cmdREAD_SIZE(IExpression<Data16> PRGID, IExpression<Data16> HANDLE, IExpression<Data32> BYTES)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
-			parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
-			parameterList.Add(BYTES ?? throw new ArgumentNullException(nameof(BYTES)));
-			return new ARRAYSubcommand(ARRAYSubcommandValue.READ_SIZE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Test if file exists
-		/// </summary>
-		/// <param name="NAME">File name</param>
-		/// <param name="FLAG">Exist (0 = no, 1 = yes)</param>
-		/// <remarks>
-		/// if name starts with '~','/' or '.' it is not from current folder
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILENAMESubcommand cmdEXIST(IExpression<DataString> NAME, IExpression<Data8> FLAG)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
-			parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
-			return new FILENAMESubcommand(FILENAMESubcommandValue.EXIST, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Calculate folder/file size
-		/// </summary>
-		/// <param name="NAME">File name</param>
-		/// <param name="FILES">Total number of files</param>
-		/// <param name="SIZE">Total folder size [KB]</param>
-		/// <remarks>
-		/// if name starts with '~','/' or '.' it is not from current folder
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILENAMESubcommand cmdTOTALSIZE(IExpression<DataString> NAME, IExpression<Data32> FILES, IExpression<Data32> SIZE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
-			parameterList.Add(FILES ?? throw new ArgumentNullException(nameof(FILES)));
-			parameterList.Add(SIZE ?? throw new ArgumentNullException(nameof(SIZE)));
-			return new FILENAMESubcommand(FILENAMESubcommandValue.TOTALSIZE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Split filename into Folder, name, extension
-		/// </summary>
-		/// <param name="FILENAME">File name</param>
-		/// <param name="LENGTH">Maximal length for each of the below parameters</param>
-		/// <param name="FOLDER">Folder name</param>
-		/// <param name="NAME">Name</param>
-		/// <param name="EXT">Extension</param>
-		/// <remarks>
-		/// Example: passing "../folder/subfolder/name.ext" in FILENAME will return "../folder/subfolder" in FOLDER, "name" in NAME and ".ext" in EXT.
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILENAMESubcommand cmdSPLIT(IExpression<DataString> FILENAME, IExpression<Data8> LENGTH, IExpression<DataString> FOLDER, IExpression<DataString> NAME, IExpression<DataString> EXT)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(FILENAME ?? throw new ArgumentNullException(nameof(FILENAME)));
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(FOLDER ?? throw new ArgumentNullException(nameof(FOLDER)));
-			parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
-			parameterList.Add(EXT ?? throw new ArgumentNullException(nameof(EXT)));
-			return new FILENAMESubcommand(FILENAMESubcommandValue.SPLIT, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Merge Folder, name, extension into filename
-		/// </summary>
-		/// <param name="FOLDER">Folder name</param>
-		/// <param name="NAME">Name</param>
-		/// <param name="EXT">Extension</param>
-		/// <param name="LENGTH">Maximal length for the below parameter</param>
-		/// <param name="FILENAME">File name</param>
-		/// <remarks>
-		/// Example: passing "../folder/subfolder" in FOLDER, "name" in NAME and ".ext" in EXT will return "../folder/subfolder/name.ext" in FILENAME.
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILENAMESubcommand cmdMERGE(IExpression<DataString> FOLDER, IExpression<DataString> NAME, IExpression<DataString> EXT, IExpression<Data8> LENGTH, IExpression<DataString> FILENAME)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(FOLDER ?? throw new ArgumentNullException(nameof(FOLDER)));
-			parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
-			parameterList.Add(EXT ?? throw new ArgumentNullException(nameof(EXT)));
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(FILENAME ?? throw new ArgumentNullException(nameof(FILENAME)));
-			return new FILENAMESubcommand(FILENAMESubcommandValue.MERGE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Check filename
-		/// </summary>
-		/// <param name="FILENAME">File name</param>
-		/// <param name="OK">Filename ok (0 = FAIL, 1 = OK)</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILENAMESubcommand cmdCHECK(IExpression<DataString> FILENAME, IExpression<Data8> OK)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(FILENAME ?? throw new ArgumentNullException(nameof(FILENAME)));
-			parameterList.Add(OK ?? throw new ArgumentNullException(nameof(OK)));
-			return new FILENAMESubcommand(FILENAMESubcommandValue.CHECK, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Pack file or folder into "raf" container
-		/// </summary>
-		/// <param name="FILENAME">File name</param>
-		/// <remarks>
-		/// .raf is the same as .tar.gz
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILENAMESubcommand cmdPACK(IExpression<DataString> FILENAME)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(FILENAME ?? throw new ArgumentNullException(nameof(FILENAME)));
-			return new FILENAMESubcommand(FILENAMESubcommandValue.PACK, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Unpack "raf" container
-		/// </summary>
-		/// <param name="FILENAME">File name</param>
-		/// <remarks>
-		/// .raf is the same as .tar.gz
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILENAMESubcommand cmdUNPACK(IExpression<DataString> FILENAME)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(FILENAME ?? throw new ArgumentNullException(nameof(FILENAME)));
-			return new FILENAMESubcommand(FILENAMESubcommandValue.UNPACK, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Get current folder name
-		/// </summary>
-		/// <param name="LENGTH">Maximal length for the below parameter</param>
-		/// <param name="FOLDERNAME">Folder name</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static FILENAMESubcommand cmdGET_FOLDERNAME(IExpression<Data8> LENGTH, IExpression<DataString> FOLDERNAME)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(FOLDERNAME ?? throw new ArgumentNullException(nameof(FOLDERNAME)));
-			return new FILENAMESubcommand(FILENAMESubcommandValue.GET_FOLDERNAME, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Get active state
-		/// </summary>
-		/// <param name="HARDWARE">Hardware Transport Layer</param>
-		/// <param name="ACTIVE">Active [0,1]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static COM_GETSubcommand cmdGET_ON_OFF(IExpression<Data8> HARDWARE, IExpression<Data8> ACTIVE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
-			parameterList.Add(ACTIVE ?? throw new ArgumentNullException(nameof(ACTIVE)));
-			return new COM_GETSubcommand(COM_GETSubcommandValue.GET_ON_OFF, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Get visibility state
-		/// </summary>
-		/// <param name="HARDWARE">Hardware Transport Layer</param>
-		/// <param name="VISIBLE">Visible [0,1]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static COM_GETSubcommand cmdGET_VISIBLE(IExpression<Data8> HARDWARE, IExpression<Data8> VISIBLE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
-			parameterList.Add(VISIBLE ?? throw new ArgumentNullException(nameof(VISIBLE)));
-			return new COM_GETSubcommand(COM_GETSubcommandValue.GET_VISIBLE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Get status.
-		/// </summary>
-		/// <param name="HARDWARE">Hardware Transport Layer</param>
-		/// <param name="ITEM">Name index</param>
-		/// <param name="RESULT">Results</param>
-		/// <remarks>
-		/// This command gets the result of the command that is being executed. This could be a search or a connection request.
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static COM_GETSubcommand cmdGET_RESULT(IExpression<Data8> HARDWARE, IExpression<Data8> ITEM, IExpression<Data8> RESULT)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
-			parameterList.Add(ITEM ?? throw new ArgumentNullException(nameof(ITEM)));
-			parameterList.Add(RESULT ?? throw new ArgumentNullException(nameof(RESULT)));
-			return new COM_GETSubcommand(COM_GETSubcommandValue.GET_RESULT, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Get pin code.
-		/// </summary>
-		/// <param name="HARDWARE">Hardware Transport Layer</param>
-		/// <param name="NAME">Name</param>
-		/// <param name="LENGTH">Max length of returned string</param>
-		/// <param name="PINCODE">Pin code</param>
-		/// <remarks>
-		/// For now "1234" is returned
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static COM_GETSubcommand cmdGET_PIN(IExpression<Data8> HARDWARE, IExpression<DataString> NAME, IExpression<Data8> LENGTH, IExpression<DataString> PINCODE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
-			parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(PINCODE ?? throw new ArgumentNullException(nameof(PINCODE)));
-			return new COM_GETSubcommand(COM_GETSubcommandValue.GET_PIN, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Gets a list state value. This can be compared to previous values to determine if items are added or removed from a list since the last call.
-		/// </summary>
-		/// <param name="HARDWARE">Hardware Transport Layer</param>
-		/// <param name="STATE">Value that represents the current state</param>
-		[Support(Official = false, Xtended = false, Compat = true)]
-		public static COM_GETSubcommand cmdLIST_STATE(IExpression<Data8> HARDWARE, IExpression<Data16> STATE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
-			parameterList.Add(STATE ?? throw new ArgumentNullException(nameof(STATE)));
-			return new COM_GETSubcommand(COM_GETSubcommandValue.LIST_STATE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Get number of item from search.
-		/// </summary>
-		/// <param name="HARDWARE">Hardware Transport Layer</param>
-		/// <param name="ITEMS">No of items in seach list</param>
-		/// <remarks>
-		/// After a search has been completed, SEARCH ITEMS will return the number of remote devices found.
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static COM_GETSubcommand cmdSEARCH_ITEMS(IExpression<Data8> HARDWARE, IExpression<Data8> ITEMS)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
-			parameterList.Add(ITEMS ?? throw new ArgumentNullException(nameof(ITEMS)));
-			return new COM_GETSubcommand(COM_GETSubcommandValue.SEARCH_ITEMS, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Get search item informations.
-		/// </summary>
-		/// <param name="HARDWARE">Hardware Transport Layer</param>
-		/// <param name="ITEM">Item - index in search list</param>
-		/// <param name="LENGTH">Max length of returned string</param>
-		/// <param name="NAME">Name</param>
-		/// <param name="PAIRED">Paired [0,1]</param>
-		/// <param name="CONNECTED">Connected [0,1]</param>
-		/// <param name="TYPE">Bluetooth Device Type</param>
-		/// <param name="VISIBLE">Visible [0,1]</param>
-		/// <remarks>
-		/// Used to retrieve the item information in the search list
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static COM_GETSubcommand cmdSEARCH_ITEM(IExpression<Data8> HARDWARE, IExpression<Data8> ITEM, IExpression<Data8> LENGTH, IExpression<DataString> NAME, IExpression<Data8> PAIRED, IExpression<Data8> CONNECTED, IExpression<Data8> TYPE, IExpression<Data8> VISIBLE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
-			parameterList.Add(ITEM ?? throw new ArgumentNullException(nameof(ITEM)));
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
-			parameterList.Add(PAIRED ?? throw new ArgumentNullException(nameof(PAIRED)));
-			parameterList.Add(CONNECTED ?? throw new ArgumentNullException(nameof(CONNECTED)));
-			parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
-			parameterList.Add(VISIBLE ?? throw new ArgumentNullException(nameof(VISIBLE)));
-			return new COM_GETSubcommand(COM_GETSubcommandValue.SEARCH_ITEM, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Get no of item in favourite list.
-		/// </summary>
-		/// <param name="HARDWARE">Hardware Transport Layer</param>
-		/// <param name="ITEMS">No of items in seach list</param>
-		/// <remarks>
-		/// The number of paired devices, not necessarily visible or present devices
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static COM_GETSubcommand cmdFAVOUR_ITEMS(IExpression<Data8> HARDWARE, IExpression<Data8> ITEMS)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
-			parameterList.Add(ITEMS ?? throw new ArgumentNullException(nameof(ITEMS)));
-			return new COM_GETSubcommand(COM_GETSubcommandValue.FAVOUR_ITEMS, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Get favourite item information.
-		/// </summary>
-		/// <param name="HARDWARE">Hardware Transport Layer</param>
-		/// <param name="ITEM">Item - index in favourite list</param>
-		/// <param name="LENGTH">Max length of returned string</param>
-		/// <param name="NAME">Name</param>
-		/// <param name="PAIRED">Paired [0,1]</param>
-		/// <param name="CONNECTED">Connected [0,1]</param>
-		/// <param name="TYPE">Bluetooth Device Type</param>
-		/// <remarks>
-		/// Used to retrieve the item information in the favourite list. All items in the favourite list are paired devices.
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static COM_GETSubcommand cmdFAVOUR_ITEM(IExpression<Data8> HARDWARE, IExpression<Data8> ITEM, IExpression<Data8> LENGTH, IExpression<DataString> NAME, IExpression<Data8> PAIRED, IExpression<Data8> CONNECTED, IExpression<Data8> TYPE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
-			parameterList.Add(ITEM ?? throw new ArgumentNullException(nameof(ITEM)));
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
-			parameterList.Add(PAIRED ?? throw new ArgumentNullException(nameof(PAIRED)));
-			parameterList.Add(CONNECTED ?? throw new ArgumentNullException(nameof(CONNECTED)));
-			parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
-			return new COM_GETSubcommand(COM_GETSubcommandValue.FAVOUR_ITEM, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Get bluetooth address information
-		/// </summary>
-		/// <param name="HARDWARE">Hardware Transport Layer</param>
-		/// <param name="LENGTH">Max length of returned string</param>
-		/// <param name="STRING">Bluetooth address</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static COM_GETSubcommand cmdGET_ID(IExpression<Data8> HARDWARE, IExpression<Data8> LENGTH, IExpression<DataString> STRING)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(STRING ?? throw new ArgumentNullException(nameof(STRING)));
-			return new COM_GETSubcommand(COM_GETSubcommandValue.GET_ID, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Gets the name of the brick
-		/// </summary>
-		/// <param name="LENGTH">Max length of returned string</param>
-		/// <param name="NAME">Brick name</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static COM_GETSubcommand cmdGET_BRICKNAME(IExpression<Data8> LENGTH, IExpression<DataString> NAME)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
-			return new COM_GETSubcommand(COM_GETSubcommandValue.GET_BRICKNAME, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Gets the network information. WIFI only
-		/// </summary>
-		/// <param name="HARDWARE">Hardware Transport Layer</param>
-		/// <param name="LENGTH">Max length of returned string</param>
-		/// <param name="NAME">Access point (AP) name</param>
-		/// <param name="MAC">MAC address</param>
-		/// <param name="IP">IP address</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static COM_GETSubcommand cmdGET_NETWORK(IExpression<Data8> HARDWARE, IExpression<Data8> LENGTH, IExpression<DataString> NAME, IExpression<DataString> MAC, IExpression<DataString> IP)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
-			parameterList.Add(MAC ?? throw new ArgumentNullException(nameof(MAC)));
-			parameterList.Add(IP ?? throw new ArgumentNullException(nameof(IP)));
-			return new COM_GETSubcommand(COM_GETSubcommandValue.GET_NETWORK, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Return if hardare is present. WIFI only
-		/// </summary>
-		/// <param name="HARDWARE">Hardware Transport Layer</param>
-		/// <param name="OK">Present [0,1]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static COM_GETSubcommand cmdGET_PRESENT(IExpression<Data8> HARDWARE, IExpression<Data8> OK)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
-			parameterList.Add(OK ?? throw new ArgumentNullException(nameof(OK)));
-			return new COM_GETSubcommand(COM_GETSubcommandValue.GET_PRESENT, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Returns the encryption mode of the hardware. WIFI only
-		/// </summary>
-		/// <param name="HARDWARE">Hardware Transport Layer</param>
-		/// <param name="ITEM">Item - index in favourite list</param>
-		/// <param name="TYPE">Encryption type</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static COM_GETSubcommand cmdGET_ENCRYPT(IExpression<Data8> HARDWARE, IExpression<Data8> ITEM, IExpression<Data8> TYPE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
-			parameterList.Add(ITEM ?? throw new ArgumentNullException(nameof(ITEM)));
-			parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
-			return new COM_GETSubcommand(COM_GETSubcommandValue.GET_ENCRYPT, parameterList.ToArray());
-		}
-
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static COM_GETSubcommand cmdCONNEC_ITEMS(IExpression<Data8> HARDWARE, IExpression<Data8> ITEMS)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
-			parameterList.Add(ITEMS ?? throw new ArgumentNullException(nameof(ITEMS)));
-			return new COM_GETSubcommand(COM_GETSubcommandValue.CONNEC_ITEMS, parameterList.ToArray());
-		}
-
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static COM_GETSubcommand cmdCONNEC_ITEM(IExpression<Data8> HARDWARE, IExpression<Data8> ITEM, IExpression<Data8> LENGTH, IExpression<Data8> NAME, IExpression<Data8> TYPE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
-			parameterList.Add(ITEM ?? throw new ArgumentNullException(nameof(ITEM)));
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
-			parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
-			return new COM_GETSubcommand(COM_GETSubcommandValue.CONNEC_ITEM, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Returns the encryption mode of the hardware. WIFI only
-		/// </summary>
-		/// <param name="HARDWARE">Hardware Transport Layer</param>
-		/// <param name="LENGTH">Max length of returned string</param>
-		/// <param name="NAME">Name</param>
-		/// <param name="TYPE">Encryption type</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static COM_GETSubcommand cmdGET_INCOMING(IExpression<Data8> HARDWARE, IExpression<Data8> LENGTH, IExpression<DataString> NAME, IExpression<Data8> TYPE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
-			parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
-			return new COM_GETSubcommand(COM_GETSubcommandValue.GET_INCOMING, parameterList.ToArray());
-		}
-
-		/// <param name="HARDWARE">Hardware Transport Layer</param>
-		/// <param name="ACTIVE">Active [0,1], 1 = on, 0 = off</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static COM_GETSubcommand cmdGET_MODE2(IExpression<Data8> HARDWARE, IExpression<Data8> ACTIVE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
-			parameterList.Add(ACTIVE ?? throw new ArgumentNullException(nameof(ACTIVE)));
-			return new COM_GETSubcommand(COM_GETSubcommandValue.GET_MODE2, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Set active state, either on or off
-		/// </summary>
-		/// <param name="HARDWARE">Hardware Transport Layer</param>
-		/// <param name="ACTIVE">Active [0,1], 1 = on, 0 = off</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static COM_SETSubcommand cmdSET_ON_OFF(IExpression<Data8> HARDWARE, IExpression<Data8> ACTIVE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
-			parameterList.Add(ACTIVE ?? throw new ArgumentNullException(nameof(ACTIVE)));
-			return new COM_SETSubcommand(COM_SETSubcommandValue.SET_ON_OFF, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Set visibility state - Only available for bluetooth
-		/// </summary>
-		/// <param name="HARDWARE">Hardware Transport Layer</param>
-		/// <param name="VISIBLE">Visible [0,1], 1 = visible, 0 = invisible</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static COM_SETSubcommand cmdSET_VISIBLE(IExpression<Data8> HARDWARE, IExpression<Data8> VISIBLE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
-			parameterList.Add(VISIBLE ?? throw new ArgumentNullException(nameof(VISIBLE)));
-			return new COM_SETSubcommand(COM_SETSubcommandValue.SET_VISIBLE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Starts or or stops the search for remote devices
-		/// </summary>
-		/// <param name="HARDWARE">Hardware Transport Layer</param>
-		/// <param name="SEARCH">Search [0,1] 0 = stop search, 1 = start search</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static COM_SETSubcommand cmdSET_SEARCH(IExpression<Data8> HARDWARE, IExpression<Data8> SEARCH)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
-			parameterList.Add(SEARCH ?? throw new ArgumentNullException(nameof(SEARCH)));
-			return new COM_SETSubcommand(COM_SETSubcommandValue.SET_SEARCH, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Set pin code.
-		/// </summary>
-		/// <param name="HARDWARE">Hardware Transport Layer</param>
-		/// <param name="NAME">Name</param>
-		/// <param name="PINCODE">Pin code</param>
-		/// <remarks>
-		/// Set the pincode for a remote device. Used when requested by bluetooth. Not at this point possible by user program.
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static COM_SETSubcommand cmdSET_PIN(IExpression<Data8> HARDWARE, IExpression<DataString> NAME, IExpression<DataString> PINCODE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
-			parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
-			parameterList.Add(PINCODE ?? throw new ArgumentNullException(nameof(PINCODE)));
-			return new COM_SETSubcommand(COM_SETSubcommandValue.SET_PIN, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Set pin code.
-		/// </summary>
-		/// <param name="HARDWARE">Hardware Transport Layer</param>
-		/// <param name="ACCEPT">Acceptance [0,1] 0 = reject 1 = accept</param>
-		/// <remarks>
-		/// Set the pincode for a remote device. Used when requested by bluetooth. Not at this point possible by user program.
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static COM_SETSubcommand cmdSET_PASSKEY(IExpression<Data8> HARDWARE, IExpression<Data8> ACCEPT)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
-			parameterList.Add(ACCEPT ?? throw new ArgumentNullException(nameof(ACCEPT)));
-			return new COM_SETSubcommand(COM_SETSubcommandValue.SET_PASSKEY, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Initiate or close the connection request to a remote device by the specified name.
-		/// </summary>
-		/// <param name="HARDWARE">Hardware Transport Layer</param>
-		/// <param name="NAME">Name</param>
-		/// <param name="CONNECTION">Connect [0,1], 1 = Connect, 0 = Disconnect</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static COM_SETSubcommand cmdSET_CONNECTION(IExpression<Data8> HARDWARE, IExpression<DataString> NAME, IExpression<Data8> CONNECTION)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
-			parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
-			parameterList.Add(CONNECTION ?? throw new ArgumentNullException(nameof(CONNECTION)));
-			return new COM_SETSubcommand(COM_SETSubcommandValue.SET_CONNECTION, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Sets the name of the brick
-		/// </summary>
-		/// <param name="NAME">Name</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static COM_SETSubcommand cmdSET_BRICKNAME(IExpression<DataString> NAME)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
-			return new COM_SETSubcommand(COM_SETSubcommandValue.SET_BRICKNAME, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Moves the index in list one step up.
-		/// </summary>
-		/// <param name="HARDWARE">Hardware Transport Layer</param>
-		/// <param name="ITEM">Index in table</param>
-		/// <remarks>
-		/// Used to re-arrange WIFI list. Only used for WIFI.
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static COM_SETSubcommand cmdSET_MOVEUP(IExpression<Data8> HARDWARE, IExpression<Data8> ITEM)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
-			parameterList.Add(ITEM ?? throw new ArgumentNullException(nameof(ITEM)));
-			return new COM_SETSubcommand(COM_SETSubcommandValue.SET_MOVEUP, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Moves the index in list one step down.
-		/// </summary>
-		/// <param name="HARDWARE">Hardware Transport Layer</param>
-		/// <param name="ITEM">Index in table</param>
-		/// <remarks>
-		/// Used to re-arrange WIFI list. Only used for WIFI.
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static COM_SETSubcommand cmdSET_MOVEDOWN(IExpression<Data8> HARDWARE, IExpression<Data8> ITEM)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
-			parameterList.Add(ITEM ?? throw new ArgumentNullException(nameof(ITEM)));
-			return new COM_SETSubcommand(COM_SETSubcommandValue.SET_MOVEDOWN, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Sets the encryption type for an item in a list.
-		/// </summary>
-		/// <param name="HARDWARE">Hardware Transport Layer</param>
-		/// <param name="ITEM">Index in table</param>
-		/// <param name="ENCRYPT">Encryption type</param>
-		/// <remarks>
-		/// Only used for WIFI.
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static COM_SETSubcommand cmdSET_ENCRYPT(IExpression<Data8> HARDWARE, IExpression<Data8> ITEM, IExpression<Data8> ENCRYPT)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
-			parameterList.Add(ITEM ?? throw new ArgumentNullException(nameof(ITEM)));
-			parameterList.Add(ENCRYPT ?? throw new ArgumentNullException(nameof(ENCRYPT)));
-			return new COM_SETSubcommand(COM_SETSubcommandValue.SET_ENCRYPT, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Sets the SSID name. Only used for WIFI
-		/// </summary>
-		/// <param name="HARDWARE">Hardware Transport Layer</param>
-		/// <param name="NAME">Name</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static COM_SETSubcommand cmdSET_SSID(IExpression<Data8> HARDWARE, IExpression<DataString> NAME)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
-			parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
-			return new COM_SETSubcommand(COM_SETSubcommandValue.SET_SSID, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Set active mode state, either active or not
-		/// </summary>
-		/// <param name="HARDWARE">Hardware Transport Layer</param>
-		/// <param name="ACTIVE">Active [0,1], 1 = on, 0 = off</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static COM_SETSubcommand cmdSET_MODE2(IExpression<Data8> HARDWARE, IExpression<Data8> ACTIVE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
-			parameterList.Add(ACTIVE ?? throw new ArgumentNullException(nameof(ACTIVE)));
-			return new COM_SETSubcommand(COM_SETSubcommandValue.SET_MODE2, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Enables test byte codes for 10 seconds
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static TSTSubcommand cmdTST_OPEN()
-		{
-			var parameterList = new List<IByteCode>();
-			return new TSTSubcommand(TSTSubcommandValue.TST_OPEN, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Disables test byte codes
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static TSTSubcommand cmdTST_CLOSE()
-		{
-			var parameterList = new List<IByteCode>();
-			return new TSTSubcommand(TSTSubcommandValue.TST_CLOSE, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Read connector pin status
-		/// </summary>
-		/// <param name="PORT">Input connector [0..3], output connector [16..19]</param>
-		/// <param name="LENGTH">Number of pins in returned string</param>
-		/// <param name="STRING">String variable start index ('0' = low, '1' = high)</param>
-		/// <remarks>
-		/// Input -----— STRING[0] Pin1 I_ONx current source control output ['0','1'] STRING[1] Pin2 LEGDETx ['0','1'] STRING[2] Pin5 DIGIx0 ['0','1'] STRING[3] Pin6 DIGIx1 ['0','1'] STRING[4] - TXINx_EN ['0','1']
-		/// Output -----— STRING[0] Pin1 MxIN0 ['0','1'] STRING[1] Pin2 MxIN1 ['0','1'] STRING[2] Pin5 DETx0 ['0','1'] STRING[3] Pin5 INTx0 ['0','1'] STRING[4] Pin6 DIRx ['0','1']
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static TSTSubcommand cmdTST_READ_PINS(IExpression<Data8> PORT, IExpression<Data8> LENGTH, IExpression<Data8> STRING)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(PORT ?? throw new ArgumentNullException(nameof(PORT)));
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(STRING ?? throw new ArgumentNullException(nameof(STRING)));
-			return new TSTSubcommand(TSTSubcommandValue.TST_READ_PINS, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Write to connector pin
-		/// </summary>
-		/// <param name="PORT">Input connector [0..3], output connector [16..19]</param>
-		/// <param name="LENGTH">Number of pins in returned string</param>
-		/// <param name="STRING">String variable start index ('0' = set low, '1' = set high, 'X' = tristate, '-' = don't touch)</param>
-		/// <remarks>
-		/// Input -----— STRING[0] Pin1 I_ONx current source control output ['0','1','X','-'] STRING[1] Pin2 LEGDETx ['0','1','X','-'] STRING[2] Pin5 DIGIx0 ['0','1','X','-'] STRING[3] Pin6 DIGIx1 ['0','1','X','-'] STRING[4] - TXINx_EN ['0','1','X','-']
-		/// Output -----— STRING[0] Pin1 MxIN0 ['0','1','X','-'] STRING[1] Pin2 MxIN1 ['0','1','X','-'] STRING[2] Pin5 DETx0 Write ['0','1','X','-'] STRING[3] Pin5 INTx0 Read ['0','1','X','-'] STRING[4] Pin6 DIRx ['0','1','X','-']
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static TSTSubcommand cmdTST_WRITE_PINS(IExpression<Data8> PORT, IExpression<Data8> LENGTH, IExpression<Data8> STRING)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(PORT ?? throw new ArgumentNullException(nameof(PORT)));
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(STRING ?? throw new ArgumentNullException(nameof(STRING)));
-			return new TSTSubcommand(TSTSubcommandValue.TST_WRITE_PINS, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Read raw count from ADC
-		/// </summary>
-		/// <param name="INDEX">Input mapped index (see remarks) [0..15]</param>
-		/// <param name="VALUE">Raw count [0..4095]</param>
-		/// <remarks>
-		/// INDEX 0..3 Input connector pin 1 (0=conn1, 1=conn2, 2=conn3, 3=conn4) INDEX 4..7 Input connector pin 6 (4=conn1, 5=conn2, 6=conn3, 7=conn4) INDEX 8..11 Output connector pin 5 (8=conn1, 9=conn2, 10=conn3, 11=conn4)
-		/// INDEX 12 Battery temperature INDEX 13 Current flowing to motors INDEX 14 Current flowing from the battery INDEX 15 Voltage at battery cell 1, 2, 3,4, 5, and 6
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static TSTSubcommand cmdTST_READ_ADC(IExpression<Data8> INDEX, IExpression<Data16> VALUE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(INDEX ?? throw new ArgumentNullException(nameof(INDEX)));
-			parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
-			return new TSTSubcommand(TSTSubcommandValue.TST_READ_ADC, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Write data to port through UART
-		/// </summary>
-		/// <param name="PORT">Input connector [0..3]</param>
-		/// <param name="LENGTH">Length of string to write [0..63]</param>
-		/// <param name="STRING">String of data</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static TSTSubcommand cmdTST_WRITE_UART(IExpression<Data8> PORT, IExpression<Data8> LENGTH, IExpression<Data8> STRING)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(PORT ?? throw new ArgumentNullException(nameof(PORT)));
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(STRING ?? throw new ArgumentNullException(nameof(STRING)));
-			return new TSTSubcommand(TSTSubcommandValue.TST_WRITE_UART, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Read data from port through UART
-		/// </summary>
-		/// <param name="PORT">Input connector [0..3]</param>
-		/// <param name="LENGTH">Length of string to write [0..63]</param>
-		/// <param name="STRING">String of data</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static TSTSubcommand cmdTST_READ_UART(IExpression<Data8> PORT, IExpression<Data8> LENGTH, IExpression<Data8> STRING)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(PORT ?? throw new ArgumentNullException(nameof(PORT)));
-			parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
-			parameterList.Add(STRING ?? throw new ArgumentNullException(nameof(STRING)));
-			return new TSTSubcommand(TSTSubcommandValue.TST_READ_UART, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Enable all UARTs
-		/// </summary>
-		/// <param name="BITRATE">Bit rate [2400..115200 b/S]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static TSTSubcommand cmdTST_ENABLE_UART(IExpression<Data32> BITRATE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(BITRATE ?? throw new ArgumentNullException(nameof(BITRATE)));
-			return new TSTSubcommand(TSTSubcommandValue.TST_ENABLE_UART, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Disable all UARTs
-		/// </summary>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static TSTSubcommand cmdTST_DISABLE_UART()
-		{
-			var parameterList = new List<IByteCode>();
-			return new TSTSubcommand(TSTSubcommandValue.TST_DISABLE_UART, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Read accu switch state
-		/// </summary>
-		/// <param name="ACTIVE">State [0..1]</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static TSTSubcommand cmdTST_ACCU_SWITCH(IExpression<Data8> ACTIVE)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(ACTIVE ?? throw new ArgumentNullException(nameof(ACTIVE)));
-			return new TSTSubcommand(TSTSubcommandValue.TST_ACCU_SWITCH, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Turn on mode2
-		/// </summary>
-		/// <remarks>
-		/// This only works on pre-release EV3 hardware.
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static TSTSubcommand cmdTST_BOOT_MODE2()
-		{
-			var parameterList = new List<IByteCode>();
-			return new TSTSubcommand(TSTSubcommandValue.TST_BOOT_MODE2, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Read mode2 status
-		/// </summary>
-		/// <param name="STATUS">State [0..2]</param>
-		/// <remarks>
-		/// This only works on pre-release EV3 hardware.
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static TSTSubcommand cmdTST_POLL_MODE2(IExpression<Data8> STATUS)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(STATUS ?? throw new ArgumentNullException(nameof(STATUS)));
-			return new TSTSubcommand(TSTSubcommandValue.TST_POLL_MODE2, parameterList.ToArray());
-		}
-
-		/// <summary>
-		/// Closes mode2
-		/// </summary>
-		/// <remarks>
-		/// This only works on pre-release EV3 hardware.
-		/// </remarks>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static TSTSubcommand cmdTST_CLOSE_MODE2()
-		{
-			var parameterList = new List<IByteCode>();
-			return new TSTSubcommand(TSTSubcommandValue.TST_CLOSE_MODE2, parameterList.ToArray());
-		}
+		/// Contains all of the opcode factory methods.
+		/// </summary>
+		public static class Opcode
+		{
+			/// <summary>
+			/// This code does not exist in normal program
+			/// </summary>
+			/// <remarks>
+			/// Dispatch status changes to INSTRBREAK
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opERROR()
+			{
+				var parameterList = new List<IByteCode>();
+				return new EV3.Opcodes.Opcode(OpcodeValue.ERROR, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// This code does absolutely nothing
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opNOP()
+			{
+				var parameterList = new List<IByteCode>();
+				return new EV3.Opcodes.Opcode(OpcodeValue.NOP, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Stops specific program id slot
+			/// </summary>
+			/// <param name="PRGID">Program id (GUI_SLOT = all, CURRENT_SLOT = current)</param>
+			/// <remarks>
+			/// Dispatch status changes to PRGBREAK
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opPROGRAM_STOP(IExpression<Data16> PRGID)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.PROGRAM_STOP, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Start program id slot
+			/// </summary>
+			/// <param name="PRGID">Program id</param>
+			/// <param name="SIZE">Size of image</param>
+			/// <param name="IP">Address of image (value from opFILE(LOAD_IMAGE,..) )</param>
+			/// <param name="DEBUG">Debug mode (0=normal, 1=debug, 2=don't execute)</param>
+			/// <remarks>
+			/// Dispatch status unchanged
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opPROGRAM_START(IExpression<Data16> PRGID, IExpression<Data32> SIZE, IExpression<Data32> IP, IExpression<Data8> DEBUG)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
+				parameterList.Add(SIZE ?? throw new ArgumentNullException(nameof(SIZE)));
+				parameterList.Add(IP ?? throw new ArgumentNullException(nameof(IP)));
+				parameterList.Add(DEBUG ?? throw new ArgumentNullException(nameof(DEBUG)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.PROGRAM_START, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Stops specific object
+			/// </summary>
+			/// <param name="OBJID">Object id</param>
+			/// <remarks>
+			/// Dispatch status changes to STOPBREAK
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opOBJECT_STOP(IExpression<Data16> OBJID)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(OBJID ?? throw new ArgumentNullException(nameof(OBJID)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.OBJECT_STOP, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Start specific object
+			/// </summary>
+			/// <param name="OBJID">Object id</param>
+			/// <remarks>
+			/// Dispatch status unchanged
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opOBJECT_START(IExpression<Data16> OBJID)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(OBJID ?? throw new ArgumentNullException(nameof(OBJID)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.OBJECT_START, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Triggers object and run the object if fully triggered
+			/// </summary>
+			/// <param name="OBJID">Object id</param>
+			/// <remarks>
+			/// Dispatch status unchanged
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opOBJECT_TRIG(IExpression<Data16> OBJID)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(OBJID ?? throw new ArgumentNullException(nameof(OBJID)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.OBJECT_TRIG, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Wait until object has run
+			/// </summary>
+			/// <param name="OBJID">Object id</param>
+			/// <remarks>
+			/// Dispatch status can change to BUSYBREAK
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opOBJECT_WAIT(IExpression<Data16> OBJID)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(OBJID ?? throw new ArgumentNullException(nameof(OBJID)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.OBJECT_WAIT, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Return from byte code subroutine
+			/// </summary>
+			/// <remarks>
+			/// Dispatch status changes to STOPBREAK
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opRETURN()
+			{
+				var parameterList = new List<IByteCode>();
+				return new EV3.Opcodes.Opcode(OpcodeValue.RETURN, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Calls byte code subroutine
+			/// </summary>
+			/// <param name="OBJID">Object id</param>
+			/// <param name="PARAMETERS">Number of parameters</param>
+			/// <param name="PARAMETERS_">variable arguments</param>
+			/// <remarks>
+			/// Dispatch status changes to STOPBREAK or BUSYBREAK
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opCALL(IExpression<Data16> OBJID, IExpression<Data8> PARAMETERS, params IExpression[] PARAMETERS_)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(OBJID ?? throw new ArgumentNullException(nameof(OBJID)));
+				parameterList.Add(PARAMETERS ?? throw new ArgumentNullException(nameof(PARAMETERS)));
+				parameterList.AddRange(PARAMETERS_ ?? throw new ArgumentNullException(nameof(PARAMETERS_)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.CALL, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Stops current object
+			/// </summary>
+			/// <remarks>
+			/// Dispatch status changes to STOPBREAK
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opOBJECT_END()
+			{
+				var parameterList = new List<IByteCode>();
+				return new EV3.Opcodes.Opcode(OpcodeValue.OBJECT_END, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Breaks execution of current VMTHREAD
+			/// </summary>
+			/// <remarks>
+			/// Dispatch status changes to INSTRBREAK
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opSLEEP()
+			{
+				var parameterList = new List<IByteCode>();
+				return new EV3.Opcodes.Opcode(OpcodeValue.SLEEP, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Get program data
+			/// </summary>
+			/// <param name="CMD">Specific command parameter</param>
+			/// <remarks>
+			/// Dispatch status can change to FAILBREAK
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opPROGRAM_INFO(PROGRAM_INFOSubcommand CMD)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.PROGRAM_INFO, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// This code does nothing besides marking an address to a label
+			/// </summary>
+			/// <param name="NO">Label number</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opLABEL(IExpression<DataLabel> NO)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.LABEL, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Display globals or object locals on terminal
+			/// </summary>
+			/// <param name="PRGID">Program slot number</param>
+			/// <param name="OBJID">Object id (zero means globals)</param>
+			/// <param name="OFFSET">Offset (start from)</param>
+			/// <param name="SIZE">Size (length of dump) zero means all (max 1024)</param>
+			/// <remarks>
+			/// Dispatch status unchanged
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opPROBE(IExpression<Data16> PRGID, IExpression<Data16> OBJID, IExpression<Data32> OFFSET, IExpression<Data32> SIZE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
+				parameterList.Add(OBJID ?? throw new ArgumentNullException(nameof(OBJID)));
+				parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
+				parameterList.Add(SIZE ?? throw new ArgumentNullException(nameof(SIZE)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.PROBE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Run byte code snippet
+			/// </summary>
+			/// <param name="PRGID">Program slot number</param>
+			/// <param name="IMAGE">Address of image</param>
+			/// <param name="GLOBAL">Address of global variables</param>
+			/// <remarks>
+			/// Dispatch status can change to BUSYBREAK
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opDO(IExpression<Data16> PRGID, IExpression<Data32> IMAGE, IExpression<Data32> GLOBAL)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
+				parameterList.Add(IMAGE ?? throw new ArgumentNullException(nameof(IMAGE)));
+				parameterList.Add(GLOBAL ?? throw new ArgumentNullException(nameof(GLOBAL)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.DO, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Add two 8-bit values DESTINATION = SOURCE1 + SOURCE2
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opADD8(IExpression<Data8> SOURCE1, IExpression<Data8> SOURCE2, IExpression<Data8> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.ADD8, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Add two 16-bit values DESTINATION = SOURCE1 + SOURCE2
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opADD16(IExpression<Data16> SOURCE1, IExpression<Data16> SOURCE2, IExpression<Data16> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.ADD16, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Add two 32-bit values DESTINATION = SOURCE1 + SOURCE2
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opADD32(IExpression<Data32> SOURCE1, IExpression<Data32> SOURCE2, IExpression<Data32> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.ADD32, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Add two floating point values DESTINATION = SOURCE1 + SOURCE2
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opADDF(IExpression<DataFloat> SOURCE1, IExpression<DataFloat> SOURCE2, IExpression<DataFloat> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.ADDF, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Subtract two 8 bit values DESTINATION = SOURCE1 - SOURCE2
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opSUB8(IExpression<Data8> SOURCE1, IExpression<Data8> SOURCE2, IExpression<Data8> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.SUB8, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Subtract two 16 bit values DESTINATION = SOURCE1 - SOURCE2
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opSUB16(IExpression<Data16> SOURCE1, IExpression<Data16> SOURCE2, IExpression<Data16> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.SUB16, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Subtract two 32 bit values DESTINATION = SOURCE1 - SOURCE2
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opSUB32(IExpression<Data32> SOURCE1, IExpression<Data32> SOURCE2, IExpression<Data32> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.SUB32, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Subtract two floating point values DESTINATION = SOURCE1 - SOURCE2
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opSUBF(IExpression<DataFloat> SOURCE1, IExpression<DataFloat> SOURCE2, IExpression<DataFloat> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.SUBF, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Multiply two 8 bit values DESTINATION = SOURCE1 * SOURCE2
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opMUL8(IExpression<Data8> SOURCE1, IExpression<Data8> SOURCE2, IExpression<Data8> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.MUL8, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Multiply two 16 bit values DESTINATION = SOURCE1 * SOURCE2
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opMUL16(IExpression<Data16> SOURCE1, IExpression<Data16> SOURCE2, IExpression<Data16> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.MUL16, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Multiply two 32 bit values DESTINATION = SOURCE1 * SOURCE2
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opMUL32(IExpression<Data32> SOURCE1, IExpression<Data32> SOURCE2, IExpression<Data32> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.MUL32, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Multiply two floating point values DESTINATION = SOURCE1 * SOURCE2
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opMULF(IExpression<DataFloat> SOURCE1, IExpression<DataFloat> SOURCE2, IExpression<DataFloat> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.MULF, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Divide two 8 bit values DESTINATION = SOURCE1 / SOURCE2
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opDIV8(IExpression<Data8> SOURCE1, IExpression<Data8> SOURCE2, IExpression<Data8> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.DIV8, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Divide two 16 bit values DESTINATION = SOURCE1 / SOURCE2
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opDIV16(IExpression<Data16> SOURCE1, IExpression<Data16> SOURCE2, IExpression<Data16> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.DIV16, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Divide two 32 bit values DESTINATION = SOURCE1 / SOURCE2
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opDIV32(IExpression<Data32> SOURCE1, IExpression<Data32> SOURCE2, IExpression<Data32> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.DIV32, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Divide two floating point values DESTINATION = SOURCE1 / SOURCE2
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opDIVF(IExpression<DataFloat> SOURCE1, IExpression<DataFloat> SOURCE2, IExpression<DataFloat> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.DIVF, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Or two 8 bit values DESTINATION = SOURCE1 | SOURCE2
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opOR8(IExpression<Data8> SOURCE1, IExpression<Data8> SOURCE2, IExpression<Data8> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.OR8, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Or two 16 bit values DESTINATION = SOURCE1 | SOURCE2
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opOR16(IExpression<Data16> SOURCE1, IExpression<Data16> SOURCE2, IExpression<Data16> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.OR16, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Or two 32 bit values DESTINATION = SOURCE1 | SOURCE2
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opOR32(IExpression<Data32> SOURCE1, IExpression<Data32> SOURCE2, IExpression<Data32> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.OR32, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// And two 8 bit values DESTINATION = SOURCE1 &amp; SOURCE2
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opAND8(IExpression<Data8> SOURCE1, IExpression<Data8> SOURCE2, IExpression<Data8> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.AND8, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// And two 16 bit values DESTINATION = SOURCE1 &amp; SOURCE2
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opAND16(IExpression<Data16> SOURCE1, IExpression<Data16> SOURCE2, IExpression<Data16> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.AND16, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// And two 32 bit values DESTINATION = SOURCE1 &amp; SOURCE2
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opAND32(IExpression<Data32> SOURCE1, IExpression<Data32> SOURCE2, IExpression<Data32> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.AND32, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Exclusive or two 8 bit values DESTINATION = SOURCE1 ^ SOURCE2
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opXOR8(IExpression<Data8> SOURCE1, IExpression<Data8> SOURCE2, IExpression<Data8> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.XOR8, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Exclusive or two 16 bit values DESTINATION = SOURCE1 ^ SOURCE2
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opXOR16(IExpression<Data16> SOURCE1, IExpression<Data16> SOURCE2, IExpression<Data16> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.XOR16, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Exclusive or two 32 bit values DESTINATION = SOURCE1 ^ SOURCE2
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opXOR32(IExpression<Data32> SOURCE1, IExpression<Data32> SOURCE2, IExpression<Data32> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.XOR32, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Rotate left 8 bit value DESTINATION = SOURCE1 &lt;&lt; SOURCE2
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opRL8(IExpression<Data8> SOURCE1, IExpression<Data8> SOURCE2, IExpression<Data8> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.RL8, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Rotate left 16 bit value DESTINATION = SOURCE1 &lt;&lt; SOURCE2
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opRL16(IExpression<Data16> SOURCE1, IExpression<Data16> SOURCE2, IExpression<Data16> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.RL16, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Rotate left 32 bit value DESTINATION = SOURCE1 &lt;&lt; SOURCE2
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opRL32(IExpression<Data32> SOURCE1, IExpression<Data32> SOURCE2, IExpression<Data32> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.RL32, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Move LENGTH number of DATA8 from BYTE STREAM to memory DESTINATION START
+			/// </summary>
+			/// <param name="DESTINATION">First element in DATA8 array to be initiated</param>
+			/// <param name="LENGTH">Number of elements to initiate</param>
+			/// <param name="SOURCE">First element to initiate DATA8 array with</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opINIT_BYTES(IExpression<Data8> DESTINATION, IExpression<Data32> LENGTH, params IExpression<Data8>[] SOURCE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.AddRange(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.INIT_BYTES, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Move 8 bit value from SOURCE to DESTINATION
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opMOVE8_8(IExpression<Data8> SOURCE, IExpression<Data8> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.MOVE8_8, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Move 8 bit value from SOURCE to DESTINATION
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opMOVE8_16(IExpression<Data8> SOURCE, IExpression<Data16> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.MOVE8_16, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Move 8 bit value from SOURCE to DESTINATION
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opMOVE8_32(IExpression<Data8> SOURCE, IExpression<Data32> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.MOVE8_32, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Move 8 bit value from SOURCE to DESTINATION
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opMOVE8_F(IExpression<Data8> SOURCE, IExpression<DataFloat> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.MOVE8_F, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Move 16 bit value from SOURCE to DESTINATION
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opMOVE16_8(IExpression<Data16> SOURCE, IExpression<Data8> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.MOVE16_8, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Move 16 bit value from SOURCE to DESTINATION
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opMOVE16_16(IExpression<Data16> SOURCE, IExpression<Data16> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.MOVE16_16, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Move 16 bit value from SOURCE to DESTINATION
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opMOVE16_32(IExpression<Data16> SOURCE, IExpression<Data32> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.MOVE16_32, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Move 16 bit value from SOURCE to DESTINATION
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opMOVE16_F(IExpression<Data16> SOURCE, IExpression<DataFloat> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.MOVE16_F, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Move 32 bit value from SOURCE to DESTINATION
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opMOVE32_8(IExpression<Data32> SOURCE, IExpression<Data8> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.MOVE32_8, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Move 32 bit value from SOURCE to DESTINATION
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opMOVE32_16(IExpression<Data32> SOURCE, IExpression<Data16> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.MOVE32_16, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Move 32 bit value from SOURCE to DESTINATION
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opMOVE32_32(IExpression<Data32> SOURCE, IExpression<Data32> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.MOVE32_32, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Move 32 bit value from SOURCE to DESTINATION
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opMOVE32_F(IExpression<Data32> SOURCE, IExpression<DataFloat> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.MOVE32_F, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Move floating point value from SOURCE to DESTINATION
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opMOVEF_8(IExpression<DataFloat> SOURCE, IExpression<Data8> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.MOVEF_8, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Move floating point value from SOURCE to DESTINATION
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opMOVEF_16(IExpression<DataFloat> SOURCE, IExpression<Data16> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.MOVEF_16, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Move floating point value from SOURCE to DESTINATION
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opMOVEF_32(IExpression<DataFloat> SOURCE, IExpression<Data32> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.MOVEF_32, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Move floating point value from SOURCE to DESTINATION
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opMOVEF_F(IExpression<DataFloat> SOURCE, IExpression<DataFloat> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.MOVEF_F, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Branch unconditionally relative
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opJR(IExpression<DataLabel> OFFSET)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.JR, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Branch relative if FLAG is FALSE (zero)
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opJR_FALSE(IExpression<Data8> FLAG, IExpression<DataLabel> OFFSET)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
+				parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.JR_FALSE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Branch relative if FLAG is TRUE (non zero)
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opJR_TRUE(IExpression<Data8> FLAG, IExpression<DataLabel> OFFSET)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
+				parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.JR_TRUE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Branch relative if VALUE is NAN (not a number)
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opJR_NAN(IExpression<DataFloat> VALUE, IExpression<DataLabel> OFFSET)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.JR_NAN, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// If LEFT is less than RIGTH - set FLAG
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opCP_LT8(IExpression<Data8> LEFT, IExpression<Data8> RIGHT, IExpression<Data8> FLAG)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.CP_LT8, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// If LEFT is less than RIGTH - set FLAG
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opCP_LT16(IExpression<Data16> LEFT, IExpression<Data16> RIGHT, IExpression<Data8> FLAG)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.CP_LT16, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// If LEFT is less than RIGTH - set FLAG
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opCP_LT32(IExpression<Data32> LEFT, IExpression<Data32> RIGHT, IExpression<Data8> FLAG)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.CP_LT32, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// If LEFT is less than RIGTH - set FLAG
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opCP_LTF(IExpression<DataFloat> LEFT, IExpression<DataFloat> RIGHT, IExpression<Data8> FLAG)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.CP_LTF, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// If LEFT is greater than RIGTH - set FLAG
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opCP_GT8(IExpression<Data8> LEFT, IExpression<Data8> RIGHT, IExpression<Data8> FLAG)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.CP_GT8, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// If LEFT is greater than RIGTH - set FLAG
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opCP_GT16(IExpression<Data16> LEFT, IExpression<Data16> RIGHT, IExpression<Data8> FLAG)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.CP_GT16, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// If LEFT is greater than RIGTH - set FLAG
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opCP_GT32(IExpression<Data32> LEFT, IExpression<Data32> RIGHT, IExpression<Data8> FLAG)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.CP_GT32, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// If LEFT is greater than RIGTH - set FLAG
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opCP_GTF(IExpression<DataFloat> LEFT, IExpression<DataFloat> RIGHT, IExpression<Data8> FLAG)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.CP_GTF, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// If LEFT is equal to RIGTH - set FLAG
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opCP_EQ8(IExpression<Data8> LEFT, IExpression<Data8> RIGHT, IExpression<Data8> FLAG)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.CP_EQ8, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// If LEFT is equal to RIGTH - set FLAG
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opCP_EQ16(IExpression<Data16> LEFT, IExpression<Data16> RIGHT, IExpression<Data8> FLAG)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.CP_EQ16, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// If LEFT is equal to RIGTH - set FLAG
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opCP_EQ32(IExpression<Data32> LEFT, IExpression<Data32> RIGHT, IExpression<Data8> FLAG)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.CP_EQ32, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// If LEFT is equal to RIGTH - set FLAG
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opCP_EQF(IExpression<DataFloat> LEFT, IExpression<DataFloat> RIGHT, IExpression<Data8> FLAG)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.CP_EQF, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// If LEFT is not equal to RIGTH - set FLAG
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opCP_NEQ8(IExpression<Data8> LEFT, IExpression<Data8> RIGHT, IExpression<Data8> FLAG)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.CP_NEQ8, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// If LEFT is not equal to RIGTH - set FLAG
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opCP_NEQ16(IExpression<Data16> LEFT, IExpression<Data16> RIGHT, IExpression<Data8> FLAG)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.CP_NEQ16, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// If LEFT is not equal to RIGTH - set FLAG
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opCP_NEQ32(IExpression<Data32> LEFT, IExpression<Data32> RIGHT, IExpression<Data8> FLAG)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.CP_NEQ32, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// If LEFT is not equal to RIGTH - set FLAG
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opCP_NEQF(IExpression<DataFloat> LEFT, IExpression<DataFloat> RIGHT, IExpression<Data8> FLAG)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.CP_NEQF, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// If LEFT is less than or equal to RIGTH - set FLAG
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opCP_LTEQ8(IExpression<Data8> LEFT, IExpression<Data8> RIGHT, IExpression<Data8> FLAG)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.CP_LTEQ8, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// If LEFT is less than or equal to RIGTH - set FLAG
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opCP_LTEQ16(IExpression<Data16> LEFT, IExpression<Data16> RIGHT, IExpression<Data8> FLAG)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.CP_LTEQ16, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// If LEFT is less than or equal to RIGTH - set FLAG
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opCP_LTEQ32(IExpression<Data32> LEFT, IExpression<Data32> RIGHT, IExpression<Data8> FLAG)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.CP_LTEQ32, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// If LEFT is less than or equal to RIGTH - set FLAG
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opCP_LTEQF(IExpression<DataFloat> LEFT, IExpression<DataFloat> RIGHT, IExpression<Data8> FLAG)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.CP_LTEQF, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// If LEFT is greater than or equal to RIGTH - set FLAG
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opCP_GTEQ8(IExpression<Data8> LEFT, IExpression<Data8> RIGHT, IExpression<Data8> FLAG)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.CP_GTEQ8, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// If LEFT is greater than or equal to RIGTH - set FLAG
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opCP_GTEQ16(IExpression<Data16> LEFT, IExpression<Data16> RIGHT, IExpression<Data8> FLAG)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.CP_GTEQ16, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// If LEFT is greater than or equal to RIGTH - set FLAG
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opCP_GTEQ32(IExpression<Data32> LEFT, IExpression<Data32> RIGHT, IExpression<Data8> FLAG)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.CP_GTEQ32, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// If LEFT is greater than or equal to RIGTH - set FLAG
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opCP_GTEQF(IExpression<DataFloat> LEFT, IExpression<DataFloat> RIGHT, IExpression<Data8> FLAG)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.CP_GTEQF, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// If FLAG is set move SOURCE1 to RESULT else move SOURCE2 to RESULT
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opSELECT8(IExpression<Data8> FLAG, IExpression<Data8> SOURCE1, IExpression<Data8> SOURCE2, IExpression<Data8> RESULT)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
+				parameterList.Add(RESULT ?? throw new ArgumentNullException(nameof(RESULT)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.SELECT8, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// If FLAG is set move SOURCE1 to RESULT else move SOURCE2 to RESULT
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opSELECT16(IExpression<Data8> FLAG, IExpression<Data16> SOURCE1, IExpression<Data16> SOURCE2, IExpression<Data16> RESULT)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
+				parameterList.Add(RESULT ?? throw new ArgumentNullException(nameof(RESULT)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.SELECT16, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// If FLAG is set move SOURCE1 to RESULT else move SOURCE2 to RESULT
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opSELECT32(IExpression<Data8> FLAG, IExpression<Data32> SOURCE1, IExpression<Data32> SOURCE2, IExpression<Data32> RESULT)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
+				parameterList.Add(RESULT ?? throw new ArgumentNullException(nameof(RESULT)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.SELECT32, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// If FLAG is set move SOURCE1 to RESULT else move SOURCE2 to RESULT
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opSELECTF(IExpression<Data8> FLAG, IExpression<DataFloat> SOURCE1, IExpression<DataFloat> SOURCE2, IExpression<DataFloat> RESULT)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
+				parameterList.Add(RESULT ?? throw new ArgumentNullException(nameof(RESULT)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.SELECTF, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Executes a system command
+			/// </summary>
+			/// <param name="COMMAND">Command string (HND)</param>
+			/// <param name="STATUS">Return status of the command</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opSYSTEM(IExpression<DataString> COMMAND, IExpression<Data32> STATUS)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(COMMAND ?? throw new ArgumentNullException(nameof(COMMAND)));
+				parameterList.Add(STATUS ?? throw new ArgumentNullException(nameof(STATUS)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.SYSTEM, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Convert encoded port to Layer and Bitfield
+			/// </summary>
+			/// <param name="PortIn">EncodedPortNumber</param>
+			/// <param name="Layer">Layer</param>
+			/// <param name="Bitfield">Bitfield</param>
+			/// <param name="Inverted">yes if left/right motor are inverted (ie, C&amp;A)</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opPORT_CNV_OUTPUT(IExpression<Data32> PortIn, IExpression<Data8> Layer, IExpression<Data8> Bitfield, IExpression<Data8> Inverted)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(PortIn ?? throw new ArgumentNullException(nameof(PortIn)));
+				parameterList.Add(Layer ?? throw new ArgumentNullException(nameof(Layer)));
+				parameterList.Add(Bitfield ?? throw new ArgumentNullException(nameof(Bitfield)));
+				parameterList.Add(Inverted ?? throw new ArgumentNullException(nameof(Inverted)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.PORT_CNV_OUTPUT, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Convert encoded port to Layer and Port
+			/// </summary>
+			/// <param name="PortIn">EncodedPortNumber</param>
+			/// <param name="Layer">Layer</param>
+			/// <param name="PortOut">0-index port for use with VM commands</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opPORT_CNV_INPUT(IExpression<Data32> PortIn, IExpression<Data8> Layer, IExpression<Data8> PortOut)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(PortIn ?? throw new ArgumentNullException(nameof(PortIn)));
+				parameterList.Add(Layer ?? throw new ArgumentNullException(nameof(Layer)));
+				parameterList.Add(PortOut ?? throw new ArgumentNullException(nameof(PortOut)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.PORT_CNV_INPUT, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Convert note to tone
+			/// </summary>
+			/// <param name="NOTE">Note string (HND) (e.c. "C#4")</param>
+			/// <param name="FREQ">Frequency [Hz]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opNOTE_TO_FREQ(IExpression<DataString> NOTE, IExpression<Data16> FREQ)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(NOTE ?? throw new ArgumentNullException(nameof(NOTE)));
+				parameterList.Add(FREQ ?? throw new ArgumentNullException(nameof(FREQ)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.NOTE_TO_FREQ, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Branch relative OFFSET if LEFT is less than RIGHT
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opJR_LT8(IExpression<Data8> LEFT, IExpression<Data8> RIGHT, IExpression<DataLabel> OFFSET)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.JR_LT8, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Branch relative OFFSET if LEFT is less than RIGHT
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opJR_LT16(IExpression<Data16> LEFT, IExpression<Data16> RIGHT, IExpression<DataLabel> OFFSET)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.JR_LT16, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Branch relative OFFSET if LEFT is less than RIGHT
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opJR_LT32(IExpression<Data32> LEFT, IExpression<Data32> RIGHT, IExpression<DataLabel> OFFSET)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.JR_LT32, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Branch relative OFFSET if LEFT is less than RIGHT
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opJR_LTF(IExpression<DataFloat> LEFT, IExpression<DataFloat> RIGHT, IExpression<DataLabel> OFFSET)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.JR_LTF, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Branch relative OFFSET if LEFT is greater than RIGHT
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opJR_GT8(IExpression<Data8> LEFT, IExpression<Data8> RIGHT, IExpression<DataLabel> OFFSET)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.JR_GT8, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Branch relative OFFSET if LEFT is greater than RIGHT
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opJR_GT16(IExpression<Data16> LEFT, IExpression<Data16> RIGHT, IExpression<DataLabel> OFFSET)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.JR_GT16, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Branch relative OFFSET if LEFT is greater than RIGHT
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opJR_GT32(IExpression<Data32> LEFT, IExpression<Data32> RIGHT, IExpression<DataLabel> OFFSET)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.JR_GT32, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Branch relative OFFSET if LEFT is greater than RIGHT
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opJR_GTF(IExpression<DataFloat> LEFT, IExpression<DataFloat> RIGHT, IExpression<DataLabel> OFFSET)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.JR_GTF, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Branch relative OFFSET if LEFT is equal to RIGHT
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opJR_EQ8(IExpression<Data8> LEFT, IExpression<Data8> RIGHT, IExpression<DataLabel> OFFSET)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.JR_EQ8, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Branch relative OFFSET if LEFT is equal to RIGHT
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opJR_EQ16(IExpression<Data16> LEFT, IExpression<Data16> RIGHT, IExpression<DataLabel> OFFSET)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.JR_EQ16, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Branch relative OFFSET if LEFT is equal to RIGHT
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opJR_EQ32(IExpression<Data32> LEFT, IExpression<Data32> RIGHT, IExpression<DataLabel> OFFSET)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.JR_EQ32, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Branch relative OFFSET if LEFT is equal to RIGHT
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opJR_EQF(IExpression<DataFloat> LEFT, IExpression<DataFloat> RIGHT, IExpression<DataLabel> OFFSET)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.JR_EQF, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Branch relative OFFSET if LEFT is not equal to RIGHT
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opJR_NEQ8(IExpression<Data8> LEFT, IExpression<Data8> RIGHT, IExpression<DataLabel> OFFSET)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.JR_NEQ8, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Branch relative OFFSET if LEFT is not equal to RIGHT
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opJR_NEQ16(IExpression<Data16> LEFT, IExpression<Data16> RIGHT, IExpression<DataLabel> OFFSET)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.JR_NEQ16, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Branch relative OFFSET if LEFT is not equal to RIGHT
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opJR_NEQ32(IExpression<Data32> LEFT, IExpression<Data32> RIGHT, IExpression<DataLabel> OFFSET)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.JR_NEQ32, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Branch relative OFFSET if LEFT is not equal to RIGHT
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opJR_NEQF(IExpression<DataFloat> LEFT, IExpression<DataFloat> RIGHT, IExpression<DataLabel> OFFSET)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.JR_NEQF, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Branch relative OFFSET if LEFT is less than or equal to RIGHT
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opJR_LTEQ8(IExpression<Data8> LEFT, IExpression<Data8> RIGHT, IExpression<DataLabel> OFFSET)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.JR_LTEQ8, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Branch relative OFFSET if LEFT is less than or equal to RIGHT
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opJR_LTEQ16(IExpression<Data16> LEFT, IExpression<Data16> RIGHT, IExpression<DataLabel> OFFSET)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.JR_LTEQ16, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Branch relative OFFSET if LEFT is less than or equal to RIGHT
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opJR_LTEQ32(IExpression<Data32> LEFT, IExpression<Data32> RIGHT, IExpression<DataLabel> OFFSET)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.JR_LTEQ32, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Branch relative OFFSET if LEFT is less than or equal to RIGHT
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opJR_LTEQF(IExpression<DataFloat> LEFT, IExpression<DataFloat> RIGHT, IExpression<DataLabel> OFFSET)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.JR_LTEQF, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Branch relative OFFSET if LEFT is greater than or equal to RIGHT
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opJR_GTEQ8(IExpression<Data8> LEFT, IExpression<Data8> RIGHT, IExpression<DataLabel> OFFSET)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.JR_GTEQ8, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Branch relative OFFSET if LEFT is greater than or equal to RIGHT
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opJR_GTEQ16(IExpression<Data16> LEFT, IExpression<Data16> RIGHT, IExpression<DataLabel> OFFSET)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.JR_GTEQ16, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Branch relative OFFSET if LEFT is greater than or equal to RIGHT
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opJR_GTEQ32(IExpression<Data32> LEFT, IExpression<Data32> RIGHT, IExpression<DataLabel> OFFSET)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.JR_GTEQ32, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Branch relative OFFSET if LEFT is greater than or equal to RIGHT
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opJR_GTEQF(IExpression<DataFloat> LEFT, IExpression<DataFloat> RIGHT, IExpression<DataLabel> OFFSET)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LEFT ?? throw new ArgumentNullException(nameof(LEFT)));
+				parameterList.Add(RIGHT ?? throw new ArgumentNullException(nameof(RIGHT)));
+				parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.JR_GTEQF, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Info functions entry
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opINFO(INFOSubcommand CMD)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.INFO, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// String function entry
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opSTRINGS(STRINGSSubcommand CMD)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.STRINGS, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Write VM memory
+			/// </summary>
+			/// <param name="PRGID">Program slot number (must be running)</param>
+			/// <param name="OBJID">Object id (zero means globals)</param>
+			/// <param name="OFFSET">Offset (start from)</param>
+			/// <param name="SIZE">Size (length of array to write)</param>
+			/// <param name="ARRAY">First element of DATA8 array to write</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opMEMORY_WRITE(IExpression<Data16> PRGID, IExpression<Data16> OBJID, IExpression<Data32> OFFSET, IExpression<Data32> SIZE, IExpression<Data8> ARRAY)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
+				parameterList.Add(OBJID ?? throw new ArgumentNullException(nameof(OBJID)));
+				parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
+				parameterList.Add(SIZE ?? throw new ArgumentNullException(nameof(SIZE)));
+				parameterList.Add(ARRAY ?? throw new ArgumentNullException(nameof(ARRAY)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.MEMORY_WRITE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Read VM memory
+			/// </summary>
+			/// <param name="PRGID">Program slot number (must be running)</param>
+			/// <param name="OBJID">Object id (zero means globals)</param>
+			/// <param name="OFFSET">Offset (start from)</param>
+			/// <param name="SIZE">Size (length of array to read)</param>
+			/// <param name="ARRAY">First element of DATA8 array to receive data</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opMEMORY_READ(IExpression<Data16> PRGID, IExpression<Data16> OBJID, IExpression<Data32> OFFSET, IExpression<Data32> SIZE, IExpression<Data8> ARRAY)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
+				parameterList.Add(OBJID ?? throw new ArgumentNullException(nameof(OBJID)));
+				parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
+				parameterList.Add(SIZE ?? throw new ArgumentNullException(nameof(SIZE)));
+				parameterList.Add(ARRAY ?? throw new ArgumentNullException(nameof(ARRAY)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.MEMORY_READ, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// User Interface flush buffers
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opUI_FLUSH()
+			{
+				var parameterList = new List<IByteCode>();
+				return new EV3.Opcodes.Opcode(OpcodeValue.UI_FLUSH, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// User Interface read
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opUI_READ(UI_READSubcommand CMD)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.UI_READ, parameterList.ToArray());
+			}
+
+			/// <remarks>
+			/// Dispatch status can change to BUSYBREAK and FAILBREAK
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opUI_WRITE(UI_WRITESubcommand CMD)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.UI_WRITE, parameterList.ToArray());
+			}
+
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opUI_BUTTON(UI_BUTTONSubcommand CMD)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.UI_BUTTON, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// UI draw
+			/// </summary>
+			/// <remarks>
+			/// Dispatch status can change to BUSYBREAK
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opUI_DRAW(UI_DRAWSubcommand CMD)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.UI_DRAW, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Setup timer to wait TIME mS
+			/// </summary>
+			/// <param name="TIME">Time to wait [mS]</param>
+			/// <param name="TIMER">Variable used for timing</param>
+			/// <remarks>
+			/// Dispatch status unchanged
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opTIMER_WAIT(IExpression<Data32> TIME, IExpression<Data32> TIMER)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(TIME ?? throw new ArgumentNullException(nameof(TIME)));
+				parameterList.Add(TIMER ?? throw new ArgumentNullException(nameof(TIMER)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.TIMER_WAIT, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Wait for timer ready (wait for timeout)
+			/// </summary>
+			/// <param name="TIMER">Variable used for timing</param>
+			/// <remarks>
+			/// Dispatch status can change to BUSYBREAK
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opTIMER_READY(IExpression<Data32> TIMER)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(TIMER ?? throw new ArgumentNullException(nameof(TIMER)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.TIMER_READY, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Read free running timer [mS]
+			/// </summary>
+			/// <param name="TIME">Value</param>
+			/// <remarks>
+			/// Dispatch status unchanged
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opTIMER_READ(IExpression<Data32> TIME)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(TIME ?? throw new ArgumentNullException(nameof(TIME)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.TIMER_READ, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Display globals or object locals on terminal
+			/// </summary>
+			/// <remarks>
+			/// Removes it self when done
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opBP0()
+			{
+				var parameterList = new List<IByteCode>();
+				return new EV3.Opcodes.Opcode(OpcodeValue.BP0, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Display globals or object locals on terminal
+			/// </summary>
+			/// <remarks>
+			/// Removes it self when done
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opBP1()
+			{
+				var parameterList = new List<IByteCode>();
+				return new EV3.Opcodes.Opcode(OpcodeValue.BP1, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Display globals or object locals on terminal
+			/// </summary>
+			/// <remarks>
+			/// Removes it self when done
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opBP2()
+			{
+				var parameterList = new List<IByteCode>();
+				return new EV3.Opcodes.Opcode(OpcodeValue.BP2, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Display globals or object locals on terminal
+			/// </summary>
+			/// <remarks>
+			/// Removes it self when done
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opBP3()
+			{
+				var parameterList = new List<IByteCode>();
+				return new EV3.Opcodes.Opcode(OpcodeValue.BP3, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Set break point in byte code program
+			/// </summary>
+			/// <param name="PRGID">Program slot number</param>
+			/// <param name="NO">Breakpoint number [0..2] (3 = trigger out on TP4)</param>
+			/// <param name="ADDRESS">Address (Offset from start of image) (0 = remove breakpoint)</param>
+			/// <remarks>
+			/// TP4 is only present on pre-release EV3 hardware
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opBP_SET(IExpression<Data16> PRGID, IExpression<Data8> NO, IExpression<Data32> ADDRESS)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				parameterList.Add(ADDRESS ?? throw new ArgumentNullException(nameof(ADDRESS)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.BP_SET, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Math function entry
+			/// </summary>
+			/// <param name="CMD">Specific command parameter</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opMATH(MATHSubcommand CMD)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.MATH, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Get random value
+			/// </summary>
+			/// <param name="MIN">Minimum value</param>
+			/// <param name="MAX">Maximum value</param>
+			/// <param name="VALUE">value</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opRANDOM(IExpression<Data16> MIN, IExpression<Data16> MAX, IExpression<Data16> VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(MIN ?? throw new ArgumentNullException(nameof(MIN)));
+				parameterList.Add(MAX ?? throw new ArgumentNullException(nameof(MAX)));
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.RANDOM, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Read free running timer [uS]
+			/// </summary>
+			/// <param name="TIME">Value</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opTIMER_READ_US(IExpression<Data32> TIME)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(TIME ?? throw new ArgumentNullException(nameof(TIME)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.TIMER_READ_US, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Keep alive
+			/// </summary>
+			/// <param name="MINUTES">Number of minutes before sleep</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opKEEP_ALIVE(IExpression<Data8> MINUTES)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(MINUTES ?? throw new ArgumentNullException(nameof(MINUTES)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.KEEP_ALIVE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Communication read
+			/// </summary>
+			/// <remarks>
+			/// Dispatch status unchanged
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opCOM_READ(COM_READSubcommand CMD)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.COM_READ, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Communication write
+			/// </summary>
+			/// <remarks>
+			/// Dispatch status unchanged
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opCOM_WRITE(COM_WRITESubcommand CMD)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.COM_WRITE, parameterList.ToArray());
+			}
+
+			/// <remarks>
+			/// Dispatch status unchanged
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opSOUND(SOUNDSubcommand CMD)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.SOUND, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Test if sound busy (playing file or tone
+			/// </summary>
+			/// <param name="BUSY">Sound busy flag (0 = ready, 1 = busy)</param>
+			/// <remarks>
+			/// Dispatch status unchanged
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opSOUND_TEST(IExpression<Data8> BUSY)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(BUSY ?? throw new ArgumentNullException(nameof(BUSY)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.SOUND_TEST, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Wait for sound ready (wait until sound finished)
+			/// </summary>
+			/// <remarks>
+			/// Dispatch status can change to BUSYBREAK
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opSOUND_READY()
+			{
+				var parameterList = new List<IByteCode>();
+				return new EV3.Opcodes.Opcode(OpcodeValue.SOUND_READY, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Sample devices
+			/// </summary>
+			/// <param name="TIME">Sample time [mS]</param>
+			/// <param name="SAMPLES">Number of samples</param>
+			/// <param name="INIT">DATA16 array (handle) - to start/reset buffer -&gt; fill array with -1 otherwise don't change</param>
+			/// <param name="DEVICES">DATA8 array (handle) with devices to sample</param>
+			/// <param name="TYPES">DATA8 array (handle) with types</param>
+			/// <param name="MODES">DATA8 array (handle) with modes</param>
+			/// <param name="DATASETS">DATA8 array (handle) with data sets</param>
+			/// <param name="VALUES">DATAF array (handle) with values</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opINPUT_SAMPLE(IExpression<Data32> TIME, IExpression<Data16> SAMPLES, IExpression<Data16> INIT, IExpression<Data8> DEVICES, IExpression<Data8> TYPES, IExpression<Data8> MODES, IExpression<Data8> DATASETS, IExpression<DataFloat> VALUES)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(TIME ?? throw new ArgumentNullException(nameof(TIME)));
+				parameterList.Add(SAMPLES ?? throw new ArgumentNullException(nameof(SAMPLES)));
+				parameterList.Add(INIT ?? throw new ArgumentNullException(nameof(INIT)));
+				parameterList.Add(DEVICES ?? throw new ArgumentNullException(nameof(DEVICES)));
+				parameterList.Add(TYPES ?? throw new ArgumentNullException(nameof(TYPES)));
+				parameterList.Add(MODES ?? throw new ArgumentNullException(nameof(MODES)));
+				parameterList.Add(DATASETS ?? throw new ArgumentNullException(nameof(DATASETS)));
+				parameterList.Add(VALUES ?? throw new ArgumentNullException(nameof(VALUES)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.INPUT_SAMPLE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Read all available devices on input and output(chain)
+			/// </summary>
+			/// <param name="LENGTH">Maximum number of device types (normally 32)</param>
+			/// <param name="ARRAY">First element of DATA8 array of types (normally 32)</param>
+			/// <param name="CHANGED">Changed status</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opINPUT_DEVICE_LIST(IExpression<Data8> LENGTH, IExpression<Data8> ARRAY, IExpression<Data8> CHANGED)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(ARRAY ?? throw new ArgumentNullException(nameof(ARRAY)));
+				parameterList.Add(CHANGED ?? throw new ArgumentNullException(nameof(CHANGED)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.INPUT_DEVICE_LIST, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Read information about device
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opINPUT_DEVICE(INPUT_DEVICESubcommand CMD)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.INPUT_DEVICE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Read device value in Percent
+			/// </summary>
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NO">Port number</param>
+			/// <param name="TYPE">Device type id (0 = don't change type)</param>
+			/// <param name="MODE">Device mode [0..7] (-1 = don't change mode)</param>
+			/// <param name="PCT">Percent value from device</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opINPUT_READ(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> TYPE, IExpression<Data8> MODE, IExpression<Data8> PCT)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
+				parameterList.Add(MODE ?? throw new ArgumentNullException(nameof(MODE)));
+				parameterList.Add(PCT ?? throw new ArgumentNullException(nameof(PCT)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.INPUT_READ, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Test if device busy (changing type or mode)
+			/// </summary>
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NO">Port number</param>
+			/// <param name="BUSY">Device busy flag (0 = ready, 1 = busy)</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opINPUT_TEST(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> BUSY)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				parameterList.Add(BUSY ?? throw new ArgumentNullException(nameof(BUSY)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.INPUT_TEST, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Wait for device ready (wait for valid data)
+			/// </summary>
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NO">Port number</param>
+			/// <remarks>
+			/// Dispatch status can change to BUSYBREAK
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opINPUT_READY(IExpression<Data8> LAYER, IExpression<Data8> NO)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.INPUT_READY, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Read device value in SI units
+			/// </summary>
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NO">Port number</param>
+			/// <param name="TYPE">Device type id (0 = don't change type)</param>
+			/// <param name="MODE">Device mode [0..7] (-1 = don't change mode)</param>
+			/// <param name="SI">SI unit value from device</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opINPUT_READSI(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> TYPE, IExpression<Data8> MODE, IExpression<DataFloat> SI)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
+				parameterList.Add(MODE ?? throw new ArgumentNullException(nameof(MODE)));
+				parameterList.Add(SI ?? throw new ArgumentNullException(nameof(SI)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.INPUT_READSI, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Read device value
+			/// </summary>
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NO">Port number</param>
+			/// <param name="TYPE">Device type id (0 = don't change type)</param>
+			/// <param name="MODE">Device mode [0..7] (-1 = don't change mode)</param>
+			/// <param name="FORMAT">Format (PCT, RAW, SI ...)</param>
+			/// <param name="VALUES">Number of return values</param>
+			/// <param name="VALUES_">variable arguments</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opINPUT_READEXT(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> TYPE, IExpression<Data8> MODE, IExpression<Data8> FORMAT, IExpression<Data8> VALUES, params IExpression[] VALUES_)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
+				parameterList.Add(MODE ?? throw new ArgumentNullException(nameof(MODE)));
+				parameterList.Add(FORMAT ?? throw new ArgumentNullException(nameof(FORMAT)));
+				parameterList.Add(VALUES ?? throw new ArgumentNullException(nameof(VALUES)));
+				parameterList.AddRange(VALUES_ ?? throw new ArgumentNullException(nameof(VALUES_)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.INPUT_READEXT, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Write data to device (only UART devices)
+			/// </summary>
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NO">Port number</param>
+			/// <param name="BYTES">No of bytes to write [1..32]</param>
+			/// <param name="DATA">First byte in DATA8 array to write</param>
+			/// <remarks>
+			/// Dispatch status can change to BUSYBREAK
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opINPUT_WRITE(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> BYTES, IExpression<Data8> DATA)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				parameterList.Add(BYTES ?? throw new ArgumentNullException(nameof(BYTES)));
+				parameterList.Add(DATA ?? throw new ArgumentNullException(nameof(DATA)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.INPUT_WRITE, parameterList.ToArray());
+			}
+
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NO">Port number</param>
+			/// <param name="TYPE"></param>
+			/// <remarks>
+			/// This bytecode is defined but not implemented
+			/// </remarks>
+			[Support(Official = false, Xtended = false, Compat = false)]
+			public static EV3.Opcodes.Opcode opOUTPUT_GET_TYPE(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> TYPE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.OUTPUT_GET_TYPE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Set output type
+			/// </summary>
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NO">Output no [0..3]</param>
+			/// <param name="TYPE">Device type id from typedata.rcf</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opOUTPUT_SET_TYPE(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> TYPE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.OUTPUT_SET_TYPE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Resets the Tacho counts
+			/// </summary>
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NOS">Output bit field [0x00..0x0F]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opOUTPUT_RESET(IExpression<Data8> LAYER, IExpression<Data8> NOS)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NOS ?? throw new ArgumentNullException(nameof(NOS)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.OUTPUT_RESET, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Stops the outputs
+			/// </summary>
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NOS">Output bit field [0x00..0x0F]</param>
+			/// <param name="BRAKE">0 = Coast, 1 = BRAKE</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opOUTPUT_STOP(IExpression<Data8> LAYER, IExpression<Data8> NOS, IExpression<Data8> BRAKE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NOS ?? throw new ArgumentNullException(nameof(NOS)));
+				parameterList.Add(BRAKE ?? throw new ArgumentNullException(nameof(BRAKE)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.OUTPUT_STOP, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Set power of the outputs
+			/// </summary>
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NOS">Output bit field [0x00..0x0F]</param>
+			/// <param name="POWER">Power [-100..100%]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opOUTPUT_POWER(IExpression<Data8> LAYER, IExpression<Data8> NOS, IExpression<Data8> POWER)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NOS ?? throw new ArgumentNullException(nameof(NOS)));
+				parameterList.Add(POWER ?? throw new ArgumentNullException(nameof(POWER)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.OUTPUT_POWER, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Set speed of the outputs
+			/// </summary>
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NOS">Output bit field [0x00..0x0F]</param>
+			/// <param name="SPEED">Speed [-100..100%]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opOUTPUT_SPEED(IExpression<Data8> LAYER, IExpression<Data8> NOS, IExpression<Data8> SPEED)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NOS ?? throw new ArgumentNullException(nameof(NOS)));
+				parameterList.Add(SPEED ?? throw new ArgumentNullException(nameof(SPEED)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.OUTPUT_SPEED, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Starts the outputs
+			/// </summary>
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NOS">Output bit field [0x00..0x0F]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opOUTPUT_START(IExpression<Data8> LAYER, IExpression<Data8> NOS)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NOS ?? throw new ArgumentNullException(nameof(NOS)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.OUTPUT_START, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Set polarity of the outputs
+			/// </summary>
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NOS">Output bit field [0x00..0x0F]</param>
+			/// <param name="POL">Polarity [-1,0,1]</param>
+			/// <remarks>
+			/// Polarity:
+			///   * -1 makes the motor run backward
+			///   * 1 makes the motor run forward
+			///   * 0 makes the motor run the opposite direction
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opOUTPUT_POLARITY(IExpression<Data8> LAYER, IExpression<Data8> NOS, IExpression<Data8> POL)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NOS ?? throw new ArgumentNullException(nameof(NOS)));
+				parameterList.Add(POL ?? throw new ArgumentNullException(nameof(POL)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.OUTPUT_POLARITY, parameterList.ToArray());
+			}
+
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NO">NO - Output no [0..3]</param>
+			/// <param name="SPEED">Speed [-100..100%]</param>
+			/// <param name="TACHO">Tacho pulses [-MAX .. +MAX]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opOUTPUT_READ(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> SPEED, IExpression<Data32> TACHO)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				parameterList.Add(SPEED ?? throw new ArgumentNullException(nameof(SPEED)));
+				parameterList.Add(TACHO ?? throw new ArgumentNullException(nameof(TACHO)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.OUTPUT_READ, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Testing if output is not used
+			/// </summary>
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NOS">Output bit field [0x00..0x0F]</param>
+			/// <param name="BUSY">Output busy flag (0 = ready, 1 = Busy)</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opOUTPUT_TEST(IExpression<Data8> LAYER, IExpression<Data8> NOS, IExpression<Data8> BUSY)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NOS ?? throw new ArgumentNullException(nameof(NOS)));
+				parameterList.Add(BUSY ?? throw new ArgumentNullException(nameof(BUSY)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.OUTPUT_TEST, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Wait for output ready (wait for completion)
+			/// </summary>
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NOS">Output bit field [0x00..0x0F]</param>
+			/// <remarks>
+			/// cOUTPUT_START command has no effect on this command. Dispatch status can change to BUSYBREAK.
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opOUTPUT_READY(IExpression<Data8> LAYER, IExpression<Data8> NOS)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NOS ?? throw new ArgumentNullException(nameof(NOS)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.OUTPUT_READY, parameterList.ToArray());
+			}
+
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NOS">Output bit field [0x00..0x0F]</param>
+			/// <param name="POS"></param>
+			/// <remarks>
+			/// This bytecode is defined but not implemented
+			/// </remarks>
+			[Support(Official = false, Xtended = false, Compat = false)]
+			public static EV3.Opcodes.Opcode opOUTPUT_POSITION(IExpression<Data8> LAYER, IExpression<Data8> NOS, IExpression<Data32> POS)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NOS ?? throw new ArgumentNullException(nameof(NOS)));
+				parameterList.Add(POS ?? throw new ArgumentNullException(nameof(POS)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.OUTPUT_POSITION, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Set Ramp up, constant and rampdown steps and power of the outputs
+			/// </summary>
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NOS">Output bit field [0x00..0x0F]</param>
+			/// <param name="POWER">Power [-100..100%]</param>
+			/// <param name="STEP1">Tacho pulses [0..MAX]</param>
+			/// <param name="STEP2">Tacho pulses [0..MAX]</param>
+			/// <param name="STEP3">Tacho pulses [0..MAX]</param>
+			/// <param name="BRAKE">0 = Coast, 1 = BRAKE</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opOUTPUT_STEP_POWER(IExpression<Data8> LAYER, IExpression<Data8> NOS, IExpression<Data8> POWER, IExpression<Data32> STEP1, IExpression<Data32> STEP2, IExpression<Data32> STEP3, IExpression<Data8> BRAKE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NOS ?? throw new ArgumentNullException(nameof(NOS)));
+				parameterList.Add(POWER ?? throw new ArgumentNullException(nameof(POWER)));
+				parameterList.Add(STEP1 ?? throw new ArgumentNullException(nameof(STEP1)));
+				parameterList.Add(STEP2 ?? throw new ArgumentNullException(nameof(STEP2)));
+				parameterList.Add(STEP3 ?? throw new ArgumentNullException(nameof(STEP3)));
+				parameterList.Add(BRAKE ?? throw new ArgumentNullException(nameof(BRAKE)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.OUTPUT_STEP_POWER, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Set Ramp up, constant and rampdown steps and power of the outputs
+			/// </summary>
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NOS">Output bit field [0x00..0x0F]</param>
+			/// <param name="POWER">Power [-100..100%]</param>
+			/// <param name="TIME1">Time in Ms [0..MAX]</param>
+			/// <param name="TIME2">Time in Ms [0..MAX]</param>
+			/// <param name="TIME3">Time in Ms [0..MAX]</param>
+			/// <param name="BRAKE">0 = Coast, 1 = BRAKE</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opOUTPUT_TIME_POWER(IExpression<Data8> LAYER, IExpression<Data8> NOS, IExpression<Data8> POWER, IExpression<Data32> TIME1, IExpression<Data32> TIME2, IExpression<Data32> TIME3, IExpression<Data8> BRAKE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NOS ?? throw new ArgumentNullException(nameof(NOS)));
+				parameterList.Add(POWER ?? throw new ArgumentNullException(nameof(POWER)));
+				parameterList.Add(TIME1 ?? throw new ArgumentNullException(nameof(TIME1)));
+				parameterList.Add(TIME2 ?? throw new ArgumentNullException(nameof(TIME2)));
+				parameterList.Add(TIME3 ?? throw new ArgumentNullException(nameof(TIME3)));
+				parameterList.Add(BRAKE ?? throw new ArgumentNullException(nameof(BRAKE)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.OUTPUT_TIME_POWER, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Set Ramp up, constant and rampdown steps and power of the outputs
+			/// </summary>
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NOS">Output bit field [0x00..0x0F]</param>
+			/// <param name="SPEED">Speed [-100..100%]</param>
+			/// <param name="STEP1">Tacho pulses [0..MAX]</param>
+			/// <param name="STEP2">Tacho pulses [0..MAX]</param>
+			/// <param name="STEP3">Tacho pulses [0..MAX]</param>
+			/// <param name="BRAKE">0 = Coast, 1 = BRAKE</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opOUTPUT_STEP_SPEED(IExpression<Data8> LAYER, IExpression<Data8> NOS, IExpression<Data8> SPEED, IExpression<Data32> STEP1, IExpression<Data32> STEP2, IExpression<Data32> STEP3, IExpression<Data8> BRAKE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NOS ?? throw new ArgumentNullException(nameof(NOS)));
+				parameterList.Add(SPEED ?? throw new ArgumentNullException(nameof(SPEED)));
+				parameterList.Add(STEP1 ?? throw new ArgumentNullException(nameof(STEP1)));
+				parameterList.Add(STEP2 ?? throw new ArgumentNullException(nameof(STEP2)));
+				parameterList.Add(STEP3 ?? throw new ArgumentNullException(nameof(STEP3)));
+				parameterList.Add(BRAKE ?? throw new ArgumentNullException(nameof(BRAKE)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.OUTPUT_STEP_SPEED, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Set Ramp up, constant and rampdown steps and power of the outputs
+			/// </summary>
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NOS">Output bit field [0x00..0x0F]</param>
+			/// <param name="SPEED">Speed [-100..100%]</param>
+			/// <param name="TIME1">Time in Ms [0..MAX]</param>
+			/// <param name="TIME2">Time in Ms [0..MAX]</param>
+			/// <param name="TIME3">Time in Ms [0..MAX]</param>
+			/// <param name="BRAKE">0 = Coast, 1 = BRAKE</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opOUTPUT_TIME_SPEED(IExpression<Data8> LAYER, IExpression<Data8> NOS, IExpression<Data8> SPEED, IExpression<Data32> TIME1, IExpression<Data32> TIME2, IExpression<Data32> TIME3, IExpression<Data8> BRAKE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NOS ?? throw new ArgumentNullException(nameof(NOS)));
+				parameterList.Add(SPEED ?? throw new ArgumentNullException(nameof(SPEED)));
+				parameterList.Add(TIME1 ?? throw new ArgumentNullException(nameof(TIME1)));
+				parameterList.Add(TIME2 ?? throw new ArgumentNullException(nameof(TIME2)));
+				parameterList.Add(TIME3 ?? throw new ArgumentNullException(nameof(TIME3)));
+				parameterList.Add(BRAKE ?? throw new ArgumentNullException(nameof(BRAKE)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.OUTPUT_TIME_SPEED, parameterList.ToArray());
+			}
+
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NOS">Output bit field [0x00..0x0F]</param>
+			/// <param name="SPEED">Speed [-100..100%]</param>
+			/// <param name="TURN">Turn Ratio [-200..200]</param>
+			/// <param name="STEP">Tacho Pulses [0..MAX]</param>
+			/// <param name="BRAKE">0 = Coast, 1 = BRAKE</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opOUTPUT_STEP_SYNC(IExpression<Data8> LAYER, IExpression<Data8> NOS, IExpression<Data8> SPEED, IExpression<Data16> TURN, IExpression<Data32> STEP, IExpression<Data8> BRAKE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NOS ?? throw new ArgumentNullException(nameof(NOS)));
+				parameterList.Add(SPEED ?? throw new ArgumentNullException(nameof(SPEED)));
+				parameterList.Add(TURN ?? throw new ArgumentNullException(nameof(TURN)));
+				parameterList.Add(STEP ?? throw new ArgumentNullException(nameof(STEP)));
+				parameterList.Add(BRAKE ?? throw new ArgumentNullException(nameof(BRAKE)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.OUTPUT_STEP_SYNC, parameterList.ToArray());
+			}
+
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NOS">Output bit field [0x00..0x0F]</param>
+			/// <param name="SPEED">Speed [-100..100%]</param>
+			/// <param name="TURN">Turn Ratio [-200..200]</param>
+			/// <param name="TIME">Time in ms [0..MAX]</param>
+			/// <param name="BRAKE">0 = Coast, 1 = BRAKE</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opOUTPUT_TIME_SYNC(IExpression<Data8> LAYER, IExpression<Data8> NOS, IExpression<Data8> SPEED, IExpression<Data16> TURN, IExpression<Data32> TIME, IExpression<Data8> BRAKE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NOS ?? throw new ArgumentNullException(nameof(NOS)));
+				parameterList.Add(SPEED ?? throw new ArgumentNullException(nameof(SPEED)));
+				parameterList.Add(TURN ?? throw new ArgumentNullException(nameof(TURN)));
+				parameterList.Add(TIME ?? throw new ArgumentNullException(nameof(TIME)));
+				parameterList.Add(BRAKE ?? throw new ArgumentNullException(nameof(BRAKE)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.OUTPUT_TIME_SYNC, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Clearing tacho count when used as sensor
+			/// </summary>
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NOS">Output bit field [0x00..0x0F]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opOUTPUT_CLR_COUNT(IExpression<Data8> LAYER, IExpression<Data8> NOS)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NOS ?? throw new ArgumentNullException(nameof(NOS)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.OUTPUT_CLR_COUNT, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Getting tacho count when used as sensor - values are in shared memory
+			/// </summary>
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NOS">Output bit field [0x00..0x0F]</param>
+			/// <param name="TACHO">Tacho pulses [-MAX .. +MAX]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opOUTPUT_GET_COUNT(IExpression<Data8> LAYER, IExpression<Data8> NOS, IExpression<Data32> TACHO)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NOS ?? throw new ArgumentNullException(nameof(NOS)));
+				parameterList.Add(TACHO ?? throw new ArgumentNullException(nameof(TACHO)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.OUTPUT_GET_COUNT, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Program stop
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opOUTPUT_PRG_STOP()
+			{
+				var parameterList = new List<IByteCode>();
+				return new EV3.Opcodes.Opcode(OpcodeValue.OUTPUT_PRG_STOP, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Memory file entry
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opFILE(FILESubcommand CMD)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.FILE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Array entry
+			/// </summary>
+			/// <remarks>
+			/// Dispatch status can change to BUSYBREAK or FAILBREAK
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opARRAY(ARRAYSubcommand CMD)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.ARRAY, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Array element write
+			/// </summary>
+			/// <param name="HANDLE">Array handle</param>
+			/// <param name="INDEX">Index to first byte to write</param>
+			/// <param name="VALUE">Value to write - type depends on type of array</param>
+			/// <remarks>
+			/// Dispatch status can change to FAILBREAK
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opARRAY_WRITE(IExpression<Data16> HANDLE, IExpression<Data32> INDEX, IExpression VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
+				parameterList.Add(INDEX ?? throw new ArgumentNullException(nameof(INDEX)));
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.ARRAY_WRITE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Array element read
+			/// </summary>
+			/// <param name="HANDLE">Array handle</param>
+			/// <param name="INDEX">Index to first byte to write</param>
+			/// <param name="VALUE">Value to read - type depends on type of array</param>
+			/// <remarks>
+			/// Dispatch status can change to FAILBREAK
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opARRAY_READ(IExpression<Data16> HANDLE, IExpression<Data32> INDEX, IExpression VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
+				parameterList.Add(INDEX ?? throw new ArgumentNullException(nameof(INDEX)));
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.ARRAY_READ, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Array element append
+			/// </summary>
+			/// <param name="HANDLE">Array handle</param>
+			/// <param name="VALUE">Value (new element) to append - type depends on type of array</param>
+			/// <remarks>
+			/// Dispatch status can change to FAILBREAK
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opARRAY_APPEND(IExpression<Data16> HANDLE, IExpression VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.ARRAY_APPEND, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Get memory usage
+			/// </summary>
+			/// <param name="TOTAL">Total memory [KB]</param>
+			/// <param name="FREE">Free memory [KB]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opMEMORY_USAGE(IExpression<Data32> TOTAL, IExpression<Data32> FREE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(TOTAL ?? throw new ArgumentNullException(nameof(TOTAL)));
+				parameterList.Add(FREE ?? throw new ArgumentNullException(nameof(FREE)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.MEMORY_USAGE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Memory filename entry
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opFILENAME(FILENAMESubcommand CMD)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.FILENAME, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Read 8 bit value from SOURCE[INDEX] to DESTINATION
+			/// </summary>
+			/// <param name="SOURCE">First value in array of values</param>
+			/// <param name="INDEX">Index to array member to read</param>
+			/// <param name="DESTINATION">Variable to receive read value</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opREAD8(IExpression<Data8> SOURCE, IExpression<Data8> INDEX, IExpression<Data8> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
+				parameterList.Add(INDEX ?? throw new ArgumentNullException(nameof(INDEX)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.READ8, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Read 16 bit value from SOURCE[INDEX] to DESTINATION
+			/// </summary>
+			/// <param name="SOURCE">First value in array of values</param>
+			/// <param name="INDEX">Index to array member to read</param>
+			/// <param name="DESTINATION">Variable to receive read value</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opREAD16(IExpression<Data16> SOURCE, IExpression<Data8> INDEX, IExpression<Data16> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
+				parameterList.Add(INDEX ?? throw new ArgumentNullException(nameof(INDEX)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.READ16, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Read 32 bit value from SOURCE[INDEX] to DESTINATION
+			/// </summary>
+			/// <param name="SOURCE">First value in array of values</param>
+			/// <param name="INDEX">Index to array member to read</param>
+			/// <param name="DESTINATION">Variable to receive read value</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opREAD32(IExpression<Data32> SOURCE, IExpression<Data8> INDEX, IExpression<Data32> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
+				parameterList.Add(INDEX ?? throw new ArgumentNullException(nameof(INDEX)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.READ32, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Read floating point value from SOURCE[INDEX] to DESTINATION
+			/// </summary>
+			/// <param name="SOURCE">First value in array of values</param>
+			/// <param name="INDEX">Index to array member to read</param>
+			/// <param name="DESTINATION">Variable to receive read value</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opREADF(IExpression<DataFloat> SOURCE, IExpression<Data8> INDEX, IExpression<DataFloat> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
+				parameterList.Add(INDEX ?? throw new ArgumentNullException(nameof(INDEX)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.READF, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Write 8 bit value from SOURCE to DESTINATION[INDEX]
+			/// </summary>
+			/// <param name="SOURCE">Variable to write</param>
+			/// <param name="INDEX">Index to array member to write</param>
+			/// <param name="DESTINATION">Array to receive write value</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opWRITE8(IExpression<Data8> SOURCE, IExpression<Data8> INDEX, IExpression<Data8> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
+				parameterList.Add(INDEX ?? throw new ArgumentNullException(nameof(INDEX)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.WRITE8, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Write 16 bit value from SOURCE to DESTINATION[INDEX]
+			/// </summary>
+			/// <param name="SOURCE">Variable to write</param>
+			/// <param name="INDEX">Index to array member to write</param>
+			/// <param name="DESTINATION">Array to receive write value</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opWRITE16(IExpression<Data16> SOURCE, IExpression<Data8> INDEX, IExpression<Data16> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
+				parameterList.Add(INDEX ?? throw new ArgumentNullException(nameof(INDEX)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.WRITE16, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Write 32 bit value from SOURCE to DESTINATION[INDEX]
+			/// </summary>
+			/// <param name="SOURCE">Variable to write</param>
+			/// <param name="INDEX">Index to array member to write</param>
+			/// <param name="DESTINATION">Array to receive write value</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opWRITE32(IExpression<Data32> SOURCE, IExpression<Data8> INDEX, IExpression<Data32> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
+				parameterList.Add(INDEX ?? throw new ArgumentNullException(nameof(INDEX)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.WRITE32, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Write floating point value from SOURCE to DESTINATION[INDEX]
+			/// </summary>
+			/// <param name="SOURCE">Variable to write</param>
+			/// <param name="INDEX">Index to array member to write</param>
+			/// <param name="DESTINATION">Array to receive write value</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opWRITEF(IExpression<DataFloat> SOURCE, IExpression<Data8> INDEX, IExpression<DataFloat> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
+				parameterList.Add(INDEX ?? throw new ArgumentNullException(nameof(INDEX)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.WRITEF, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Test if communication is busy
+			/// </summary>
+			/// <param name="HARDWARE">Hardware transport layer</param>
+			/// <param name="NAME">Name of the remote/own device</param>
+			/// <remarks>
+			/// Dispatch status may be set to BUSYBREAK. If name is 0 then own adapter status is evaluated.
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opCOM_READY(IExpression<Data8> HARDWARE, IExpression<Data8> NAME)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
+				parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.COM_READY, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// This code does not exist in normal program
+			/// </summary>
+			/// <remarks>
+			/// Dispatch status changes to INSTRBREAK
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opCOM_READDATA(IExpression<Data8> VALUE1, IExpression<Data8> VALUE2, IExpression<Data16> VALUE3, IExpression<Data8> VALUE4)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(VALUE1 ?? throw new ArgumentNullException(nameof(VALUE1)));
+				parameterList.Add(VALUE2 ?? throw new ArgumentNullException(nameof(VALUE2)));
+				parameterList.Add(VALUE3 ?? throw new ArgumentNullException(nameof(VALUE3)));
+				parameterList.Add(VALUE4 ?? throw new ArgumentNullException(nameof(VALUE4)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.COM_READDATA, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// This code does not exist in normal program
+			/// </summary>
+			/// <remarks>
+			/// Dispatch status changes to INSTRBREAK
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opCOM_WRITEDATA(IExpression<Data8> VALUE1, IExpression<Data8> VALUE2, IExpression<Data16> VALUE3, IExpression<Data8> VALUE4)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(VALUE1 ?? throw new ArgumentNullException(nameof(VALUE1)));
+				parameterList.Add(VALUE2 ?? throw new ArgumentNullException(nameof(VALUE2)));
+				parameterList.Add(VALUE3 ?? throw new ArgumentNullException(nameof(VALUE3)));
+				parameterList.Add(VALUE4 ?? throw new ArgumentNullException(nameof(VALUE4)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.COM_WRITEDATA, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Communication get entry
+			/// </summary>
+			/// <remarks>
+			/// Dispatch status can return FAILBREAK
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opCOM_GET(COM_GETSubcommand CMD)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.COM_GET, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Communication set entry
+			/// </summary>
+			/// <remarks>
+			/// Dispatch status can return FAILBREAK
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opCOM_SET(COM_SETSubcommand CMD)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.COM_SET, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Test if communication is busy
+			/// </summary>
+			/// <param name="HARDWARE">Hardware transport layer</param>
+			/// <param name="NAME">Name of the remote/own device</param>
+			/// <param name="BUSY">Busy flag</param>
+			/// <remarks>
+			/// Dispatch status is set to NOBREAK. If name is 0 then own adapter busy status is returned.
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opCOM_TEST(IExpression<Data8> HARDWARE, IExpression<Data8> NAME, IExpression<Data8> BUSY)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
+				parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
+				parameterList.Add(BUSY ?? throw new ArgumentNullException(nameof(BUSY)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.COM_TEST, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Removes a know remote device from the brick
+			/// </summary>
+			/// <param name="HARDWARE"></param>
+			/// <param name="REMOTE_NAME">Pointer to remote brick name</param>
+			/// <remarks>
+			/// Dispatch status can return FAILBREAK
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opCOM_REMOVE(IExpression<Data8> HARDWARE, IExpression<Data8> REMOTE_NAME)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
+				parameterList.Add(REMOTE_NAME ?? throw new ArgumentNullException(nameof(REMOTE_NAME)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.COM_REMOVE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Sends a file or folder to remote brick.
+			/// </summary>
+			/// <param name="HARDWARE"></param>
+			/// <param name="REMOTE_NAME">Pointer to remote brick name</param>
+			/// <param name="FILE_NAME">File/folder name to send</param>
+			/// <param name="FILE_TYPE">File or folder type to send</param>
+			/// <remarks>
+			/// Dispatch status can return FAILBREAK
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opCOM_WRITEFILE(IExpression<Data8> HARDWARE, IExpression<Data8> REMOTE_NAME, IExpression<Data8> FILE_NAME, IExpression<Data8> FILE_TYPE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
+				parameterList.Add(REMOTE_NAME ?? throw new ArgumentNullException(nameof(REMOTE_NAME)));
+				parameterList.Add(FILE_NAME ?? throw new ArgumentNullException(nameof(FILE_NAME)));
+				parameterList.Add(FILE_TYPE ?? throw new ArgumentNullException(nameof(FILE_TYPE)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.COM_WRITEFILE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Open a mail box on the brick
+			/// </summary>
+			/// <param name="NO">Reference ID for the mailbox. Maximum number of mailboxes is 30</param>
+			/// <param name="BOXNAME">Zero terminated string with the mailbox name</param>
+			/// <param name="TYPES">Data type of the content of the mailbox</param>
+			/// <param name="FIFOSIZE">Not used</param>
+			/// <param name="VALUES">Number of values of the type (specified by TYPE).</param>
+			/// <remarks>
+			/// If data type DATA_S is selected then it requires that a zero terminated string is sent. Maximum mailbox size is 250 bytes. I.e. if type is string (DATA_S) then there can only be 1 string of maximum 250 bytes (incl. zero termination), or if array (DATA_A), then array size cannot be larger than 250 bytes.
+			/// Dispatch status can return FAILBREAK
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opMAILBOX_OPEN(IExpression<Data8> NO, IExpression<Data8> BOXNAME, IExpression<Data8> TYPES, IExpression<Data8> FIFOSIZE, IExpression<Data8> VALUES)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				parameterList.Add(BOXNAME ?? throw new ArgumentNullException(nameof(BOXNAME)));
+				parameterList.Add(TYPES ?? throw new ArgumentNullException(nameof(TYPES)));
+				parameterList.Add(FIFOSIZE ?? throw new ArgumentNullException(nameof(FIFOSIZE)));
+				parameterList.Add(VALUES ?? throw new ArgumentNullException(nameof(VALUES)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.MAILBOX_OPEN, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Write to mailbox in remote brick
+			/// </summary>
+			/// <param name="BRICKNAME">Zero terminated string name of the receiving brick</param>
+			/// <param name="HARDWARE">Transportation media</param>
+			/// <param name="BOXNAME">Zero terminated string name of the receiving mailbox</param>
+			/// <param name="TYPE">Data type of the values</param>
+			/// <param name="VALUES">Number of values of the specified type to send</param>
+			/// <param name="VALUES_">variable arguments</param>
+			/// <remarks>
+			/// If Brick name is left empty (0) then all connected devices will receive the mailbox message. If string type (DATA_S) data is to be transmitted then a zero terminated string is expected. If array type data (DATA_A) is to be transmitted then the number of bytes to be sent is equal to the array size.
+			/// Dispatch status can return FAILBREAK.
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opMAILBOX_WRITE(IExpression<Data8> BRICKNAME, IExpression<Data8> HARDWARE, IExpression<Data8> BOXNAME, IExpression<Data8> TYPE, IExpression<Data8> VALUES, params IExpression[] VALUES_)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(BRICKNAME ?? throw new ArgumentNullException(nameof(BRICKNAME)));
+				parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
+				parameterList.Add(BOXNAME ?? throw new ArgumentNullException(nameof(BOXNAME)));
+				parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
+				parameterList.Add(VALUES ?? throw new ArgumentNullException(nameof(VALUES)));
+				parameterList.AddRange(VALUES_ ?? throw new ArgumentNullException(nameof(VALUES_)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.MAILBOX_WRITE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Read data from mailbox specified by NO
+			/// </summary>
+			/// <param name="NO">Messagebox ID of the message box you want to read</param>
+			/// <param name="LENGTH">Maximum bytes to be read</param>
+			/// <param name="VALUES">Number of value to read</param>
+			/// <param name="VALUES_">variable arguments</param>
+			/// <remarks>
+			/// Returns (Type specified in open) VALUE - Data from the message box The type of Value is specified by mailbox open byte code.
+			/// Dispatch status can return FAILBREAK.
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opMAILBOX_READ(IExpression<Data8> NO, IExpression<Data8> LENGTH, IExpression<Data8> VALUES, params IExpression[] VALUES_)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(VALUES ?? throw new ArgumentNullException(nameof(VALUES)));
+				parameterList.AddRange(VALUES_ ?? throw new ArgumentNullException(nameof(VALUES_)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.MAILBOX_READ, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Tests if new message has been read
+			/// </summary>
+			/// <param name="NO">Reference ID mailbox number</param>
+			/// <param name="BUSY">If Busy = TRUE then no new messages are received</param>
+			/// <remarks>
+			/// Dispatch status can return FAILBREAK
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opMAILBOX_TEST(IExpression<Data8> NO, IExpression<Data8> BUSY)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				parameterList.Add(BUSY ?? throw new ArgumentNullException(nameof(BUSY)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.MAILBOX_TEST, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Waiting from message to be read
+			/// </summary>
+			/// <param name="NO">Reference ID mailbox number</param>
+			/// <remarks>
+			/// Dispatch status can return FAILBREAK
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opMAILBOX_READY(IExpression<Data8> NO)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.MAILBOX_READY, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Closes mailbox indicated by NO
+			/// </summary>
+			/// <param name="NO">Reference ID mailbox number</param>
+			/// <remarks>
+			/// Dispatch status can return FAILBREAK
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opMAILBOX_CLOSE(IExpression<Data8> NO)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.MAILBOX_CLOSE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Set the connection type for a specific port
+			/// </summary>
+			/// <param name="LAYER">Chain layer number [0..3]</param>
+			/// <param name="NO">Port number</param>
+			/// <param name="CONN">Connection type (CONN_NXT_IIC, CONN_NXT_DUMB or CONN_INPUT_DUMB)</param>
+			/// <remarks>
+			/// Note that this won't do much if the auto-id has not been disabled
+			/// </remarks>
+			[Support(Official = false, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opINPUT_SET_CONN(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> CONN)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				parameterList.Add(CONN ?? throw new ArgumentNullException(nameof(CONN)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.INPUT_SET_CONN, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Read I2C data from specified port
+			/// </summary>
+			/// <param name="LAYER">Chain layer number [0..3]</param>
+			/// <param name="NO">Port number</param>
+			/// <param name="RDLNG">No of bytes to read</param>
+			/// <param name="RDDATA">DATA8 array (handle) to read into</param>
+			/// <param name="RESULT">Write/read result (OK, FAIL, BUSY, STOP)</param>
+			[Support(Official = false, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opINPUT_IIC_READ(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> RDLNG, IExpression<Data8> RDDATA, IExpression<Data8> RESULT)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				parameterList.Add(RDLNG ?? throw new ArgumentNullException(nameof(RDLNG)));
+				parameterList.Add(RDDATA ?? throw new ArgumentNullException(nameof(RDDATA)));
+				parameterList.Add(RESULT ?? throw new ArgumentNullException(nameof(RESULT)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.INPUT_IIC_READ, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Read I2C status of specified port
+			/// </summary>
+			/// <param name="LAYER">Chain layer number [0..3]</param>
+			/// <param name="NO">Port number</param>
+			/// <param name="RESULT">Current I2C bus status (OK, FAIL, BUSY, STOP)</param>
+			[Support(Official = false, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opINPUT_IIC_STATUS(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> RESULT)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				parameterList.Add(RESULT ?? throw new ArgumentNullException(nameof(RESULT)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.INPUT_IIC_STATUS, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Write I2C data to specified port
+			/// </summary>
+			/// <param name="LAYER">Chain layer number [0..3]</param>
+			/// <param name="NO">Port number</param>
+			/// <param name="WRLNG">No of bytes to write</param>
+			/// <param name="WRDATA">DATA8 array (handle) of data to write</param>
+			/// <param name="RDLNG">No of bytes to read</param>
+			/// <param name="RESULT">Write/read result (OK, FAIL, BUSY, STOP)</param>
+			[Support(Official = false, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opINPUT_IIC_WRITE(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> WRLNG, IExpression<Data8> WRDATA, IExpression<Data8> RDLNG, IExpression<Data8> RESULT)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				parameterList.Add(WRLNG ?? throw new ArgumentNullException(nameof(WRLNG)));
+				parameterList.Add(WRDATA ?? throw new ArgumentNullException(nameof(WRDATA)));
+				parameterList.Add(RDLNG ?? throw new ArgumentNullException(nameof(RDLNG)));
+				parameterList.Add(RESULT ?? throw new ArgumentNullException(nameof(RESULT)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.INPUT_IIC_WRITE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Enabled or disable auto-id for a specific sensor port
+			/// </summary>
+			/// <param name="LAYER">Chain layer number [0..3]</param>
+			/// <param name="NO">Port number</param>
+			/// <param name="ENABLE">Boolean (0 disabled, 1 enable)</param>
+			[Support(Official = false, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opINPUT_SET_AUTOID(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> ENABLE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				parameterList.Add(ENABLE ?? throw new ArgumentNullException(nameof(ENABLE)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.INPUT_SET_AUTOID, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Returns the size of the mailbox.
+			/// </summary>
+			/// <param name="NO">Reference ID mailbox number</param>
+			/// <param name="SIZE">Size in bytes of the contents of mailbox NO</param>
+			[Support(Official = false, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opMAILBOX_SIZE(IExpression<Data8> NO, IExpression<Data8> SIZE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				parameterList.Add(SIZE ?? throw new ArgumentNullException(nameof(SIZE)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.MAILBOX_SIZE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Get md5 sum of a file
+			/// </summary>
+			/// <param name="NAME">File name</param>
+			/// <param name="MD5SUM">First byte in md5 sum (byte array)</param>
+			/// <param name="SUCCESS">Success flag (0 = no, 1 = yes)</param>
+			/// <remarks>
+			/// Dispatch status unchanged
+			/// </remarks>
+			[Support(Official = false, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opFILE_MD5SUM(IExpression<DataString> NAME, IExpression<Data8> MD5SUM, IExpression<Data8> SUCCESS)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
+				parameterList.Add(MD5SUM ?? throw new ArgumentNullException(nameof(MD5SUM)));
+				parameterList.Add(SUCCESS ?? throw new ArgumentNullException(nameof(SUCCESS)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.FILE_MD5SUM, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Load the selected VM
+			/// </summary>
+			/// <param name="VMINDEX">VM Index, Robotc = 0, Labview = 1</param>
+			/// <param name="RESULT">OK if VM loaded ok FAIL if it did not.</param>
+			[Support(Official = false, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opDYNLOAD_VMLOAD(IExpression<Data8> VMINDEX, IExpression<Data8> RESULT)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(VMINDEX ?? throw new ArgumentNullException(nameof(VMINDEX)));
+				parameterList.Add(RESULT ?? throw new ArgumentNullException(nameof(RESULT)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.DYNLOAD_VMLOAD, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Clean up the dynamic VM loading system
+			/// </summary>
+			/// <remarks>
+			/// Calls the VM's exit_vm() function to tidy up
+			/// </remarks>
+			[Support(Official = false, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opDYNLOAD_VMEXIT()
+			{
+				var parameterList = new List<IByteCode>();
+				return new EV3.Opcodes.Opcode(OpcodeValue.DYNLOAD_VMEXIT, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Execute Entry Point function 0 in Third Party VM
+			/// </summary>
+			/// <param name="CMD">Sub command to be executed</param>
+			/// <param name="LENGTH_IN">Amount of data passed to this opcode</param>
+			/// <param name="LENGTH_OUT">Amount of data returned</param>
+			/// <param name="VALUE">Data from opcode</param>
+			[Support(Official = false, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opDYNLOAD_ENTRY_0(IExpression<Data8> CMD, IExpression<Data8> LENGTH_IN, IExpression<Data16> LENGTH_OUT, IExpression VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
+				parameterList.Add(LENGTH_IN ?? throw new ArgumentNullException(nameof(LENGTH_IN)));
+				parameterList.Add(LENGTH_OUT ?? throw new ArgumentNullException(nameof(LENGTH_OUT)));
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.DYNLOAD_ENTRY_0, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Execute Entry Point function 1 in Third Party VM
+			/// </summary>
+			/// <param name="CMD">Sub command to be executed</param>
+			/// <param name="LENGTH_IN">Amount of data passed to this opcode</param>
+			/// <param name="LENGTH_OUT">Amount of data returned</param>
+			/// <param name="VALUE">Data from opcode</param>
+			[Support(Official = false, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opDYNLOAD_ENTRY_1(IExpression<Data8> CMD, IExpression<Data8> LENGTH_IN, IExpression<Data16> LENGTH_OUT, IExpression VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
+				parameterList.Add(LENGTH_IN ?? throw new ArgumentNullException(nameof(LENGTH_IN)));
+				parameterList.Add(LENGTH_OUT ?? throw new ArgumentNullException(nameof(LENGTH_OUT)));
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.DYNLOAD_ENTRY_1, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Execute Entry Point function 2 in Third Party VM
+			/// </summary>
+			/// <param name="CMD">Sub command to be executed</param>
+			/// <param name="LENGTH_IN">Amount of data passed to this opcode</param>
+			/// <param name="LENGTH_OUT">Amount of data returned</param>
+			/// <param name="VALUE">Data from opcode</param>
+			[Support(Official = false, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opDYNLOAD_ENTRY_2(IExpression<Data8> CMD, IExpression<Data8> LENGTH_IN, IExpression<Data16> LENGTH_OUT, IExpression VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
+				parameterList.Add(LENGTH_IN ?? throw new ArgumentNullException(nameof(LENGTH_IN)));
+				parameterList.Add(LENGTH_OUT ?? throw new ArgumentNullException(nameof(LENGTH_OUT)));
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.DYNLOAD_ENTRY_2, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Execute Entry Point function 3 in Third Party VM
+			/// </summary>
+			/// <param name="CMD">Sub command to be executed</param>
+			/// <param name="LENGTH_IN">Amount of data passed to this opcode</param>
+			/// <param name="LENGTH_OUT">Amount of data returned</param>
+			/// <param name="VALUE">Data from opcode</param>
+			[Support(Official = false, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opDYNLOAD_ENTRY_3(IExpression<Data8> CMD, IExpression<Data8> LENGTH_IN, IExpression<Data16> LENGTH_OUT, IExpression VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
+				parameterList.Add(LENGTH_IN ?? throw new ArgumentNullException(nameof(LENGTH_IN)));
+				parameterList.Add(LENGTH_OUT ?? throw new ArgumentNullException(nameof(LENGTH_OUT)));
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.DYNLOAD_ENTRY_3, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Execute Entry Point function 4 in Third Party VM
+			/// </summary>
+			/// <param name="CMD">Sub command to be executed</param>
+			/// <param name="LENGTH_IN">Amount of data passed to this opcode</param>
+			/// <param name="LENGTH_OUT">Amount of data returned</param>
+			/// <param name="VALUE">Data from opcode</param>
+			[Support(Official = false, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opDYNLOAD_ENTRY_4(IExpression<Data8> CMD, IExpression<Data8> LENGTH_IN, IExpression<Data16> LENGTH_OUT, IExpression VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
+				parameterList.Add(LENGTH_IN ?? throw new ArgumentNullException(nameof(LENGTH_IN)));
+				parameterList.Add(LENGTH_OUT ?? throw new ArgumentNullException(nameof(LENGTH_OUT)));
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.DYNLOAD_ENTRY_4, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Execute Entry Point function 5 in Third Party VM
+			/// </summary>
+			/// <param name="CMD">Sub command to be executed</param>
+			/// <param name="LENGTH_IN">Amount of data passed to this opcode</param>
+			/// <param name="LENGTH_OUT">Amount of data returned</param>
+			/// <param name="VALUE">Data from opcode</param>
+			[Support(Official = false, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opDYNLOAD_ENTRY_5(IExpression<Data8> CMD, IExpression<Data8> LENGTH_IN, IExpression<Data16> LENGTH_OUT, IExpression VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
+				parameterList.Add(LENGTH_IN ?? throw new ArgumentNullException(nameof(LENGTH_IN)));
+				parameterList.Add(LENGTH_OUT ?? throw new ArgumentNullException(nameof(LENGTH_OUT)));
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.DYNLOAD_ENTRY_5, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Execute Entry Point function 6 in Third Party VM
+			/// </summary>
+			/// <param name="CMD">Sub command to be executed</param>
+			/// <param name="LENGTH_IN">Amount of data passed to this opcode</param>
+			/// <param name="LENGTH_OUT">Amount of data returned</param>
+			/// <param name="VALUE">Data from opcode</param>
+			[Support(Official = false, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opDYNLOAD_ENTRY_6(IExpression<Data8> CMD, IExpression<Data8> LENGTH_IN, IExpression<Data16> LENGTH_OUT, IExpression VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
+				parameterList.Add(LENGTH_IN ?? throw new ArgumentNullException(nameof(LENGTH_IN)));
+				parameterList.Add(LENGTH_OUT ?? throw new ArgumentNullException(nameof(LENGTH_OUT)));
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.DYNLOAD_ENTRY_6, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Execute Entry Point function 7 in Third Party VM
+			/// </summary>
+			/// <param name="CMD">Sub command to be executed</param>
+			/// <param name="LENGTH_IN">Amount of data passed to this opcode</param>
+			/// <param name="LENGTH_OUT">Amount of data returned</param>
+			/// <param name="VALUE">Data from opcode</param>
+			[Support(Official = false, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opDYNLOAD_ENTRY_7(IExpression<Data8> CMD, IExpression<Data8> LENGTH_IN, IExpression<Data16> LENGTH_OUT, IExpression VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
+				parameterList.Add(LENGTH_IN ?? throw new ArgumentNullException(nameof(LENGTH_IN)));
+				parameterList.Add(LENGTH_OUT ?? throw new ArgumentNullException(nameof(LENGTH_OUT)));
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.DYNLOAD_ENTRY_7, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Execute Entry Point function 8 in Third Party VM
+			/// </summary>
+			/// <param name="CMD">Sub command to be executed</param>
+			/// <param name="LENGTH_IN">Amount of data passed to this opcode</param>
+			/// <param name="LENGTH_OUT">Amount of data returned</param>
+			/// <param name="VALUE">Data from opcode</param>
+			[Support(Official = false, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opDYNLOAD_ENTRY_8(IExpression<Data8> CMD, IExpression<Data8> LENGTH_IN, IExpression<Data16> LENGTH_OUT, IExpression VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
+				parameterList.Add(LENGTH_IN ?? throw new ArgumentNullException(nameof(LENGTH_IN)));
+				parameterList.Add(LENGTH_OUT ?? throw new ArgumentNullException(nameof(LENGTH_OUT)));
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.DYNLOAD_ENTRY_8, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Execute Entry Point function 9 in Third Party VM
+			/// </summary>
+			/// <param name="CMD">Sub command to be executed</param>
+			/// <param name="LENGTH_IN">Amount of data passed to this opcode</param>
+			/// <param name="LENGTH_OUT">Amount of data returned</param>
+			/// <param name="VALUE">Data from opcode</param>
+			[Support(Official = false, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opDYNLOAD_ENTRY_9(IExpression<Data8> CMD, IExpression<Data8> LENGTH_IN, IExpression<Data16> LENGTH_OUT, IExpression VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
+				parameterList.Add(LENGTH_IN ?? throw new ArgumentNullException(nameof(LENGTH_IN)));
+				parameterList.Add(LENGTH_OUT ?? throw new ArgumentNullException(nameof(LENGTH_OUT)));
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.DYNLOAD_ENTRY_9, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Get the index of the currently loaded VM
+			/// </summary>
+			/// <param name="RESULT">VM Index, Robotc = 0, Labview = 1, -1 for no loaded VM</param>
+			[Support(Official = false, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opDYNLOAD_GET_VM(IExpression<Data8> RESULT)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(RESULT ?? throw new ArgumentNullException(nameof(RESULT)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.DYNLOAD_GET_VM, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// System test functions entry
+			/// </summary>
+			/// <remarks>
+			/// This set of commands are for test only as they change behaviour in some driver modules. When test is open every command keeps the test byte codes enabled for 10 seconds.
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.Opcode opTST(TSTSubcommand CMD)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(CMD ?? throw new ArgumentNullException(nameof(CMD)));
+				return new EV3.Opcodes.Opcode(OpcodeValue.TST, parameterList.ToArray());
+			}
+
+			/// <param name="PRGID">Program slot number</param>
+			/// <param name="OBJID">Object id</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.PROGRAM_INFOSubcommand cmdOBJ_STOP(IExpression<Data16> PRGID, IExpression<Data16> OBJID)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
+				parameterList.Add(OBJID ?? throw new ArgumentNullException(nameof(OBJID)));
+				return new EV3.Opcodes.PROGRAM_INFOSubcommand(PROGRAM_INFOSubcommandValue.OBJ_STOP, parameterList.ToArray());
+			}
+
+			/// <param name="PRGID">Program slot number</param>
+			/// <param name="OBJID">Object id</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.PROGRAM_INFOSubcommand cmdOBJ_START(IExpression<Data16> PRGID, IExpression<Data16> OBJID)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
+				parameterList.Add(OBJID ?? throw new ArgumentNullException(nameof(OBJID)));
+				return new EV3.Opcodes.PROGRAM_INFOSubcommand(PROGRAM_INFOSubcommandValue.OBJ_START, parameterList.ToArray());
+			}
+
+			/// <param name="PRGID">Program slot number</param>
+			/// <param name="DATA">Program status</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.PROGRAM_INFOSubcommand cmdGET_STATUS(IExpression<Data16> PRGID, IExpression<Data8> DATA)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
+				parameterList.Add(DATA ?? throw new ArgumentNullException(nameof(DATA)));
+				return new EV3.Opcodes.PROGRAM_INFOSubcommand(PROGRAM_INFOSubcommandValue.GET_STATUS, parameterList.ToArray());
+			}
+
+			/// <param name="PRGID">Program slot number</param>
+			/// <param name="DATA">Program speed [instr/S]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.PROGRAM_INFOSubcommand cmdGET_SPEED(IExpression<Data16> PRGID, IExpression<Data32> DATA)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
+				parameterList.Add(DATA ?? throw new ArgumentNullException(nameof(DATA)));
+				return new EV3.Opcodes.PROGRAM_INFOSubcommand(PROGRAM_INFOSubcommandValue.GET_SPEED, parameterList.ToArray());
+			}
+
+			/// <param name="PRGID">Program slot number</param>
+			/// <param name="DATA">Program result [OK, BUSY, FAIL]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.PROGRAM_INFOSubcommand cmdGET_PRGRESULT(IExpression<Data16> PRGID, IExpression<Data8> DATA)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
+				parameterList.Add(DATA ?? throw new ArgumentNullException(nameof(DATA)));
+				return new EV3.Opcodes.PROGRAM_INFOSubcommand(PROGRAM_INFOSubcommandValue.GET_PRGRESULT, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Set number of instructions before VMThread change
+			/// </summary>
+			/// <param name="PRGID">Program slot number</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.PROGRAM_INFOSubcommand cmdSET_INSTR(IExpression<Data16> PRGID)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
+				return new EV3.Opcodes.PROGRAM_INFOSubcommand(PROGRAM_INFOSubcommandValue.SET_INSTR, parameterList.ToArray());
+			}
+
+			/// <param name="PRGID">Program slot number</param>
+			/// <param name="NAME">Program name</param>
+			[Support(Official = false, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.PROGRAM_INFOSubcommand cmdGET_PRGNAME(IExpression<Data16> PRGID, IExpression<Data8> NAME)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
+				parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
+				return new EV3.Opcodes.PROGRAM_INFOSubcommand(PROGRAM_INFOSubcommandValue.GET_PRGNAME, parameterList.ToArray());
+			}
+
+			/// <param name="NUMBER">Error number</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.INFOSubcommand cmdSET_ERROR(IExpression<Data8> NUMBER)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(NUMBER ?? throw new ArgumentNullException(nameof(NUMBER)));
+				return new EV3.Opcodes.INFOSubcommand(INFOSubcommandValue.SET_ERROR, parameterList.ToArray());
+			}
+
+			/// <param name="NUMBER">Error number</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.INFOSubcommand cmdGET_ERROR(IExpression<Data8> NUMBER)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(NUMBER ?? throw new ArgumentNullException(nameof(NUMBER)));
+				return new EV3.Opcodes.INFOSubcommand(INFOSubcommandValue.GET_ERROR, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Convert error number to text string
+			/// </summary>
+			/// <param name="NUMBER">Error number</param>
+			/// <param name="LENGTH">Maximal length of string returned (-1 = no check)</param>
+			/// <param name="DESTINATION">Message</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.INFOSubcommand cmdERRORTEXT(IExpression<Data8> NUMBER, IExpression<Data8> LENGTH, IExpression<DataString> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(NUMBER ?? throw new ArgumentNullException(nameof(NUMBER)));
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.INFOSubcommand(INFOSubcommandValue.ERRORTEXT, parameterList.ToArray());
+			}
+
+			/// <param name="VALUE">Volume [0..100%]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.INFOSubcommand cmdGET_VOLUME(IExpression<Data8> VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.INFOSubcommand(INFOSubcommandValue.GET_VOLUME, parameterList.ToArray());
+			}
+
+			/// <param name="VALUE">Volume [0..100%]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.INFOSubcommand cmdSET_VOLUME(IExpression<Data8> VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.INFOSubcommand(INFOSubcommandValue.SET_VOLUME, parameterList.ToArray());
+			}
+
+			/// <param name="VALUE">Minutes to sleep [0..120min] (0 = never)</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.INFOSubcommand cmdGET_MINUTES(IExpression<Data8> VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.INFOSubcommand(INFOSubcommandValue.GET_MINUTES, parameterList.ToArray());
+			}
+
+			/// <param name="VALUE">Minutes to sleep [0..120min] (0 = never)</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.INFOSubcommand cmdSET_MINUTES(IExpression<Data8> VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.INFOSubcommand(INFOSubcommandValue.SET_MINUTES, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Get size of string (not including zero termination)
+			/// </summary>
+			/// <param name="SOURCE1">String variable or handle to string</param>
+			/// <param name="SIZE">Size</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.STRINGSSubcommand cmdGET_SIZE(IExpression<DataString> SOURCE1, IExpression<Data16> SIZE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(SIZE ?? throw new ArgumentNullException(nameof(SIZE)));
+				return new EV3.Opcodes.STRINGSSubcommand(STRINGSSubcommandValue.GET_SIZE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Add two strings (SOURCE1 + SOURCE2 -&gt; DESTINATION)
+			/// </summary>
+			/// <param name="SOURCE1">String variable or handle to string</param>
+			/// <param name="SOURCE2">String variable or handle to string</param>
+			/// <param name="DESTINATION">String variable or handle to string</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.STRINGSSubcommand cmdADD(IExpression<DataString> SOURCE1, IExpression<DataString> SOURCE2, IExpression<DataString> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.STRINGSSubcommand(STRINGSSubcommandValue.ADD, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Compare two strings
+			/// </summary>
+			/// <param name="SOURCE1">String variable or handle to string</param>
+			/// <param name="SOURCE2">String variable or handle to string</param>
+			/// <param name="RESULT">Result (0 = not equal, 1 = equal)</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.STRINGSSubcommand cmdCOMPARE(IExpression<DataString> SOURCE1, IExpression<DataString> SOURCE2, IExpression<Data8> RESULT)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
+				parameterList.Add(RESULT ?? throw new ArgumentNullException(nameof(RESULT)));
+				return new EV3.Opcodes.STRINGSSubcommand(STRINGSSubcommandValue.COMPARE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Duplicate a string (SOURCE1 -&gt; DESTINATION)
+			/// </summary>
+			/// <param name="SOURCE1">String variable or handle to string</param>
+			/// <param name="DESTINATION">String variable or handle to string</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.STRINGSSubcommand cmdDUPLICATE(IExpression<DataString> SOURCE1, IExpression<DataString> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.STRINGSSubcommand(STRINGSSubcommandValue.DUPLICATE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Convert floating point value to a string (strips trailing zeroes)
+			/// </summary>
+			/// <param name="VALUE">Value to write (if "nan" op to 4 dashes is returned: "----")</param>
+			/// <param name="FIGURES">Total number of figures inclusive decimal point (FIGURES &lt; 0 -&gt; Left adjusted)</param>
+			/// <param name="DECIMALS">Number of decimals</param>
+			/// <param name="DESTINATION">String variable or handle to string</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.STRINGSSubcommand cmdVALUE_TO_STRING(IExpression<DataFloat> VALUE, IExpression<Data8> FIGURES, IExpression<Data8> DECIMALS, IExpression<DataString> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				parameterList.Add(FIGURES ?? throw new ArgumentNullException(nameof(FIGURES)));
+				parameterList.Add(DECIMALS ?? throw new ArgumentNullException(nameof(DECIMALS)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.STRINGSSubcommand(STRINGSSubcommandValue.VALUE_TO_STRING, parameterList.ToArray());
+			}
+
+			/// <param name="SOURCE1">String variable or handle to string</param>
+			/// <param name="DESTINATION">Value</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.STRINGSSubcommand cmdSTRING_TO_VALUE(IExpression<DataString> SOURCE1, IExpression<DataFloat> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.STRINGSSubcommand(STRINGSSubcommandValue.STRING_TO_VALUE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Strip a string for spaces (SOURCE1 -&gt; DESTINATION)
+			/// </summary>
+			/// <param name="SOURCE1">String variable or handle to string</param>
+			/// <param name="DESTINATION">String variable or handle to string</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.STRINGSSubcommand cmdSTRIP(IExpression<DataString> SOURCE1, IExpression<DataString> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.STRINGSSubcommand(STRINGSSubcommandValue.STRIP, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Convert integer value to a string
+			/// </summary>
+			/// <param name="VALUE">Value to write</param>
+			/// <param name="FIGURES">Total number of figures</param>
+			/// <param name="DESTINATION">String variable or handle to string</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.STRINGSSubcommand cmdNUMBER_TO_STRING(IExpression<Data16> VALUE, IExpression<Data8> FIGURES, IExpression<DataString> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				parameterList.Add(FIGURES ?? throw new ArgumentNullException(nameof(FIGURES)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.STRINGSSubcommand(STRINGSSubcommandValue.NUMBER_TO_STRING, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Return DESTINATION: a substring from SOURCE1 that starts were SOURCE2 ends
+			/// </summary>
+			/// <param name="SOURCE1">String variable or handle to string</param>
+			/// <param name="SOURCE2">String variable or handle to string</param>
+			/// <param name="DESTINATION">String variable or handle to string</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.STRINGSSubcommand cmdSUB(IExpression<DataString> SOURCE1, IExpression<DataString> SOURCE2, IExpression<DataString> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE1 ?? throw new ArgumentNullException(nameof(SOURCE1)));
+				parameterList.Add(SOURCE2 ?? throw new ArgumentNullException(nameof(SOURCE2)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.STRINGSSubcommand(STRINGSSubcommandValue.SUB, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Convert floating point value to a formatted string
+			/// </summary>
+			/// <param name="VALUE">Value to write</param>
+			/// <param name="FORMAT">Format string variable or handle to string</param>
+			/// <param name="SIZE">Total size of destination string</param>
+			/// <param name="DESTINATION">String variable or handle to string</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.STRINGSSubcommand cmdVALUE_FORMATTED(IExpression<DataFloat> VALUE, IExpression<DataString> FORMAT, IExpression<Data8> SIZE, IExpression<DataString> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				parameterList.Add(FORMAT ?? throw new ArgumentNullException(nameof(FORMAT)));
+				parameterList.Add(SIZE ?? throw new ArgumentNullException(nameof(SIZE)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.STRINGSSubcommand(STRINGSSubcommandValue.VALUE_FORMATTED, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Convert integer number to a formatted string
+			/// </summary>
+			/// <param name="VALUE">Number to write</param>
+			/// <param name="FORMAT">Format string variable or handle to string</param>
+			/// <param name="SIZE">Total size of destination string</param>
+			/// <param name="DESTINATION">String variable or handle to string</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.STRINGSSubcommand cmdNUMBER_FORMATTED(IExpression<Data32> VALUE, IExpression<DataString> FORMAT, IExpression<Data8> SIZE, IExpression<DataString> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				parameterList.Add(FORMAT ?? throw new ArgumentNullException(nameof(FORMAT)));
+				parameterList.Add(SIZE ?? throw new ArgumentNullException(nameof(SIZE)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.STRINGSSubcommand(STRINGSSubcommandValue.NUMBER_FORMATTED, parameterList.ToArray());
+			}
+
+			/// <param name="VALUE">Battery voltage [V]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_READSubcommand cmdGET_VBATT(IExpression<DataFloat> VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.UI_READSubcommand(UI_READSubcommandValue.GET_VBATT, parameterList.ToArray());
+			}
+
+			/// <param name="VALUE">Battery current [A]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_READSubcommand cmdGET_IBATT(IExpression<DataFloat> VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.UI_READSubcommand(UI_READSubcommandValue.GET_IBATT, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Get os version string
+			/// </summary>
+			/// <param name="LENGTH">Maximal length of string returned (-1 = no check)</param>
+			/// <param name="DESTINATION">String variable or handle to string</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_READSubcommand cmdGET_OS_VERS(IExpression<Data8> LENGTH, IExpression<DataString> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.UI_READSubcommand(UI_READSubcommandValue.GET_OS_VERS, parameterList.ToArray());
+			}
+
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_READSubcommand cmdGET_EVENT(IExpression<Data8> EVENT)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(EVENT ?? throw new ArgumentNullException(nameof(EVENT)));
+				return new EV3.Opcodes.UI_READSubcommand(UI_READSubcommandValue.GET_EVENT, parameterList.ToArray());
+			}
+
+			/// <param name="VALUE">Battery temperature rise [C]</param>
+			/// <remarks>
+			/// This returns 0 on all known hardware. The EV3 has code to estimate battery temperature, but it is disabled.
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_READSubcommand cmdGET_TBATT(IExpression<DataFloat> VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.UI_READSubcommand(UI_READSubcommandValue.GET_TBATT, parameterList.ToArray());
+			}
+
+			/// <param name="IINT">Integrated battery current [A]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_READSubcommand cmdGET_IINT(IExpression<DataFloat> IINT)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(IINT ?? throw new ArgumentNullException(nameof(IINT)));
+				return new EV3.Opcodes.UI_READSubcommand(UI_READSubcommandValue.GET_IINT, parameterList.ToArray());
+			}
+
+			/// <param name="VALUE">Motor current [A]</param>
+			/// <remarks>
+			/// Only pre-release EV3 hardware returns a real value. Returns 0 on all known devices (they lack the necessary hardware).
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_READSubcommand cmdGET_IMOTOR(IExpression<DataFloat> VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.UI_READSubcommand(UI_READSubcommandValue.GET_IMOTOR, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Get string from terminal
+			/// </summary>
+			/// <param name="LENGTH">Maximal length of string returned</param>
+			/// <param name="DESTINATION">String variable or handle to string</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_READSubcommand cmdGET_STRING(IExpression<Data8> LENGTH, IExpression<DataString> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.UI_READSubcommand(UI_READSubcommandValue.GET_STRING, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Get hardware version string
+			/// </summary>
+			/// <param name="LENGTH">Maximal length of string returned (-1 = no check)</param>
+			/// <param name="DESTINATION">String variable or handle to string</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_READSubcommand cmdGET_HW_VERS(IExpression<Data8> LENGTH, IExpression<DataString> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.UI_READSubcommand(UI_READSubcommandValue.GET_HW_VERS, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Get firmware version string
+			/// </summary>
+			/// <param name="LENGTH">Maximal length of string returned (-1 = no check)</param>
+			/// <param name="DESTINATION">String variable or handle to string</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_READSubcommand cmdGET_FW_VERS(IExpression<Data8> LENGTH, IExpression<DataString> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.UI_READSubcommand(UI_READSubcommandValue.GET_FW_VERS, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Get firmware build string
+			/// </summary>
+			/// <param name="LENGTH">Maximal length of string returned (-1 = no check)</param>
+			/// <param name="DESTINATION">String variable or handle to string</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_READSubcommand cmdGET_FW_BUILD(IExpression<Data8> LENGTH, IExpression<DataString> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.UI_READSubcommand(UI_READSubcommandValue.GET_FW_BUILD, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Get os build string
+			/// </summary>
+			/// <param name="LENGTH">Maximal length of string returned (-1 = no check)</param>
+			/// <param name="DESTINATION">String variable or handle to string</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_READSubcommand cmdGET_OS_BUILD(IExpression<Data8> LENGTH, IExpression<DataString> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.UI_READSubcommand(UI_READSubcommandValue.GET_OS_BUILD, parameterList.ToArray());
+			}
+
+			/// <param name="VALUE">Address from lms_cmdin</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_READSubcommand cmdGET_ADDRESS(IExpression<Data32> VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.UI_READSubcommand(UI_READSubcommandValue.GET_ADDRESS, parameterList.ToArray());
+			}
+
+			/// <param name="LENGTH">Maximal code stream length</param>
+			/// <param name="IMAGE">Address of image</param>
+			/// <param name="GLOBAL">Address of global variables</param>
+			/// <param name="FLAG">Flag tells if image is ready</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_READSubcommand cmdGET_CODE(IExpression<Data32> LENGTH, IExpression<Data32> IMAGE, IExpression<Data32> GLOBAL, IExpression<Data8> FLAG)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(IMAGE ?? throw new ArgumentNullException(nameof(IMAGE)));
+				parameterList.Add(GLOBAL ?? throw new ArgumentNullException(nameof(GLOBAL)));
+				parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
+				return new EV3.Opcodes.UI_READSubcommand(UI_READSubcommandValue.GET_CODE, parameterList.ToArray());
+			}
+
+			/// <param name="VALUE">Key value from lms_cmdin (0 = no key)</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_READSubcommand cmdKEY(IExpression<Data8> VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.UI_READSubcommand(UI_READSubcommandValue.KEY, parameterList.ToArray());
+			}
+
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_READSubcommand cmdGET_SHUTDOWN(IExpression<Data8> FLAG)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
+				return new EV3.Opcodes.UI_READSubcommand(UI_READSubcommandValue.GET_SHUTDOWN, parameterList.ToArray());
+			}
+
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_READSubcommand cmdGET_WARNING(IExpression<Data8> WARNINGS)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(WARNINGS ?? throw new ArgumentNullException(nameof(WARNINGS)));
+				return new EV3.Opcodes.UI_READSubcommand(UI_READSubcommandValue.GET_WARNING, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Get battery level in %
+			/// </summary>
+			/// <param name="PCT">Battery level [0..100]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_READSubcommand cmdGET_LBATT(IExpression<Data8> PCT)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(PCT ?? throw new ArgumentNullException(nameof(PCT)));
+				return new EV3.Opcodes.UI_READSubcommand(UI_READSubcommandValue.GET_LBATT, parameterList.ToArray());
+			}
+
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_READSubcommand cmdTEXTBOX_READ(IExpression<Data8> TEXT, IExpression<Data32> SIZE, IExpression<Data8> DEL, IExpression<Data8> LENGTH, IExpression<Data16> LINE, IExpression<Data8> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(TEXT ?? throw new ArgumentNullException(nameof(TEXT)));
+				parameterList.Add(SIZE ?? throw new ArgumentNullException(nameof(SIZE)));
+				parameterList.Add(DEL ?? throw new ArgumentNullException(nameof(DEL)));
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(LINE ?? throw new ArgumentNullException(nameof(LINE)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.UI_READSubcommand(UI_READSubcommandValue.TEXTBOX_READ, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Get version string
+			/// </summary>
+			/// <param name="LENGTH">Maximal length of string returned (-1 = no check)</param>
+			/// <param name="DESTINATION">String variable or handle to string</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_READSubcommand cmdGET_VERSION(IExpression<Data8> LENGTH, IExpression<DataString> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.UI_READSubcommand(UI_READSubcommandValue.GET_VERSION, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Get IP address string
+			/// </summary>
+			/// <param name="LENGTH">Maximal length of string returned (-1 = no check)</param>
+			/// <param name="DESTINATION">String variable or handle to string</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_READSubcommand cmdGET_IP(IExpression<Data8> LENGTH, IExpression<DataString> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.UI_READSubcommand(UI_READSubcommandValue.GET_IP, parameterList.ToArray());
+			}
+
+			/// <param name="VBATT">Battery voltage [V]</param>
+			/// <param name="IBATT">Battery current [A]</param>
+			/// <param name="IINT">Integrated battery current [A]</param>
+			/// <param name="IMOTOR">Motor current [A]</param>
+			/// <remarks>
+			/// All known hardware returns 0 for IMOTOR.
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_READSubcommand cmdGET_POWER(IExpression<DataFloat> VBATT, IExpression<DataFloat> IBATT, IExpression<DataFloat> IINT, IExpression<DataFloat> IMOTOR)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(VBATT ?? throw new ArgumentNullException(nameof(VBATT)));
+				parameterList.Add(IBATT ?? throw new ArgumentNullException(nameof(IBATT)));
+				parameterList.Add(IINT ?? throw new ArgumentNullException(nameof(IINT)));
+				parameterList.Add(IMOTOR ?? throw new ArgumentNullException(nameof(IMOTOR)));
+				return new EV3.Opcodes.UI_READSubcommand(UI_READSubcommandValue.GET_POWER, parameterList.ToArray());
+			}
+
+			/// <param name="STATE">SD card present [0..1]</param>
+			/// <param name="TOTAL">Kbytes in total</param>
+			/// <param name="FREE">Kbytes free</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_READSubcommand cmdGET_SDCARD(IExpression<Data8> STATE, IExpression<Data32> TOTAL, IExpression<Data32> FREE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(STATE ?? throw new ArgumentNullException(nameof(STATE)));
+				parameterList.Add(TOTAL ?? throw new ArgumentNullException(nameof(TOTAL)));
+				parameterList.Add(FREE ?? throw new ArgumentNullException(nameof(FREE)));
+				return new EV3.Opcodes.UI_READSubcommand(UI_READSubcommandValue.GET_SDCARD, parameterList.ToArray());
+			}
+
+			/// <param name="STATE">USB stick present [0..1]</param>
+			/// <param name="TOTAL">Kbytes in total</param>
+			/// <param name="FREE">Kbytes free</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_READSubcommand cmdGET_USBSTICK(IExpression<Data8> STATE, IExpression<Data32> TOTAL, IExpression<Data32> FREE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(STATE ?? throw new ArgumentNullException(nameof(STATE)));
+				parameterList.Add(TOTAL ?? throw new ArgumentNullException(nameof(TOTAL)));
+				parameterList.Add(FREE ?? throw new ArgumentNullException(nameof(FREE)));
+				return new EV3.Opcodes.UI_READSubcommand(UI_READSubcommandValue.GET_USBSTICK, parameterList.ToArray());
+			}
+
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_WRITESubcommand cmdWRITE_FLUSH()
+			{
+				var parameterList = new List<IByteCode>();
+				return new EV3.Opcodes.UI_WRITESubcommand(UI_WRITESubcommandValue.WRITE_FLUSH, parameterList.ToArray());
+			}
+
+			/// <param name="VALUE">Value to write</param>
+			/// <param name="FIGURES">Total number of figures inclusive decimal point</param>
+			/// <param name="DECIMALS">Number of decimals</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_WRITESubcommand cmdFLOATVALUE(IExpression<DataFloat> VALUE, IExpression<Data8> FIGURES, IExpression<Data8> DECIMALS)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				parameterList.Add(FIGURES ?? throw new ArgumentNullException(nameof(FIGURES)));
+				parameterList.Add(DECIMALS ?? throw new ArgumentNullException(nameof(DECIMALS)));
+				return new EV3.Opcodes.UI_WRITESubcommand(UI_WRITESubcommandValue.FLOATVALUE, parameterList.ToArray());
+			}
+
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_WRITESubcommand cmdSTAMP(IExpression<Data8> VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.UI_WRITESubcommand(UI_WRITESubcommandValue.STAMP, parameterList.ToArray());
+			}
+
+			/// <param name="STRING">String</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_WRITESubcommand cmdPUT_STRING(IExpression<DataString> STRING)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(STRING ?? throw new ArgumentNullException(nameof(STRING)));
+				return new EV3.Opcodes.UI_WRITESubcommand(UI_WRITESubcommandValue.PUT_STRING, parameterList.ToArray());
+			}
+
+			/// <param name="VALUE">Value to write</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_WRITESubcommand cmdVALUE8(IExpression<Data8> VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.UI_WRITESubcommand(UI_WRITESubcommandValue.VALUE8, parameterList.ToArray());
+			}
+
+			/// <param name="VALUE">Value to write</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_WRITESubcommand cmdVALUE16(IExpression<Data16> VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.UI_WRITESubcommand(UI_WRITESubcommandValue.VALUE16, parameterList.ToArray());
+			}
+
+			/// <param name="VALUE">Value to write</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_WRITESubcommand cmdVALUE32(IExpression<Data32> VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.UI_WRITESubcommand(UI_WRITESubcommandValue.VALUE32, parameterList.ToArray());
+			}
+
+			/// <param name="VALUE">Value to write</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_WRITESubcommand cmdVALUEF(IExpression<DataFloat> VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.UI_WRITESubcommand(UI_WRITESubcommandValue.VALUEF, parameterList.ToArray());
+			}
+
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_WRITESubcommand cmdADDRESS(IExpression<Data32> VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.UI_WRITESubcommand(UI_WRITESubcommandValue.ADDRESS, parameterList.ToArray());
+			}
+
+			/// <param name="ARRAY">First byte in byte array to write</param>
+			/// <param name="LENGTH">Length of array</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_WRITESubcommand cmdCODE(IExpression<Data8> ARRAY, IExpression<Data32> LENGTH)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(ARRAY ?? throw new ArgumentNullException(nameof(ARRAY)));
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				return new EV3.Opcodes.UI_WRITESubcommand(UI_WRITESubcommandValue.CODE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Send to brick when file down load is completed (plays sound and updates the UI browser)
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_WRITESubcommand cmdDOWNLOAD_END()
+			{
+				var parameterList = new List<IByteCode>();
+				return new EV3.Opcodes.UI_WRITESubcommand(UI_WRITESubcommandValue.DOWNLOAD_END, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Set or clear screen block status (if screen blocked - all graphical screen action are disabled)
+			/// </summary>
+			/// <param name="STATUS">Value [0 = normal,1 = blocked]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_WRITESubcommand cmdSCREEN_BLOCK(IExpression<Data8> STATUS)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(STATUS ?? throw new ArgumentNullException(nameof(STATUS)));
+				return new EV3.Opcodes.UI_WRITESubcommand(UI_WRITESubcommandValue.SCREEN_BLOCK, parameterList.ToArray());
+			}
+
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_WRITESubcommand cmdALLOW_PULSE(IExpression<Data8> VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.UI_WRITESubcommand(UI_WRITESubcommandValue.ALLOW_PULSE, parameterList.ToArray());
+			}
+
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_WRITESubcommand cmdSET_PULSE(IExpression<Data8> VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.UI_WRITESubcommand(UI_WRITESubcommandValue.SET_PULSE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Append line of text at the bottom of a text box
+			/// </summary>
+			/// <param name="TEXT">Text box text (must be zero terminated)</param>
+			/// <param name="SIZE">Maximal text size (including zero termination)</param>
+			/// <param name="DEL">Delimiter code</param>
+			/// <param name="SOURCE">String variable or handle to string to append</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_WRITESubcommand cmdTEXTBOX_APPEND(IExpression<DataString> TEXT, IExpression<Data32> SIZE, IExpression<Data8> DEL, IExpression<DataString> SOURCE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(TEXT ?? throw new ArgumentNullException(nameof(TEXT)));
+				parameterList.Add(SIZE ?? throw new ArgumentNullException(nameof(SIZE)));
+				parameterList.Add(DEL ?? throw new ArgumentNullException(nameof(DEL)));
+				parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
+				return new EV3.Opcodes.UI_WRITESubcommand(UI_WRITESubcommandValue.TEXTBOX_APPEND, parameterList.ToArray());
+			}
+
+			/// <param name="VALUE">Value [0,1]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_WRITESubcommand cmdSET_BUSY(IExpression<Data8> VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.UI_WRITESubcommand(UI_WRITESubcommandValue.SET_BUSY, parameterList.ToArray());
+			}
+
+			/// <param name="STATE">Value [0 = low,1 = high]</param>
+			/// <remarks>
+			/// This was only available on pre-release EV3 hardware.
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_WRITESubcommand cmdSET_TESTPIN(IExpression<Data8> STATE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(STATE ?? throw new ArgumentNullException(nameof(STATE)));
+				return new EV3.Opcodes.UI_WRITESubcommand(UI_WRITESubcommandValue.SET_TESTPIN, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Start the "Mindstorms" "run" screen
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_WRITESubcommand cmdINIT_RUN()
+			{
+				var parameterList = new List<IByteCode>();
+				return new EV3.Opcodes.UI_WRITESubcommand(UI_WRITESubcommandValue.INIT_RUN, parameterList.ToArray());
+			}
+
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_WRITESubcommand cmdUPDATE_RUN()
+			{
+				var parameterList = new List<IByteCode>();
+				return new EV3.Opcodes.UI_WRITESubcommand(UI_WRITESubcommandValue.UPDATE_RUN, parameterList.ToArray());
+			}
+
+			/// <param name="PATTERN">LED Pattern</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_WRITESubcommand cmdLED(IExpression<Data8> PATTERN)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(PATTERN ?? throw new ArgumentNullException(nameof(PATTERN)));
+				return new EV3.Opcodes.UI_WRITESubcommand(UI_WRITESubcommandValue.LED, parameterList.ToArray());
+			}
+
+			/// <param name="VALUE">Value [0,1]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_WRITESubcommand cmdPOWER(IExpression<Data8> VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.UI_WRITESubcommand(UI_WRITESubcommandValue.POWER, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Update tick to scroll graph horizontally in memory when drawing graph in "scope" mode
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_WRITESubcommand cmdGRAPH_SAMPLE()
+			{
+				var parameterList = new List<IByteCode>();
+				return new EV3.Opcodes.UI_WRITESubcommand(UI_WRITESubcommandValue.GRAPH_SAMPLE, parameterList.ToArray());
+			}
+
+			/// <param name="STATE">Value [0 = Off,1 = On]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_WRITESubcommand cmdTERMINAL(IExpression<Data8> STATE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(STATE ?? throw new ArgumentNullException(nameof(STATE)));
+				return new EV3.Opcodes.UI_WRITESubcommand(UI_WRITESubcommandValue.TERMINAL, parameterList.ToArray());
+			}
+
+			/// <param name="BUTTON"></param>
+			/// <param name="STATE">Button has been pressed (0 = no, 1 = yes)</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_BUTTONSubcommand cmdSHORTPRESS(IExpression<Data8> BUTTON, IExpression<Data8> STATE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(BUTTON ?? throw new ArgumentNullException(nameof(BUTTON)));
+				parameterList.Add(STATE ?? throw new ArgumentNullException(nameof(STATE)));
+				return new EV3.Opcodes.UI_BUTTONSubcommand(UI_BUTTONSubcommandValue.SHORTPRESS, parameterList.ToArray());
+			}
+
+			/// <param name="BUTTON"></param>
+			/// <param name="STATE">Button has been pressed (0 = no, 1 = yes)</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_BUTTONSubcommand cmdLONGPRESS(IExpression<Data8> BUTTON, IExpression<Data8> STATE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(BUTTON ?? throw new ArgumentNullException(nameof(BUTTON)));
+				parameterList.Add(STATE ?? throw new ArgumentNullException(nameof(STATE)));
+				return new EV3.Opcodes.UI_BUTTONSubcommand(UI_BUTTONSubcommandValue.LONGPRESS, parameterList.ToArray());
+			}
+
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_BUTTONSubcommand cmdWAIT_FOR_PRESS()
+			{
+				var parameterList = new List<IByteCode>();
+				return new EV3.Opcodes.UI_BUTTONSubcommand(UI_BUTTONSubcommandValue.WAIT_FOR_PRESS, parameterList.ToArray());
+			}
+
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_BUTTONSubcommand cmdFLUSH()
+			{
+				var parameterList = new List<IByteCode>();
+				return new EV3.Opcodes.UI_BUTTONSubcommand(UI_BUTTONSubcommandValue.FLUSH, parameterList.ToArray());
+			}
+
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_BUTTONSubcommand cmdPRESS(IExpression<Data8> BUTTON)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(BUTTON ?? throw new ArgumentNullException(nameof(BUTTON)));
+				return new EV3.Opcodes.UI_BUTTONSubcommand(UI_BUTTONSubcommandValue.PRESS, parameterList.ToArray());
+			}
+
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_BUTTONSubcommand cmdRELEASE(IExpression<Data8> BUTTON)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(BUTTON ?? throw new ArgumentNullException(nameof(BUTTON)));
+				return new EV3.Opcodes.UI_BUTTONSubcommand(UI_BUTTONSubcommandValue.RELEASE, parameterList.ToArray());
+			}
+
+			/// <param name="VALUE">Horizontal arrows data (-1 = left, +1 = right, 0 = not pressed)</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_BUTTONSubcommand cmdGET_HORZ(IExpression<Data16> VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.UI_BUTTONSubcommand(UI_BUTTONSubcommandValue.GET_HORZ, parameterList.ToArray());
+			}
+
+			/// <param name="VALUE">Vertical arrows data (-1 = up, +1 = down, 0 = not pressed)</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_BUTTONSubcommand cmdGET_VERT(IExpression<Data16> VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.UI_BUTTONSubcommand(UI_BUTTONSubcommandValue.GET_VERT, parameterList.ToArray());
+			}
+
+			/// <param name="BUTTON"></param>
+			/// <param name="STATE">Button is pressed (0 = no, 1 = yes)</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_BUTTONSubcommand cmdPRESSED(IExpression<Data8> BUTTON, IExpression<Data8> STATE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(BUTTON ?? throw new ArgumentNullException(nameof(BUTTON)));
+				parameterList.Add(STATE ?? throw new ArgumentNullException(nameof(STATE)));
+				return new EV3.Opcodes.UI_BUTTONSubcommand(UI_BUTTONSubcommandValue.PRESSED, parameterList.ToArray());
+			}
+
+			/// <param name="BLOCKED">Set UI back button blocked flag (0 = not blocked, 1 = blocked)</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_BUTTONSubcommand cmdSET_BACK_BLOCK(IExpression<Data8> BLOCKED)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(BLOCKED ?? throw new ArgumentNullException(nameof(BLOCKED)));
+				return new EV3.Opcodes.UI_BUTTONSubcommand(UI_BUTTONSubcommandValue.SET_BACK_BLOCK, parameterList.ToArray());
+			}
+
+			/// <param name="BLOCKED">Get UI back button blocked flag (0 = not blocked, 1 = blocked)</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_BUTTONSubcommand cmdGET_BACK_BLOCK(IExpression<Data8> BLOCKED)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(BLOCKED ?? throw new ArgumentNullException(nameof(BLOCKED)));
+				return new EV3.Opcodes.UI_BUTTONSubcommand(UI_BUTTONSubcommandValue.GET_BACK_BLOCK, parameterList.ToArray());
+			}
+
+			/// <param name="BUTTON"></param>
+			/// <param name="STATE">Button has been hold down(0 = no, 1 = yes)</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_BUTTONSubcommand cmdTESTSHORTPRESS(IExpression<Data8> BUTTON, IExpression<Data8> STATE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(BUTTON ?? throw new ArgumentNullException(nameof(BUTTON)));
+				parameterList.Add(STATE ?? throw new ArgumentNullException(nameof(STATE)));
+				return new EV3.Opcodes.UI_BUTTONSubcommand(UI_BUTTONSubcommandValue.TESTSHORTPRESS, parameterList.ToArray());
+			}
+
+			/// <param name="BUTTON"></param>
+			/// <param name="STATE">Button has been hold down(0 = no, 1 = yes)</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_BUTTONSubcommand cmdTESTLONGPRESS(IExpression<Data8> BUTTON, IExpression<Data8> STATE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(BUTTON ?? throw new ArgumentNullException(nameof(BUTTON)));
+				parameterList.Add(STATE ?? throw new ArgumentNullException(nameof(STATE)));
+				return new EV3.Opcodes.UI_BUTTONSubcommand(UI_BUTTONSubcommandValue.TESTLONGPRESS, parameterList.ToArray());
+			}
+
+			/// <param name="BUTTON"></param>
+			/// <param name="STATE">Button has been pressed (0 = no, 1 = yes)</param>
+			[Support(Official = true, Xtended = true, Compat = false)]
+			public static EV3.Opcodes.UI_BUTTONSubcommand cmdGET_BUMBED(IExpression<Data8> BUTTON, IExpression<Data8> STATE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(BUTTON ?? throw new ArgumentNullException(nameof(BUTTON)));
+				parameterList.Add(STATE ?? throw new ArgumentNullException(nameof(STATE)));
+				return new EV3.Opcodes.UI_BUTTONSubcommand(UI_BUTTONSubcommandValue.GET_BUMBED, parameterList.ToArray());
+			}
+
+			/// <param name="BUTTON"></param>
+			/// <param name="STATE">Button has been pressed (0 = no, 1 = yes)</param>
+			/// <remarks>
+			/// Renamed from GET_BUMBED
+			/// </remarks>
+			[Support(Official = false, Xtended = false, Compat = true)]
+			public static EV3.Opcodes.UI_BUTTONSubcommand cmdGET_BUMPED(IExpression<Data8> BUTTON, IExpression<Data8> STATE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(BUTTON ?? throw new ArgumentNullException(nameof(BUTTON)));
+				parameterList.Add(STATE ?? throw new ArgumentNullException(nameof(STATE)));
+				return new EV3.Opcodes.UI_BUTTONSubcommand(UI_BUTTONSubcommandValue.GET_BUMPED, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Get and clear click sound request (internal use only)
+			/// </summary>
+			/// <param name="CLICK">Click sound request (0 = no, 1 = yes)</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_BUTTONSubcommand cmdGET_CLICK(IExpression<Data8> CLICK)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(CLICK ?? throw new ArgumentNullException(nameof(CLICK)));
+				return new EV3.Opcodes.UI_BUTTONSubcommand(UI_BUTTONSubcommandValue.GET_CLICK, parameterList.ToArray());
+			}
+
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_DRAWSubcommand cmdUPDATE()
+			{
+				var parameterList = new List<IByteCode>();
+				return new EV3.Opcodes.UI_DRAWSubcommand(UI_DRAWSubcommandValue.UPDATE, parameterList.ToArray());
+			}
+
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_DRAWSubcommand cmdCLEAN()
+			{
+				var parameterList = new List<IByteCode>();
+				return new EV3.Opcodes.UI_DRAWSubcommand(UI_DRAWSubcommandValue.CLEAN, parameterList.ToArray());
+			}
+
+			/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
+			/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
+			/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_DRAWSubcommand cmdPIXEL(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
+				parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
+				parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
+				return new EV3.Opcodes.UI_DRAWSubcommand(UI_DRAWSubcommandValue.PIXEL, parameterList.ToArray());
+			}
+
+			/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
+			/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
+			/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
+			/// <param name="X1">X end [0..LCD_WIDTH]</param>
+			/// <param name="Y1 ">Y end [0..LCD_HEIGHT]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_DRAWSubcommand cmdLINE(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<Data16> X1, IExpression<Data16> Y1 )
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
+				parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
+				parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
+				parameterList.Add(X1 ?? throw new ArgumentNullException(nameof(X1)));
+				parameterList.Add(Y1  ?? throw new ArgumentNullException(nameof(Y1 )));
+				return new EV3.Opcodes.UI_DRAWSubcommand(UI_DRAWSubcommandValue.LINE, parameterList.ToArray());
+			}
+
+			/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
+			/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
+			/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
+			/// <param name="R">Radius</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_DRAWSubcommand cmdCIRCLE(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<Data16> R)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
+				parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
+				parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
+				parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
+				return new EV3.Opcodes.UI_DRAWSubcommand(UI_DRAWSubcommandValue.CIRCLE, parameterList.ToArray());
+			}
+
+			/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
+			/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
+			/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
+			/// <param name="STRING">Text to draw</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_DRAWSubcommand cmdTEXT(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<DataString> STRING)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
+				parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
+				parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
+				parameterList.Add(STRING ?? throw new ArgumentNullException(nameof(STRING)));
+				return new EV3.Opcodes.UI_DRAWSubcommand(UI_DRAWSubcommandValue.TEXT, parameterList.ToArray());
+			}
+
+			/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
+			/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
+			/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
+			/// <param name="TYPE">Icon type (pool)</param>
+			/// <param name="NO">Icon number</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_DRAWSubcommand cmdICON(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<Data8> TYPE, IExpression<Data8> NO)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
+				parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
+				parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
+				parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				return new EV3.Opcodes.UI_DRAWSubcommand(UI_DRAWSubcommandValue.ICON, parameterList.ToArray());
+			}
+
+			/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
+			/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
+			/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
+			/// <param name="IP">Address of picture</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_DRAWSubcommand cmdPICTURE(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<Data32> IP)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
+				parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
+				parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
+				parameterList.Add(IP ?? throw new ArgumentNullException(nameof(IP)));
+				return new EV3.Opcodes.UI_DRAWSubcommand(UI_DRAWSubcommandValue.PICTURE, parameterList.ToArray());
+			}
+
+			/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
+			/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
+			/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
+			/// <param name="VALUE">Value to write</param>
+			/// <param name="FIGURES">Total number of figures inclusive decimal point</param>
+			/// <param name="DECIMALS">Number of decimals</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_DRAWSubcommand cmdVALUE(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<DataFloat> VALUE, IExpression<Data8> FIGURES, IExpression<Data8> DECIMALS)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
+				parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
+				parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				parameterList.Add(FIGURES ?? throw new ArgumentNullException(nameof(FIGURES)));
+				parameterList.Add(DECIMALS ?? throw new ArgumentNullException(nameof(DECIMALS)));
+				return new EV3.Opcodes.UI_DRAWSubcommand(UI_DRAWSubcommandValue.VALUE, parameterList.ToArray());
+			}
+
+			/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
+			/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
+			/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
+			/// <param name="X1">X size [0..LCD_WIDTH - X0]</param>
+			/// <param name="Y1 ">Y size [0..LCD_HEIGHT - Y0]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_DRAWSubcommand cmdFILLRECT(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<Data16> X1, IExpression<Data16> Y1 )
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
+				parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
+				parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
+				parameterList.Add(X1 ?? throw new ArgumentNullException(nameof(X1)));
+				parameterList.Add(Y1  ?? throw new ArgumentNullException(nameof(Y1 )));
+				return new EV3.Opcodes.UI_DRAWSubcommand(UI_DRAWSubcommandValue.FILLRECT, parameterList.ToArray());
+			}
+
+			/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
+			/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
+			/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
+			/// <param name="X1">X size [0..LCD_WIDTH - X0]</param>
+			/// <param name="Y1 ">Y size [0..LCD_HEIGHT - Y0]</param>
+			[Support(Official = true, Xtended = false, Compat = false)]
+			public static EV3.Opcodes.UI_DRAWSubcommand cmdRECT(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<Data16> X1, IExpression<Data16> Y1 )
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
+				parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
+				parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
+				parameterList.Add(X1 ?? throw new ArgumentNullException(nameof(X1)));
+				parameterList.Add(Y1  ?? throw new ArgumentNullException(nameof(Y1 )));
+				return new EV3.Opcodes.UI_DRAWSubcommand(UI_DRAWSubcommandValue.RECT, parameterList.ToArray());
+			}
+
+			/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
+			/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
+			/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
+			/// <param name="X1">X size [0..LCD_WIDTH - X0]</param>
+			/// <param name="Y1 ">Y size [0..LCD_HEIGHT - Y0]</param>
+			/// <remarks>
+			/// renamed from RECT
+			/// </remarks>
+			[Support(Official = false, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_DRAWSubcommand cmdRECTANGLE(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<Data16> X1, IExpression<Data16> Y1 )
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
+				parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
+				parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
+				parameterList.Add(X1 ?? throw new ArgumentNullException(nameof(X1)));
+				parameterList.Add(Y1  ?? throw new ArgumentNullException(nameof(Y1 )));
+				return new EV3.Opcodes.UI_DRAWSubcommand(UI_DRAWSubcommandValue.RECTANGLE, parameterList.ToArray());
+			}
+
+			/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
+			/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
+			/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
+			/// <param name="ICON1">First icon</param>
+			/// <param name="ICON2">Second icon</param>
+			/// <param name="ICON3">Third icon</param>
+			/// <param name="STRING">Notification text</param>
+			/// <param name="STATE">State 0 = INIT</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_DRAWSubcommand cmdNOTIFICATION(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<Data8> ICON1, IExpression<Data8> ICON2, IExpression<Data8> ICON3, IExpression<DataString> STRING, IExpression<Data8> STATE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
+				parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
+				parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
+				parameterList.Add(ICON1 ?? throw new ArgumentNullException(nameof(ICON1)));
+				parameterList.Add(ICON2 ?? throw new ArgumentNullException(nameof(ICON2)));
+				parameterList.Add(ICON3 ?? throw new ArgumentNullException(nameof(ICON3)));
+				parameterList.Add(STRING ?? throw new ArgumentNullException(nameof(STRING)));
+				parameterList.Add(STATE ?? throw new ArgumentNullException(nameof(STATE)));
+				return new EV3.Opcodes.UI_DRAWSubcommand(UI_DRAWSubcommandValue.NOTIFICATION, parameterList.ToArray());
+			}
+
+			/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
+			/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
+			/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
+			/// <param name="ICON1">First icon</param>
+			/// <param name="ICON2">Second icon</param>
+			/// <param name="STRING">Question text</param>
+			/// <param name="STATE">State 0 = NO, 1 = OK</param>
+			/// <param name="OK">Answer 0 = NO, 1 = OK, -1 = SKIP</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_DRAWSubcommand cmdQUESTION(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<Data8> ICON1, IExpression<Data8> ICON2, IExpression<DataString> STRING, IExpression<Data8> STATE, IExpression<Data8> OK)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
+				parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
+				parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
+				parameterList.Add(ICON1 ?? throw new ArgumentNullException(nameof(ICON1)));
+				parameterList.Add(ICON2 ?? throw new ArgumentNullException(nameof(ICON2)));
+				parameterList.Add(STRING ?? throw new ArgumentNullException(nameof(STRING)));
+				parameterList.Add(STATE ?? throw new ArgumentNullException(nameof(STATE)));
+				parameterList.Add(OK ?? throw new ArgumentNullException(nameof(OK)));
+				return new EV3.Opcodes.UI_DRAWSubcommand(UI_DRAWSubcommandValue.QUESTION, parameterList.ToArray());
+			}
+
+			/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
+			/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
+			/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
+			/// <param name="ICON"></param>
+			/// <param name="LENGTH">Maximal string length</param>
+			/// <param name="DEFAULT">Default string (0 = none)</param>
+			/// <param name="CHARSET">Internal use (must be a variable initialised by a "valid character set")</param>
+			/// <param name="STRING">Keyboard input</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_DRAWSubcommand cmdKEYBOARD(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<Data8> ICON, IExpression<Data8> LENGTH, IExpression<DataString> DEFAULT, IExpression<Data8> CHARSET, IExpression<DataString> STRING)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
+				parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
+				parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
+				parameterList.Add(ICON ?? throw new ArgumentNullException(nameof(ICON)));
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(DEFAULT ?? throw new ArgumentNullException(nameof(DEFAULT)));
+				parameterList.Add(CHARSET ?? throw new ArgumentNullException(nameof(CHARSET)));
+				parameterList.Add(STRING ?? throw new ArgumentNullException(nameof(STRING)));
+				return new EV3.Opcodes.UI_DRAWSubcommand(UI_DRAWSubcommandValue.KEYBOARD, parameterList.ToArray());
+			}
+
+			/// <param name="TYPE">Browser Types Avaliable</param>
+			/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
+			/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
+			/// <param name="X1">X size [0..LCD_WIDTH]</param>
+			/// <param name="Y1">Y size [0..LCD_HEIGHT]</param>
+			/// <param name="LENGTH">Maximal string length</param>
+			/// <param name="ITEM_TYPE">Item type (folder, byte code file, sound file, ...)(must be a zero initialised variable)</param>
+			/// <param name="STRING">Selected item name</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_DRAWSubcommand cmdBROWSE(IExpression<Data8> TYPE, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<Data16> X1, IExpression<Data16> Y1, IExpression<Data8> LENGTH, IExpression<Data8> ITEM_TYPE, IExpression<DataString> STRING)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
+				parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
+				parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
+				parameterList.Add(X1 ?? throw new ArgumentNullException(nameof(X1)));
+				parameterList.Add(Y1 ?? throw new ArgumentNullException(nameof(Y1)));
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(ITEM_TYPE ?? throw new ArgumentNullException(nameof(ITEM_TYPE)));
+				parameterList.Add(STRING ?? throw new ArgumentNullException(nameof(STRING)));
+				return new EV3.Opcodes.UI_DRAWSubcommand(UI_DRAWSubcommandValue.BROWSE, parameterList.ToArray());
+			}
+
+			/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
+			/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
+			/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
+			/// <param name="X1">X size [0..LCD_WIDTH]</param>
+			/// <param name="Y1">Y size [0..LCD_HEIGHT]</param>
+			/// <param name="MIN">Minimum value</param>
+			/// <param name="MAX">Maximum value</param>
+			/// <param name="ACT">Actual value</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_DRAWSubcommand cmdVERTBAR(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<Data16> X1, IExpression<Data16> Y1, IExpression<Data16> MIN, IExpression<Data16> MAX, IExpression<Data16> ACT)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
+				parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
+				parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
+				parameterList.Add(X1 ?? throw new ArgumentNullException(nameof(X1)));
+				parameterList.Add(Y1 ?? throw new ArgumentNullException(nameof(Y1)));
+				parameterList.Add(MIN ?? throw new ArgumentNullException(nameof(MIN)));
+				parameterList.Add(MAX ?? throw new ArgumentNullException(nameof(MAX)));
+				parameterList.Add(ACT ?? throw new ArgumentNullException(nameof(ACT)));
+				return new EV3.Opcodes.UI_DRAWSubcommand(UI_DRAWSubcommandValue.VERTBAR, parameterList.ToArray());
+			}
+
+			/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
+			/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
+			/// <param name="X1">X size [0..LCD_WIDTH]</param>
+			/// <param name="Y1 ">Y size [0..LCD_HEIGHT]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_DRAWSubcommand cmdINVERSERECT(IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<Data16> X1, IExpression<Data16> Y1 )
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
+				parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
+				parameterList.Add(X1 ?? throw new ArgumentNullException(nameof(X1)));
+				parameterList.Add(Y1  ?? throw new ArgumentNullException(nameof(Y1 )));
+				return new EV3.Opcodes.UI_DRAWSubcommand(UI_DRAWSubcommandValue.INVERSERECT, parameterList.ToArray());
+			}
+
+			/// <param name="TYPE">Font type [0..2] font will change to 0 when UPDATE is called</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_DRAWSubcommand cmdSELECT_FONT(IExpression<Data8> TYPE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
+				return new EV3.Opcodes.UI_DRAWSubcommand(UI_DRAWSubcommandValue.SELECT_FONT, parameterList.ToArray());
+			}
+
+			/// <param name="ENABLE">Enable top status line (0 = disabled, 1 = enabled)</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_DRAWSubcommand cmdTOPLINE(IExpression<Data8> ENABLE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(ENABLE ?? throw new ArgumentNullException(nameof(ENABLE)));
+				return new EV3.Opcodes.UI_DRAWSubcommand(UI_DRAWSubcommandValue.TOPLINE, parameterList.ToArray());
+			}
+
+			/// <param name="COLOR">Color [BG_COLOR..FG_COLOR] (Color != BG_COLOR and FG_COLOR -&gt; test pattern)</param>
+			/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
+			/// <param name="Y1">X size [0..LCD_HEIGHT]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_DRAWSubcommand cmdFILLWINDOW(IExpression<Data8> COLOR, IExpression<Data16> Y0, IExpression<Data16> Y1)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
+				parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
+				parameterList.Add(Y1 ?? throw new ArgumentNullException(nameof(Y1)));
+				return new EV3.Opcodes.UI_DRAWSubcommand(UI_DRAWSubcommandValue.FILLWINDOW, parameterList.ToArray());
+			}
+
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_DRAWSubcommand cmdSCROLL(IExpression<Data16> Y)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(Y ?? throw new ArgumentNullException(nameof(Y)));
+				return new EV3.Opcodes.UI_DRAWSubcommand(UI_DRAWSubcommandValue.SCROLL, parameterList.ToArray());
+			}
+
+			/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
+			/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
+			/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
+			/// <param name="X1">X end [0..LCD_WIDTH]</param>
+			/// <param name="Y1 ">Y end [0..LCD_HEIGHT]</param>
+			/// <param name="ON ">On pixels</param>
+			/// <param name="OFF ">Off pixels</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_DRAWSubcommand cmdDOTLINE(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<Data16> X1, IExpression<Data16> Y1 , IExpression<Data16> ON , IExpression<Data16> OFF )
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
+				parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
+				parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
+				parameterList.Add(X1 ?? throw new ArgumentNullException(nameof(X1)));
+				parameterList.Add(Y1  ?? throw new ArgumentNullException(nameof(Y1 )));
+				parameterList.Add(ON  ?? throw new ArgumentNullException(nameof(ON )));
+				parameterList.Add(OFF  ?? throw new ArgumentNullException(nameof(OFF )));
+				return new EV3.Opcodes.UI_DRAWSubcommand(UI_DRAWSubcommandValue.DOTLINE, parameterList.ToArray());
+			}
+
+			/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
+			/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
+			/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
+			/// <param name="VALUE">Value to write</param>
+			/// <param name="FIGURES">Total number of figures inclusive decimal point</param>
+			/// <param name="DECIMALS">Number of decimals</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_DRAWSubcommand cmdVIEW_VALUE(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<DataFloat> VALUE, IExpression<Data8> FIGURES, IExpression<Data8> DECIMALS)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
+				parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
+				parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				parameterList.Add(FIGURES ?? throw new ArgumentNullException(nameof(FIGURES)));
+				parameterList.Add(DECIMALS ?? throw new ArgumentNullException(nameof(DECIMALS)));
+				return new EV3.Opcodes.UI_DRAWSubcommand(UI_DRAWSubcommandValue.VIEW_VALUE, parameterList.ToArray());
+			}
+
+			/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
+			/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
+			/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
+			/// <param name="VALUE">Value to write</param>
+			/// <param name="FIGURES">Total number of figures inclusive decimal point</param>
+			/// <param name="DECIMALS">Number of decimals</param>
+			/// <param name="LENGTH">Maximal string length</param>
+			/// <param name="STRING">Text to draw</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_DRAWSubcommand cmdVIEW_UNIT(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<DataFloat> VALUE, IExpression<Data8> FIGURES, IExpression<Data8> DECIMALS, IExpression<Data8> LENGTH, IExpression<DataString> STRING)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
+				parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
+				parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				parameterList.Add(FIGURES ?? throw new ArgumentNullException(nameof(FIGURES)));
+				parameterList.Add(DECIMALS ?? throw new ArgumentNullException(nameof(DECIMALS)));
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(STRING ?? throw new ArgumentNullException(nameof(STRING)));
+				return new EV3.Opcodes.UI_DRAWSubcommand(UI_DRAWSubcommandValue.VIEW_UNIT, parameterList.ToArray());
+			}
+
+			/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
+			/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
+			/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
+			/// <param name="R">Radius</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_DRAWSubcommand cmdFILLCIRCLE(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<Data16> R)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
+				parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
+				parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
+				parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
+				return new EV3.Opcodes.UI_DRAWSubcommand(UI_DRAWSubcommandValue.FILLCIRCLE, parameterList.ToArray());
+			}
+
+			/// <param name="NO">Level number</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_DRAWSubcommand cmdSTORE(IExpression<Data8> NO)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				return new EV3.Opcodes.UI_DRAWSubcommand(UI_DRAWSubcommandValue.STORE, parameterList.ToArray());
+			}
+
+			/// <param name="NO">Level number (N=0 -&gt; Saved screen just before run)</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_DRAWSubcommand cmdRESTORE(IExpression<Data8> NO)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				return new EV3.Opcodes.UI_DRAWSubcommand(UI_DRAWSubcommandValue.RESTORE, parameterList.ToArray());
+			}
+
+			/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
+			/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
+			/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
+			/// <param name="STATE">State 0 = INIT</param>
+			/// <param name="ICONS">bitfield with icons</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_DRAWSubcommand cmdICON_QUESTION(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<Data8> STATE, IExpression<Data32> ICONS)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
+				parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
+				parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
+				parameterList.Add(STATE ?? throw new ArgumentNullException(nameof(STATE)));
+				parameterList.Add(ICONS ?? throw new ArgumentNullException(nameof(ICONS)));
+				return new EV3.Opcodes.UI_DRAWSubcommand(UI_DRAWSubcommandValue.ICON_QUESTION, parameterList.ToArray());
+			}
+
+			/// <param name="COLOR">Color [BG_COLOR..FG_COLOR]</param>
+			/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
+			/// <param name="Y0">Y start cord [0..LCD_HEIGHT]</param>
+			/// <param name="NAME">File name</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_DRAWSubcommand cmdBMPFILE(IExpression<Data8> COLOR, IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<DataString> NAME)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(COLOR ?? throw new ArgumentNullException(nameof(COLOR)));
+				parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
+				parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
+				parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
+				return new EV3.Opcodes.UI_DRAWSubcommand(UI_DRAWSubcommandValue.BMPFILE, parameterList.ToArray());
+			}
+
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_DRAWSubcommand cmdPOPUP(IExpression<Data8> OPEN)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(OPEN ?? throw new ArgumentNullException(nameof(OPEN)));
+				return new EV3.Opcodes.UI_DRAWSubcommand(UI_DRAWSubcommandValue.POPUP, parameterList.ToArray());
+			}
+
+			/// <param name="X0">X start cord [0..LCD_WIDTH]</param>
+			/// <param name="X1">X size [0..LCD_WIDTH - X0]</param>
+			/// <param name="ITEMS">Number of datasets in arrays</param>
+			/// <param name="OFFSET">DATA16 array (handle) containing Y start cord [0..LCD_HEIGHT]</param>
+			/// <param name="SPAN">DATA16 array (handle) containing Y size [0..(LCD_HEIGHT - hOFFSET[])]</param>
+			/// <param name="MIN">DATAF array (handle) containing min values</param>
+			/// <param name="MAX">DATAF array (handle) containing max values</param>
+			/// <param name="SAMPLE">DATAF array (handle) containing sample values</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_DRAWSubcommand cmdGRAPH_SETUP(IExpression<Data16> X0, IExpression<Data16> X1, IExpression<Data16> ITEMS, IExpression<Data16> OFFSET, IExpression<Data8> SPAN, IExpression<Data16> MIN, IExpression<Data16> MAX, IExpression<Data16> SAMPLE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
+				parameterList.Add(X1 ?? throw new ArgumentNullException(nameof(X1)));
+				parameterList.Add(ITEMS ?? throw new ArgumentNullException(nameof(ITEMS)));
+				parameterList.Add(OFFSET ?? throw new ArgumentNullException(nameof(OFFSET)));
+				parameterList.Add(SPAN ?? throw new ArgumentNullException(nameof(SPAN)));
+				parameterList.Add(MIN ?? throw new ArgumentNullException(nameof(MIN)));
+				parameterList.Add(MAX ?? throw new ArgumentNullException(nameof(MAX)));
+				parameterList.Add(SAMPLE ?? throw new ArgumentNullException(nameof(SAMPLE)));
+				return new EV3.Opcodes.UI_DRAWSubcommand(UI_DRAWSubcommandValue.GRAPH_SETUP, parameterList.ToArray());
+			}
+
+			/// <param name="VIEW">Dataset number to view (0=all)</param>
+			/// <param name="ACTUAL"></param>
+			/// <param name="LOWEST"></param>
+			/// <param name="HIGHEST"></param>
+			/// <param name="AVERAGE"></param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_DRAWSubcommand cmdGRAPH_DRAW(IExpression<Data8> VIEW, IExpression<DataFloat> ACTUAL, IExpression<DataFloat> LOWEST, IExpression<DataFloat> HIGHEST, IExpression<DataFloat> AVERAGE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(VIEW ?? throw new ArgumentNullException(nameof(VIEW)));
+				parameterList.Add(ACTUAL ?? throw new ArgumentNullException(nameof(ACTUAL)));
+				parameterList.Add(LOWEST ?? throw new ArgumentNullException(nameof(LOWEST)));
+				parameterList.Add(HIGHEST ?? throw new ArgumentNullException(nameof(HIGHEST)));
+				parameterList.Add(AVERAGE ?? throw new ArgumentNullException(nameof(AVERAGE)));
+				return new EV3.Opcodes.UI_DRAWSubcommand(UI_DRAWSubcommandValue.GRAPH_DRAW, parameterList.ToArray());
+			}
+
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.UI_DRAWSubcommand cmdTEXTBOX(IExpression<Data16> X0, IExpression<Data16> Y0, IExpression<Data16> X1, IExpression<Data16> Y1, IExpression<Data8> TEXT, IExpression<Data32> SIZE, IExpression<Data8> DEL, IExpression<Data8> LINE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(X0 ?? throw new ArgumentNullException(nameof(X0)));
+				parameterList.Add(Y0 ?? throw new ArgumentNullException(nameof(Y0)));
+				parameterList.Add(X1 ?? throw new ArgumentNullException(nameof(X1)));
+				parameterList.Add(Y1 ?? throw new ArgumentNullException(nameof(Y1)));
+				parameterList.Add(TEXT ?? throw new ArgumentNullException(nameof(TEXT)));
+				parameterList.Add(SIZE ?? throw new ArgumentNullException(nameof(SIZE)));
+				parameterList.Add(DEL ?? throw new ArgumentNullException(nameof(DEL)));
+				parameterList.Add(LINE ?? throw new ArgumentNullException(nameof(LINE)));
+				return new EV3.Opcodes.UI_DRAWSubcommand(UI_DRAWSubcommandValue.TEXTBOX, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// e^x            r = expf(x)
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.MATHSubcommand cmdEXP(IExpression<DataFloat> X, IExpression<DataFloat> R)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
+				parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
+				return new EV3.Opcodes.MATHSubcommand(MATHSubcommandValue.EXP, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Modulo         r = fmod(x,y)
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.MATHSubcommand cmdMOD(IExpression<DataFloat> X, IExpression<DataFloat> Y, IExpression<DataFloat> R)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
+				parameterList.Add(Y ?? throw new ArgumentNullException(nameof(Y)));
+				parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
+				return new EV3.Opcodes.MATHSubcommand(MATHSubcommandValue.MOD, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Floor          r = floor(x)
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.MATHSubcommand cmdFLOOR(IExpression<DataFloat> X, IExpression<DataFloat> R)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
+				parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
+				return new EV3.Opcodes.MATHSubcommand(MATHSubcommandValue.FLOOR, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Ceiling        r = ceil(x)
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.MATHSubcommand cmdCEIL(IExpression<DataFloat> X, IExpression<DataFloat> R)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
+				parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
+				return new EV3.Opcodes.MATHSubcommand(MATHSubcommandValue.CEIL, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Round          r = round(x)
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.MATHSubcommand cmdROUND(IExpression<DataFloat> X, IExpression<DataFloat> R)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
+				parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
+				return new EV3.Opcodes.MATHSubcommand(MATHSubcommandValue.ROUND, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Absolute       r = fabs(x)
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.MATHSubcommand cmdABS(IExpression<DataFloat> X, IExpression<DataFloat> R)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
+				parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
+				return new EV3.Opcodes.MATHSubcommand(MATHSubcommandValue.ABS, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Negate         r = 0.0 - x
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.MATHSubcommand cmdNEGATE(IExpression<DataFloat> X, IExpression<DataFloat> R)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
+				parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
+				return new EV3.Opcodes.MATHSubcommand(MATHSubcommandValue.NEGATE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Squareroot     r = sqrt(x)
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.MATHSubcommand cmdSQRT(IExpression<DataFloat> X, IExpression<DataFloat> R)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
+				parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
+				return new EV3.Opcodes.MATHSubcommand(MATHSubcommandValue.SQRT, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Log            r = log10(x)
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.MATHSubcommand cmdLOG(IExpression<DataFloat> X, IExpression<DataFloat> R)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
+				parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
+				return new EV3.Opcodes.MATHSubcommand(MATHSubcommandValue.LOG, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Ln             r = log(x)
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.MATHSubcommand cmdLN(IExpression<DataFloat> X, IExpression<DataFloat> R)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
+				parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
+				return new EV3.Opcodes.MATHSubcommand(MATHSubcommandValue.LN, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Sin (R = sinf(X))
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.MATHSubcommand cmdSIN(IExpression<DataFloat> X, IExpression<DataFloat> R)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
+				parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
+				return new EV3.Opcodes.MATHSubcommand(MATHSubcommandValue.SIN, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Cos (R = cos(X))
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.MATHSubcommand cmdCOS(IExpression<DataFloat> X, IExpression<DataFloat> R)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
+				parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
+				return new EV3.Opcodes.MATHSubcommand(MATHSubcommandValue.COS, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Tan (R = tanf(X))
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.MATHSubcommand cmdTAN(IExpression<DataFloat> X, IExpression<DataFloat> R)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
+				parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
+				return new EV3.Opcodes.MATHSubcommand(MATHSubcommandValue.TAN, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// ASin (R = asinf(X))
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.MATHSubcommand cmdASIN(IExpression<DataFloat> X, IExpression<DataFloat> R)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
+				parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
+				return new EV3.Opcodes.MATHSubcommand(MATHSubcommandValue.ASIN, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// ACos (R = acos(X))
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.MATHSubcommand cmdACOS(IExpression<DataFloat> X, IExpression<DataFloat> R)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
+				parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
+				return new EV3.Opcodes.MATHSubcommand(MATHSubcommandValue.ACOS, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// ATan (R = atanf(X))
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.MATHSubcommand cmdATAN(IExpression<DataFloat> X, IExpression<DataFloat> R)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
+				parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
+				return new EV3.Opcodes.MATHSubcommand(MATHSubcommandValue.ATAN, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Modulo DATA8   r = x % y
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.MATHSubcommand cmdMOD8(IExpression<Data8> X, IExpression<Data8> Y, IExpression<Data8> R)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
+				parameterList.Add(Y ?? throw new ArgumentNullException(nameof(Y)));
+				parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
+				return new EV3.Opcodes.MATHSubcommand(MATHSubcommandValue.MOD8, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Modulo DATA16  r = x % y
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.MATHSubcommand cmdMOD16(IExpression<Data16> X, IExpression<Data16> Y, IExpression<Data16> R)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
+				parameterList.Add(Y ?? throw new ArgumentNullException(nameof(Y)));
+				parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
+				return new EV3.Opcodes.MATHSubcommand(MATHSubcommandValue.MOD16, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Modulo DATA32  r = x % y
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.MATHSubcommand cmdMOD32(IExpression<Data32> X, IExpression<Data32> Y, IExpression<Data32> R)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
+				parameterList.Add(Y ?? throw new ArgumentNullException(nameof(Y)));
+				parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
+				return new EV3.Opcodes.MATHSubcommand(MATHSubcommandValue.MOD32, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Exponent       r = powf(x,y)
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.MATHSubcommand cmdPOW(IExpression<DataFloat> X, IExpression<DataFloat> Y, IExpression<DataFloat> R)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
+				parameterList.Add(Y ?? throw new ArgumentNullException(nameof(Y)));
+				parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
+				return new EV3.Opcodes.MATHSubcommand(MATHSubcommandValue.POW, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Truncate       r = (float)((int)(x * pow(y))) / pow(y)
+			/// </summary>
+			/// <param name="X">Value</param>
+			/// <param name="P">Precision [0..9]</param>
+			/// <param name="R">Result</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.MATHSubcommand cmdTRUNC(IExpression<DataFloat> X, IExpression<Data8> P, IExpression<DataFloat> R)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(X ?? throw new ArgumentNullException(nameof(X)));
+				parameterList.Add(P ?? throw new ArgumentNullException(nameof(P)));
+				parameterList.Add(R ?? throw new ArgumentNullException(nameof(R)));
+				return new EV3.Opcodes.MATHSubcommand(MATHSubcommandValue.TRUNC, parameterList.ToArray());
+			}
+
+			/// <param name="LENGTH">Maximal code stream length</param>
+			/// <param name="IMAGE">Address of image</param>
+			/// <param name="GLOBAL">Address of global variables</param>
+			/// <param name="FLAG">Flag that tells if image is ready</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.COM_READSubcommand cmdCOMMAND(IExpression<Data32> LENGTH, IExpression<Data32> IMAGE, IExpression<Data32> GLOBAL, IExpression<Data8> FLAG)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(IMAGE ?? throw new ArgumentNullException(nameof(IMAGE)));
+				parameterList.Add(GLOBAL ?? throw new ArgumentNullException(nameof(GLOBAL)));
+				parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
+				return new EV3.Opcodes.COM_READSubcommand(COM_READSubcommandValue.COMMAND, parameterList.ToArray());
+			}
+
+			/// <param name="IMAGE">Address of image</param>
+			/// <param name="GLOBAL">Address of global variables</param>
+			/// <param name="STATUS">Status</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.COM_WRITESubcommand cmdREPLY(IExpression<Data32> IMAGE, IExpression<Data32> GLOBAL, IExpression<Data8> STATUS)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(IMAGE ?? throw new ArgumentNullException(nameof(IMAGE)));
+				parameterList.Add(GLOBAL ?? throw new ArgumentNullException(nameof(GLOBAL)));
+				parameterList.Add(STATUS ?? throw new ArgumentNullException(nameof(STATUS)));
+				return new EV3.Opcodes.COM_WRITESubcommand(COM_WRITESubcommandValue.REPLY, parameterList.ToArray());
+			}
+
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.SOUNDSubcommand cmdBREAK()
+			{
+				var parameterList = new List<IByteCode>();
+				return new EV3.Opcodes.SOUNDSubcommand(SOUNDSubcommandValue.BREAK, parameterList.ToArray());
+			}
+
+			/// <param name="VOLUME">Volume [0..100]</param>
+			/// <param name="FREQUENCY">Frequency [Hz]</param>
+			/// <param name="DURATION">Duration [mS]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.SOUNDSubcommand cmdTONE(IExpression<Data8> VOLUME, IExpression<Data16> FREQUENCY, IExpression<Data16> DURATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(VOLUME ?? throw new ArgumentNullException(nameof(VOLUME)));
+				parameterList.Add(FREQUENCY ?? throw new ArgumentNullException(nameof(FREQUENCY)));
+				parameterList.Add(DURATION ?? throw new ArgumentNullException(nameof(DURATION)));
+				return new EV3.Opcodes.SOUNDSubcommand(SOUNDSubcommandValue.TONE, parameterList.ToArray());
+			}
+
+			/// <param name="VOLUME">Volume [0..100]</param>
+			/// <param name="NAME">File name</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.SOUNDSubcommand cmdPLAY(IExpression<Data8> VOLUME, IExpression<DataString> NAME)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(VOLUME ?? throw new ArgumentNullException(nameof(VOLUME)));
+				parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
+				return new EV3.Opcodes.SOUNDSubcommand(SOUNDSubcommandValue.PLAY, parameterList.ToArray());
+			}
+
+			/// <param name="VOLUME">Volume [0..100]</param>
+			/// <param name="NAME">File name</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.SOUNDSubcommand cmdREPEAT(IExpression<Data8> VOLUME, IExpression<DataString> NAME)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(VOLUME ?? throw new ArgumentNullException(nameof(VOLUME)));
+				parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
+				return new EV3.Opcodes.SOUNDSubcommand(SOUNDSubcommandValue.REPEAT, parameterList.ToArray());
+			}
+
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.SOUNDSubcommand cmdSERVICE()
+			{
+				var parameterList = new List<IByteCode>();
+				return new EV3.Opcodes.SOUNDSubcommand(SOUNDSubcommandValue.SERVICE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Insert type in table
+			/// </summary>
+			/// <param name="TYPEDATA">String variable or handle to string containing type data</param>
+			/// <param name="FORCE">Force type insert even if present (0 = don't force, 1 = force)</param>
+			/// <param name="ERROR">Error if not Third Party type (0 = no error, 1 = error or known)</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.INPUT_DEVICESubcommand cmdINSERT_TYPE(IExpression<DataString> TYPEDATA, IExpression<Data8> FORCE, IExpression<Data8> ERROR)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(TYPEDATA ?? throw new ArgumentNullException(nameof(TYPEDATA)));
+				parameterList.Add(FORCE ?? throw new ArgumentNullException(nameof(FORCE)));
+				parameterList.Add(ERROR ?? throw new ArgumentNullException(nameof(ERROR)));
+				return new EV3.Opcodes.INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.INSERT_TYPE, parameterList.ToArray());
+			}
+
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NO">Port number</param>
+			/// <param name="DATASETS">Number of data sets</param>
+			/// <param name="FORMAT">Format [0..3]</param>
+			/// <param name="MODES">Number of modes [1..8]</param>
+			/// <param name="VIEWS">Number of views [1..8]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.INPUT_DEVICESubcommand cmdGET_FORMAT(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> DATASETS, IExpression<Data8> FORMAT, IExpression<Data8> MODES, IExpression<Data8> VIEWS)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				parameterList.Add(DATASETS ?? throw new ArgumentNullException(nameof(DATASETS)));
+				parameterList.Add(FORMAT ?? throw new ArgumentNullException(nameof(FORMAT)));
+				parameterList.Add(MODES ?? throw new ArgumentNullException(nameof(MODES)));
+				parameterList.Add(VIEWS ?? throw new ArgumentNullException(nameof(VIEWS)));
+				return new EV3.Opcodes.INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.GET_FORMAT, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Apply new minimum and maximum raw value for device type to be used in scaling PCT and SI
+			/// </summary>
+			/// <param name="TYPE">Device type id from typedata.rcf</param>
+			/// <param name="MODE">Device mode [0..7]</param>
+			/// <param name="CAL_MIN">32 bit raw minimum value (Zero)</param>
+			/// <param name="CAL_MAX">32 bit raw maximum value (Full scale)</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.INPUT_DEVICESubcommand cmdCAL_MINMAX(IExpression<Data8> TYPE, IExpression<Data8> MODE, IExpression<Data32> CAL_MIN, IExpression<Data32> CAL_MAX)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
+				parameterList.Add(MODE ?? throw new ArgumentNullException(nameof(MODE)));
+				parameterList.Add(CAL_MIN ?? throw new ArgumentNullException(nameof(CAL_MIN)));
+				parameterList.Add(CAL_MAX ?? throw new ArgumentNullException(nameof(CAL_MAX)));
+				return new EV3.Opcodes.INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.CAL_MINMAX, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Apply the default minimum and maximum raw value for device type to be used in scaling PCT and SI
+			/// </summary>
+			/// <param name="TYPE">Device type id from typedata.rcf</param>
+			/// <param name="MODE">Device mode [0..7]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.INPUT_DEVICESubcommand cmdCAL_DEFAULT(IExpression<Data8> TYPE, IExpression<Data8> MODE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
+				parameterList.Add(MODE ?? throw new ArgumentNullException(nameof(MODE)));
+				return new EV3.Opcodes.INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.CAL_DEFAULT, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Get device type and mode
+			/// </summary>
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NO">Port number</param>
+			/// <param name="TYPE">Device type id from typedata.rcf</param>
+			/// <param name="MODE">Device mode [0..7]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.INPUT_DEVICESubcommand cmdGET_TYPEMODE(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> TYPE, IExpression<Data8> MODE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
+				parameterList.Add(MODE ?? throw new ArgumentNullException(nameof(MODE)));
+				return new EV3.Opcodes.INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.GET_TYPEMODE, parameterList.ToArray());
+			}
+
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NO">Port number</param>
+			/// <param name="LENGTH">Maximal length of string returned (-1 = no check)</param>
+			/// <param name="DESTINATION">String variable or handle to string</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.INPUT_DEVICESubcommand cmdGET_SYMBOL(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> LENGTH, IExpression<DataString> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.GET_SYMBOL, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Apply new minimum raw value for device type to be used in scaling PCT and SI
+			/// </summary>
+			/// <param name="TYPE">Device type id from typedata.rcf</param>
+			/// <param name="MODE">Device mode [0..7]</param>
+			/// <param name="CAL_MIN">32 bit raw minimum value (Zero)</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.INPUT_DEVICESubcommand cmdCAL_MIN(IExpression<Data8> TYPE, IExpression<Data8> MODE, IExpression<Data32> CAL_MIN)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
+				parameterList.Add(MODE ?? throw new ArgumentNullException(nameof(MODE)));
+				parameterList.Add(CAL_MIN ?? throw new ArgumentNullException(nameof(CAL_MIN)));
+				return new EV3.Opcodes.INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.CAL_MIN, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Apply new maximum raw value for device type to be used in scaling PCT and SI
+			/// </summary>
+			/// <param name="TYPE">Device type id from typedata.rcf</param>
+			/// <param name="MODE">Device mode [0..7]</param>
+			/// <param name="CAL_MAX">32 bit SI maximum value (Full scale)</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.INPUT_DEVICESubcommand cmdCAL_MAX(IExpression<Data8> TYPE, IExpression<Data8> MODE, IExpression<Data32> CAL_MAX)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
+				parameterList.Add(MODE ?? throw new ArgumentNullException(nameof(MODE)));
+				parameterList.Add(CAL_MAX ?? throw new ArgumentNullException(nameof(CAL_MAX)));
+				return new EV3.Opcodes.INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.CAL_MAX, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Generic setup/read IIC sensors
+			/// </summary>
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NO">Port number</param>
+			/// <param name="REPEAT">Repeat setup/read "REPEAT" times (0 = infinite)</param>
+			/// <param name="TIME">Time between repeats [10..1000mS] (0 = 10)</param>
+			/// <param name="WRITE_LEN">No of bytes to write</param>
+			/// <param name="WRITE_DATA">DATA8 array (handle) of data to write</param>
+			/// <param name="READ_LEN">No of bytes to read</param>
+			/// <param name="READ_DATA">DATA8 array (handle) to read into</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.INPUT_DEVICESubcommand cmdSETUP(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> REPEAT, IExpression<Data16> TIME, IExpression<Data8> WRITE_LEN, IExpression<Data8> WRITE_DATA, IExpression<Data8> READ_LEN, IExpression<Data8> READ_DATA)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				parameterList.Add(REPEAT ?? throw new ArgumentNullException(nameof(REPEAT)));
+				parameterList.Add(TIME ?? throw new ArgumentNullException(nameof(TIME)));
+				parameterList.Add(WRITE_LEN ?? throw new ArgumentNullException(nameof(WRITE_LEN)));
+				parameterList.Add(WRITE_DATA ?? throw new ArgumentNullException(nameof(WRITE_DATA)));
+				parameterList.Add(READ_LEN ?? throw new ArgumentNullException(nameof(READ_LEN)));
+				parameterList.Add(READ_DATA ?? throw new ArgumentNullException(nameof(READ_DATA)));
+				return new EV3.Opcodes.INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.SETUP, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Clear all devices (e.c. counters, angle, ...)
+			/// </summary>
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.INPUT_DEVICESubcommand cmdCLR_ALL(IExpression<Data8> LAYER)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				return new EV3.Opcodes.INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.CLR_ALL, parameterList.ToArray());
+			}
+
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NO">Port number</param>
+			/// <param name="VALUE">32 bit raw value</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.INPUT_DEVICESubcommand cmdGET_RAW(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data32> VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.GET_RAW, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Get device connection type (for test)
+			/// </summary>
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NO">Port number</param>
+			/// <param name="CONN">Connection type</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.INPUT_DEVICESubcommand cmdGET_CONNECTION(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> CONN)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				parameterList.Add(CONN ?? throw new ArgumentNullException(nameof(CONN)));
+				return new EV3.Opcodes.INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.GET_CONNECTION, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Stop all devices (e.c. motors, ...)
+			/// </summary>
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.INPUT_DEVICESubcommand cmdSTOP_ALL(IExpression<Data8> LAYER)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				return new EV3.Opcodes.INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.STOP_ALL, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Set new type and mode on existing devices
+			/// </summary>
+			/// <param name="TYPE">Existing type</param>
+			/// <param name="MODE">Existing mode</param>
+			/// <param name="NEWTYPE">New type</param>
+			/// <param name="NEWMODE">New mode</param>
+			/// <param name="ERROR">Error if not Third Party type (0 = no error, 1 = error or not found)</param>
+			/// <remarks>
+			/// if TYPE==NEWTYPE and MODE==NEWMODE -&gt; ERROR will be 0 if exists and nothing is changed
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.INPUT_DEVICESubcommand cmdSET_TYPEMODE(IExpression<Data8> TYPE, IExpression<Data8> MODE, IExpression<Data8> NEWTYPE, IExpression<Data8> NEWMODE, IExpression<Data8> ERROR)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
+				parameterList.Add(MODE ?? throw new ArgumentNullException(nameof(MODE)));
+				parameterList.Add(NEWTYPE ?? throw new ArgumentNullException(nameof(NEWTYPE)));
+				parameterList.Add(NEWMODE ?? throw new ArgumentNullException(nameof(NEWMODE)));
+				parameterList.Add(ERROR ?? throw new ArgumentNullException(nameof(ERROR)));
+				return new EV3.Opcodes.INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.SET_TYPEMODE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Generic setup/read IIC sensors with result
+			/// </summary>
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NO">Port number</param>
+			/// <param name="WRLNG">No of bytes to write</param>
+			/// <param name="WRDATA">DATA8 array  (handle) of data to write</param>
+			/// <param name="RDLNG">No of bytes to read (if negative -&gt; byte order is reversed)</param>
+			/// <param name="RDDATA">DATA8 array  (handle) to read into</param>
+			/// <param name="RESULT">Write/read result (OK, FAIL)</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.INPUT_DEVICESubcommand cmdREADY_IIC(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> WRLNG, IExpression<Data8> WRDATA, IExpression<Data8> RDLNG, IExpression<Data8> RDDATA, IExpression<Data8> RESULT)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				parameterList.Add(WRLNG ?? throw new ArgumentNullException(nameof(WRLNG)));
+				parameterList.Add(WRDATA ?? throw new ArgumentNullException(nameof(WRDATA)));
+				parameterList.Add(RDLNG ?? throw new ArgumentNullException(nameof(RDLNG)));
+				parameterList.Add(RDDATA ?? throw new ArgumentNullException(nameof(RDDATA)));
+				parameterList.Add(RESULT ?? throw new ArgumentNullException(nameof(RESULT)));
+				return new EV3.Opcodes.INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.READY_IIC, parameterList.ToArray());
+			}
+
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NO">Port number</param>
+			/// <param name="LENGTH">Maximal length of string returned (-1 = no check)</param>
+			/// <param name="DESTINATION">String variable or handle to string</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.INPUT_DEVICESubcommand cmdGET_NAME(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> LENGTH, IExpression<DataString> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.GET_NAME, parameterList.ToArray());
+			}
+
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NO">Port number</param>
+			/// <param name="MODE">Mode</param>
+			/// <param name="LENGTH">Maximal length of string returned (-1 = no check)</param>
+			/// <param name="DESTINATION">String variable or handle to string</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.INPUT_DEVICESubcommand cmdGET_MODENAME(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> MODE, IExpression<Data8> LENGTH, IExpression<DataString> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				parameterList.Add(MODE ?? throw new ArgumentNullException(nameof(MODE)));
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.GET_MODENAME, parameterList.ToArray());
+			}
+
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NO">Port number</param>
+			/// <param name="TYPE">Device type id (0 = don't change type)</param>
+			/// <param name="VALUE"></param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.INPUT_DEVICESubcommand cmdSET_RAW(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> TYPE, IExpression<Data32> VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.SET_RAW, parameterList.ToArray());
+			}
+
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NO">Port number</param>
+			/// <param name="FIGURES">Total number of figures (inclusive decimal point and decimals)</param>
+			/// <param name="DECIMALS">Number of decimals</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.INPUT_DEVICESubcommand cmdGET_FIGURES(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> FIGURES, IExpression<Data8> DECIMALS)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				parameterList.Add(FIGURES ?? throw new ArgumentNullException(nameof(FIGURES)));
+				parameterList.Add(DECIMALS ?? throw new ArgumentNullException(nameof(DECIMALS)));
+				return new EV3.Opcodes.INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.GET_FIGURES, parameterList.ToArray());
+			}
+
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NO">Port number</param>
+			/// <param name="VALUE">Positive changes since last clear</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.INPUT_DEVICESubcommand cmdGET_CHANGES(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<DataFloat> VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.GET_CHANGES, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Clear changes and bumps
+			/// </summary>
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NO">Port number</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.INPUT_DEVICESubcommand cmdCLR_CHANGES(IExpression<Data8> LAYER, IExpression<Data8> NO)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				return new EV3.Opcodes.INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.CLR_CHANGES, parameterList.ToArray());
+			}
+
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NO">Port number</param>
+			/// <param name="TYPE">Device type id (0 = don't change type)</param>
+			/// <param name="MODE">Device mode [0..7] (-1 = don't change mode)</param>
+			/// <param name="VALUES">Number of return values</param>
+			/// <param name="VALUES_">variable arguments</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.INPUT_DEVICESubcommand cmdREADY_PCT(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> TYPE, IExpression<Data8> MODE, IExpression<Data8> VALUES, params IExpression[] VALUES_)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
+				parameterList.Add(MODE ?? throw new ArgumentNullException(nameof(MODE)));
+				parameterList.Add(VALUES ?? throw new ArgumentNullException(nameof(VALUES)));
+				parameterList.AddRange(VALUES_ ?? throw new ArgumentNullException(nameof(VALUES_)));
+				return new EV3.Opcodes.INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.READY_PCT, parameterList.ToArray());
+			}
+
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NO">Port number</param>
+			/// <param name="TYPE">Device type id (0 = don't change type)</param>
+			/// <param name="MODE">Device mode [0..7] (-1 = don't change mode)</param>
+			/// <param name="VALUES">Number of return values</param>
+			/// <param name="VALUES_">variable arguments</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.INPUT_DEVICESubcommand cmdREADY_RAW(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> TYPE, IExpression<Data8> MODE, IExpression<Data8> VALUES, params IExpression[] VALUES_)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
+				parameterList.Add(MODE ?? throw new ArgumentNullException(nameof(MODE)));
+				parameterList.Add(VALUES ?? throw new ArgumentNullException(nameof(VALUES)));
+				parameterList.AddRange(VALUES_ ?? throw new ArgumentNullException(nameof(VALUES_)));
+				return new EV3.Opcodes.INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.READY_RAW, parameterList.ToArray());
+			}
+
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NO">Port number</param>
+			/// <param name="TYPE">Device type id (0 = don't change type)</param>
+			/// <param name="MODE">Device mode [0..7] (-1 = don't change mode)</param>
+			/// <param name="VALUES">Number of return values</param>
+			/// <param name="VALUES_">variable arguments</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.INPUT_DEVICESubcommand cmdREADY_SI(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<Data8> TYPE, IExpression<Data8> MODE, IExpression<Data8> VALUES, params IExpression[] VALUES_)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
+				parameterList.Add(MODE ?? throw new ArgumentNullException(nameof(MODE)));
+				parameterList.Add(VALUES ?? throw new ArgumentNullException(nameof(VALUES)));
+				parameterList.AddRange(VALUES_ ?? throw new ArgumentNullException(nameof(VALUES_)));
+				return new EV3.Opcodes.INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.READY_SI, parameterList.ToArray());
+			}
+
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NO">Port number</param>
+			/// <param name="MIN">Min SI value</param>
+			/// <param name="MAX">Max SI value</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.INPUT_DEVICESubcommand cmdGET_MINMAX(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<DataFloat> MIN, IExpression<DataFloat> MAX)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				parameterList.Add(MIN ?? throw new ArgumentNullException(nameof(MIN)));
+				parameterList.Add(MAX ?? throw new ArgumentNullException(nameof(MAX)));
+				return new EV3.Opcodes.INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.GET_MINMAX, parameterList.ToArray());
+			}
+
+			/// <param name="LAYER">Daisy chain layer number [0..3]</param>
+			/// <param name="NO">Port number</param>
+			/// <param name="VALUE">Negative changes since last clear</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.INPUT_DEVICESubcommand cmdGET_BUMPS(IExpression<Data8> LAYER, IExpression<Data8> NO, IExpression<DataFloat> VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LAYER ?? throw new ArgumentNullException(nameof(LAYER)));
+				parameterList.Add(NO ?? throw new ArgumentNullException(nameof(NO)));
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.INPUT_DEVICESubcommand(INPUT_DEVICESubcommandValue.GET_BUMPS, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Create file or open for append
+			/// </summary>
+			/// <param name="NAME">File name</param>
+			/// <param name="HANDLE">Handle to file</param>
+			/// <remarks>
+			/// if name starts with '~','/' or '.' it is not from current folder
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILESubcommand cmdOPEN_APPEND(IExpression<DataString> NAME, IExpression<Data16> HANDLE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
+				parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
+				return new EV3.Opcodes.FILESubcommand(FILESubcommandValue.OPEN_APPEND, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Open file for read
+			/// </summary>
+			/// <param name="NAME">File name</param>
+			/// <param name="HANDLE">Handle to file</param>
+			/// <param name="SIZE">File size (0 = not found)</param>
+			/// <remarks>
+			/// if name starts with '~','/' or '.' it is not from current folder
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILESubcommand cmdOPEN_READ(IExpression<DataString> NAME, IExpression<Data16> HANDLE, IExpression<Data32> SIZE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
+				parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
+				parameterList.Add(SIZE ?? throw new ArgumentNullException(nameof(SIZE)));
+				return new EV3.Opcodes.FILESubcommand(FILESubcommandValue.OPEN_READ, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Create file for write
+			/// </summary>
+			/// <param name="NAME">File name</param>
+			/// <param name="HANDLE">Handle to file</param>
+			/// <remarks>
+			/// if name starts with '~','/' or '.' it is not from current folder
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILESubcommand cmdOPEN_WRITE(IExpression<DataString> NAME, IExpression<Data16> HANDLE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
+				parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
+				return new EV3.Opcodes.FILESubcommand(FILESubcommandValue.OPEN_WRITE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Read floating point value from file
+			/// </summary>
+			/// <param name="HANDLE">Handle to file</param>
+			/// <param name="DEL">Delimiter code</param>
+			/// <param name="VALUE">Value read</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILESubcommand cmdREAD_VALUE(IExpression<Data16> HANDLE, IExpression<Data8> DEL, IExpression<DataFloat> VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
+				parameterList.Add(DEL ?? throw new ArgumentNullException(nameof(DEL)));
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.FILESubcommand(FILESubcommandValue.READ_VALUE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Write floating point value to file
+			/// </summary>
+			/// <param name="HANDLE">Handle to file</param>
+			/// <param name="DEL">Delimiter code</param>
+			/// <param name="VALUE">Value to write</param>
+			/// <param name="FIGURES">Total number of figures inclusive decimal point</param>
+			/// <param name="DECIMALS">Number of decimals</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILESubcommand cmdWRITE_VALUE(IExpression<Data16> HANDLE, IExpression<Data8> DEL, IExpression<DataFloat> VALUE, IExpression<Data8> FIGURES, IExpression<Data8> DECIMALS)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
+				parameterList.Add(DEL ?? throw new ArgumentNullException(nameof(DEL)));
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				parameterList.Add(FIGURES ?? throw new ArgumentNullException(nameof(FIGURES)));
+				parameterList.Add(DECIMALS ?? throw new ArgumentNullException(nameof(DECIMALS)));
+				return new EV3.Opcodes.FILESubcommand(FILESubcommandValue.WRITE_VALUE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Read text from file
+			/// </summary>
+			/// <param name="HANDLE">Handle to file</param>
+			/// <param name="DEL">Delimiter code</param>
+			/// <param name="LENGTH">Maximal string length</param>
+			/// <param name="TEXT">Text to read</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILESubcommand cmdREAD_TEXT(IExpression<Data16> HANDLE, IExpression<Data8> DEL, IExpression<Data16> LENGTH, IExpression<DataString> TEXT)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
+				parameterList.Add(DEL ?? throw new ArgumentNullException(nameof(DEL)));
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(TEXT ?? throw new ArgumentNullException(nameof(TEXT)));
+				return new EV3.Opcodes.FILESubcommand(FILESubcommandValue.READ_TEXT, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Write text to file
+			/// </summary>
+			/// <param name="HANDLE">Handle to file</param>
+			/// <param name="DEL">Delimiter code</param>
+			/// <param name="TEXT">Text to write</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILESubcommand cmdWRITE_TEXT(IExpression<Data16> HANDLE, IExpression<Data8> DEL, IExpression<DataString> TEXT)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
+				parameterList.Add(DEL ?? throw new ArgumentNullException(nameof(DEL)));
+				parameterList.Add(TEXT ?? throw new ArgumentNullException(nameof(TEXT)));
+				return new EV3.Opcodes.FILESubcommand(FILESubcommandValue.WRITE_TEXT, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Close file
+			/// </summary>
+			/// <param name="HANDLE">Handle to file</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILESubcommand cmdCLOSE(IExpression<Data16> HANDLE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
+				return new EV3.Opcodes.FILESubcommand(FILESubcommandValue.CLOSE, parameterList.ToArray());
+			}
+
+			/// <param name="PRGID">Program id</param>
+			/// <param name="NAME">Image name</param>
+			/// <param name="SIZE">Size</param>
+			/// <param name="IP">Address of image</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILESubcommand cmdLOAD_IMAGE(IExpression<Data16> PRGID, IExpression<DataString> NAME, IExpression<Data32> SIZE, IExpression<Data32> IP)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
+				parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
+				parameterList.Add(SIZE ?? throw new ArgumentNullException(nameof(SIZE)));
+				parameterList.Add(IP ?? throw new ArgumentNullException(nameof(IP)));
+				return new EV3.Opcodes.FILESubcommand(FILESubcommandValue.LOAD_IMAGE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Get handle from filename
+			/// </summary>
+			/// <param name="NAME">File name</param>
+			/// <param name="HANDLE">Handle to file</param>
+			/// <param name="WRITE">Open for write / append (0 = no, 1 = yes)</param>
+			/// <remarks>
+			/// if name starts with '~','/' or '.' it is not from current folder
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILESubcommand cmdGET_HANDLE(IExpression<DataString> NAME, IExpression<Data16> HANDLE, IExpression<Data8> WRITE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
+				parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
+				parameterList.Add(WRITE ?? throw new ArgumentNullException(nameof(WRITE)));
+				return new EV3.Opcodes.FILESubcommand(FILESubcommandValue.GET_HANDLE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Make folder if not present
+			/// </summary>
+			/// <param name="NAME">Folder name</param>
+			/// <param name="SUCCESS">Success (0 = no, 1 = yes)</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILESubcommand cmdMAKE_FOLDER(IExpression<DataString> NAME, IExpression<Data8> SUCCESS)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
+				parameterList.Add(SUCCESS ?? throw new ArgumentNullException(nameof(SUCCESS)));
+				return new EV3.Opcodes.FILESubcommand(FILESubcommandValue.MAKE_FOLDER, parameterList.ToArray());
+			}
+
+			/// <param name="SIZE">Size of pool</param>
+			/// <param name="HANDLE">Handle to file</param>
+			/// <param name="IP">Address of image</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILESubcommand cmdGET_POOL(IExpression<Data32> SIZE, IExpression<Data16> HANDLE, IExpression<Data32> IP)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SIZE ?? throw new ArgumentNullException(nameof(SIZE)));
+				parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
+				parameterList.Add(IP ?? throw new ArgumentNullException(nameof(IP)));
+				return new EV3.Opcodes.FILESubcommand(FILESubcommandValue.GET_POOL, parameterList.ToArray());
+			}
+
+			/// <param name="TIME">Sync time used in data log files</param>
+			/// <param name="TICK">Sync tick used in data log files</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILESubcommand cmdSET_LOG_SYNC_TIME(IExpression<Data32> TIME, IExpression<Data32> TICK)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(TIME ?? throw new ArgumentNullException(nameof(TIME)));
+				parameterList.Add(TICK ?? throw new ArgumentNullException(nameof(TICK)));
+				return new EV3.Opcodes.FILESubcommand(FILESubcommandValue.SET_LOG_SYNC_TIME, parameterList.ToArray());
+			}
+
+			/// <param name="NAME">Folder name (ex "../prjs/")</param>
+			/// <param name="ITEMS">No of sub folders</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILESubcommand cmdGET_FOLDERS(IExpression<DataString> NAME, IExpression<Data8> ITEMS)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
+				parameterList.Add(ITEMS ?? throw new ArgumentNullException(nameof(ITEMS)));
+				return new EV3.Opcodes.FILESubcommand(FILESubcommandValue.GET_FOLDERS, parameterList.ToArray());
+			}
+
+			/// <param name="TIME">Sync time used in data log files</param>
+			/// <param name="TICK">Sync tick used in data log files</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILESubcommand cmdGET_LOG_SYNC_TIME(IExpression<Data32> TIME, IExpression<Data32> TICK)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(TIME ?? throw new ArgumentNullException(nameof(TIME)));
+				parameterList.Add(TICK ?? throw new ArgumentNullException(nameof(TICK)));
+				return new EV3.Opcodes.FILESubcommand(FILESubcommandValue.GET_LOG_SYNC_TIME, parameterList.ToArray());
+			}
+
+			/// <param name="NAME">Folder name (ex "../prjs/")</param>
+			/// <param name="ITEM">Sub folder index [1..ITEMS]</param>
+			/// <param name="LENGTH">Maximal string length</param>
+			/// <param name="STRING">Subfolder name</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILESubcommand cmdGET_SUBFOLDER_NAME(IExpression<DataString> NAME, IExpression<Data8> ITEM, IExpression<Data8> LENGTH, IExpression<DataString> STRING)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
+				parameterList.Add(ITEM ?? throw new ArgumentNullException(nameof(ITEM)));
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(STRING ?? throw new ArgumentNullException(nameof(STRING)));
+				return new EV3.Opcodes.FILESubcommand(FILESubcommandValue.GET_SUBFOLDER_NAME, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Write time slot samples to file
+			/// </summary>
+			/// <param name="HANDLE">Handle to file</param>
+			/// <param name="TIME">Relative time in mS</param>
+			/// <param name="ITEMS">Total number of values in this time slot</param>
+			/// <param name="VALUES">DATAF array (handle) containing values</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILESubcommand cmdWRITE_LOG(IExpression<Data16> HANDLE, IExpression<Data32> TIME, IExpression<Data8> ITEMS, IExpression<DataFloat> VALUES)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
+				parameterList.Add(TIME ?? throw new ArgumentNullException(nameof(TIME)));
+				parameterList.Add(ITEMS ?? throw new ArgumentNullException(nameof(ITEMS)));
+				parameterList.Add(VALUES ?? throw new ArgumentNullException(nameof(VALUES)));
+				return new EV3.Opcodes.FILESubcommand(FILESubcommandValue.WRITE_LOG, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Close data log file
+			/// </summary>
+			/// <param name="HANDLE">Handle to file</param>
+			/// <param name="NAME">File name</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILESubcommand cmdCLOSE_LOG(IExpression<Data16> HANDLE, IExpression<DataString> NAME)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
+				parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
+				return new EV3.Opcodes.FILESubcommand(FILESubcommandValue.CLOSE_LOG, parameterList.ToArray());
+			}
+
+			/// <param name="NAME">Image name</param>
+			/// <param name="PRGID">Program id</param>
+			/// <param name="ITEM">Sub folder index [1..ITEMS]</param>
+			/// <param name="IP">Address of image</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILESubcommand cmdGET_IMAGE(IExpression<DataString> NAME, IExpression<Data16> PRGID, IExpression<Data8> ITEM, IExpression<Data32> IP)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
+				parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
+				parameterList.Add(ITEM ?? throw new ArgumentNullException(nameof(ITEM)));
+				parameterList.Add(IP ?? throw new ArgumentNullException(nameof(IP)));
+				return new EV3.Opcodes.FILESubcommand(FILESubcommandValue.GET_IMAGE, parameterList.ToArray());
+			}
+
+			/// <param name="NAME">Name</param>
+			/// <param name="STRING">Item name</param>
+			/// <param name="ITEM">Sub folder index [1..ITEMS]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILESubcommand cmdGET_ITEM(IExpression<DataString> NAME, IExpression<DataString> STRING, IExpression<Data8> ITEM)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
+				parameterList.Add(STRING ?? throw new ArgumentNullException(nameof(STRING)));
+				parameterList.Add(ITEM ?? throw new ArgumentNullException(nameof(ITEM)));
+				return new EV3.Opcodes.FILESubcommand(FILESubcommandValue.GET_ITEM, parameterList.ToArray());
+			}
+
+			/// <param name="ITEMS">Number of files in cache</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILESubcommand cmdGET_CACHE_FILES(IExpression<Data8> ITEMS)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(ITEMS ?? throw new ArgumentNullException(nameof(ITEMS)));
+				return new EV3.Opcodes.FILESubcommand(FILESubcommandValue.GET_CACHE_FILES, parameterList.ToArray());
+			}
+
+			/// <param name="STRING">File Name</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILESubcommand cmdPUT_CACHE_FILE(IExpression<DataString> STRING)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(STRING ?? throw new ArgumentNullException(nameof(STRING)));
+				return new EV3.Opcodes.FILESubcommand(FILESubcommandValue.PUT_CACHE_FILE, parameterList.ToArray());
+			}
+
+			/// <param name="ITEM">Cache index [1..ITEMS]</param>
+			/// <param name="LENGTH">Maximal string length</param>
+			/// <param name="STRING">File name</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILESubcommand cmdGET_CACHE_FILE(IExpression<Data8> ITEM, IExpression<Data8> LENGTH, IExpression<DataString> STRING)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(ITEM ?? throw new ArgumentNullException(nameof(ITEM)));
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(STRING ?? throw new ArgumentNullException(nameof(STRING)));
+				return new EV3.Opcodes.FILESubcommand(FILESubcommandValue.GET_CACHE_FILE, parameterList.ToArray());
+			}
+
+			/// <param name="STRING">File name</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILESubcommand cmdDEL_CACHE_FILE(IExpression<DataString> STRING)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(STRING ?? throw new ArgumentNullException(nameof(STRING)));
+				return new EV3.Opcodes.FILESubcommand(FILESubcommandValue.DEL_CACHE_FILE, parameterList.ToArray());
+			}
+
+			/// <param name="NAME">Folder name (ex "../prjs/")</param>
+			/// <param name="ITEM">Sub folder index [1..ITEMS]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILESubcommand cmdDEL_SUBFOLDER(IExpression<DataString> NAME, IExpression<Data8> ITEM)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
+				parameterList.Add(ITEM ?? throw new ArgumentNullException(nameof(ITEM)));
+				return new EV3.Opcodes.FILESubcommand(FILESubcommandValue.DEL_SUBFOLDER, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Get the current open log filename
+			/// </summary>
+			/// <param name="LENGTH">Max string length (don't care if NAME is a HND)</param>
+			/// <param name="NAME">File name (character string or HND)</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILESubcommand cmdGET_LOG_NAME(IExpression<Data8> LENGTH, IExpression<DataString> NAME)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
+				return new EV3.Opcodes.FILESubcommand(FILESubcommandValue.GET_LOG_NAME, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Create file for data logging
+			/// </summary>
+			/// <param name="NAME">File name</param>
+			/// <param name="syncedTime"></param>
+			/// <param name="syncedTick"></param>
+			/// <param name="nowTick"></param>
+			/// <param name="sample_interval_in_ms"></param>
+			/// <param name="duration_in_ms"></param>
+			/// <param name="SDATA">Sensor type data</param>
+			/// <param name="HANDLE">Handle to file</param>
+			/// <remarks>
+			/// if name starts with '~','/' or '.' it is not from current folder
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILESubcommand cmdOPEN_LOG(IExpression<DataString> NAME, IExpression<Data32> syncedTime, IExpression<Data32> syncedTick, IExpression<Data32> nowTick, IExpression<Data32> sample_interval_in_ms, IExpression<Data32> duration_in_ms, IExpression<DataString> SDATA, IExpression<Data16> HANDLE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
+				parameterList.Add(syncedTime ?? throw new ArgumentNullException(nameof(syncedTime)));
+				parameterList.Add(syncedTick ?? throw new ArgumentNullException(nameof(syncedTick)));
+				parameterList.Add(nowTick ?? throw new ArgumentNullException(nameof(nowTick)));
+				parameterList.Add(sample_interval_in_ms ?? throw new ArgumentNullException(nameof(sample_interval_in_ms)));
+				parameterList.Add(duration_in_ms ?? throw new ArgumentNullException(nameof(duration_in_ms)));
+				parameterList.Add(SDATA ?? throw new ArgumentNullException(nameof(SDATA)));
+				parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
+				return new EV3.Opcodes.FILESubcommand(FILESubcommandValue.OPEN_LOG, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Read a number of bytes from file
+			/// </summary>
+			/// <param name="HANDLE">Handle to file</param>
+			/// <param name="BYTES">Number of bytes to read</param>
+			/// <param name="DESTINATION">First byte in byte stream</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILESubcommand cmdREAD_BYTES(IExpression<Data16> HANDLE, IExpression<Data16> BYTES, IExpression<Data8> DESTINATION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
+				parameterList.Add(BYTES ?? throw new ArgumentNullException(nameof(BYTES)));
+				parameterList.Add(DESTINATION ?? throw new ArgumentNullException(nameof(DESTINATION)));
+				return new EV3.Opcodes.FILESubcommand(FILESubcommandValue.READ_BYTES, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Write a number of bytes to file
+			/// </summary>
+			/// <param name="HANDLE">Handle to file</param>
+			/// <param name="BYTES">Number of bytes to write</param>
+			/// <param name="SOURCE">First byte in byte stream to write</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILESubcommand cmdWRITE_BYTES(IExpression<Data16> HANDLE, IExpression<Data16> BYTES, IExpression<Data8> SOURCE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
+				parameterList.Add(BYTES ?? throw new ArgumentNullException(nameof(BYTES)));
+				parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
+				return new EV3.Opcodes.FILESubcommand(FILESubcommandValue.WRITE_BYTES, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Delete file
+			/// </summary>
+			/// <param name="NAME">File name</param>
+			/// <remarks>
+			/// if name starts with '~','/' or '.' it is not from current folder
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILESubcommand cmdREMOVE(IExpression<DataString> NAME)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
+				return new EV3.Opcodes.FILESubcommand(FILESubcommandValue.REMOVE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Move file SOURCE to DEST
+			/// </summary>
+			/// <param name="SOURCE">Source file name</param>
+			/// <param name="DEST">Destination file name</param>
+			/// <remarks>
+			/// if name starts with '~','/' or '.' it is not from current folder
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILESubcommand cmdMOVE(IExpression<DataString> SOURCE, IExpression<DataString> DEST)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(SOURCE ?? throw new ArgumentNullException(nameof(SOURCE)));
+				parameterList.Add(DEST ?? throw new ArgumentNullException(nameof(DEST)));
+				return new EV3.Opcodes.FILESubcommand(FILESubcommandValue.MOVE, parameterList.ToArray());
+			}
+
+			/// <param name="HANDLE">Array handle</param>
+			[Support(Official = true, Xtended = false, Compat = false)]
+			public static EV3.Opcodes.ARRAYSubcommand cmdDELETE(IExpression<Data16> HANDLE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
+				return new EV3.Opcodes.ARRAYSubcommand(ARRAYSubcommandValue.DELETE, parameterList.ToArray());
+			}
+
+			/// <param name="HANDLE">Array handle</param>
+			/// <remarks>
+			/// renamed from DELETE
+			/// </remarks>
+			[Support(Official = false, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.ARRAYSubcommand cmdDESTROY(IExpression<Data16> HANDLE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
+				return new EV3.Opcodes.ARRAYSubcommand(ARRAYSubcommandValue.DESTROY, parameterList.ToArray());
+			}
+
+			/// <param name="ELEMENTS">Number of elements</param>
+			/// <param name="HANDLE">Array handle</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.ARRAYSubcommand cmdCREATE8(IExpression<Data32> ELEMENTS, IExpression<Data16> HANDLE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(ELEMENTS ?? throw new ArgumentNullException(nameof(ELEMENTS)));
+				parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
+				return new EV3.Opcodes.ARRAYSubcommand(ARRAYSubcommandValue.CREATE8, parameterList.ToArray());
+			}
+
+			/// <param name="ELEMENTS">Number of elements</param>
+			/// <param name="HANDLE">Array handle</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.ARRAYSubcommand cmdCREATE16(IExpression<Data32> ELEMENTS, IExpression<Data16> HANDLE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(ELEMENTS ?? throw new ArgumentNullException(nameof(ELEMENTS)));
+				parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
+				return new EV3.Opcodes.ARRAYSubcommand(ARRAYSubcommandValue.CREATE16, parameterList.ToArray());
+			}
+
+			/// <param name="ELEMENTS">Number of elements</param>
+			/// <param name="HANDLE">Array handle</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.ARRAYSubcommand cmdCREATE32(IExpression<Data32> ELEMENTS, IExpression<Data16> HANDLE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(ELEMENTS ?? throw new ArgumentNullException(nameof(ELEMENTS)));
+				parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
+				return new EV3.Opcodes.ARRAYSubcommand(ARRAYSubcommandValue.CREATE32, parameterList.ToArray());
+			}
+
+			/// <param name="ELEMENTS">Number of elements</param>
+			/// <param name="HANDLE">Array handle</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.ARRAYSubcommand cmdCREATEF(IExpression<Data32> ELEMENTS, IExpression<Data16> HANDLE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(ELEMENTS ?? throw new ArgumentNullException(nameof(ELEMENTS)));
+				parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
+				return new EV3.Opcodes.ARRAYSubcommand(ARRAYSubcommandValue.CREATEF, parameterList.ToArray());
+			}
+
+			/// <param name="HANDLE">Array handle</param>
+			/// <param name="ELEMENTS">Total number of elements</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.ARRAYSubcommand cmdRESIZE(IExpression<Data16> HANDLE, IExpression<Data32> ELEMENTS)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
+				parameterList.Add(ELEMENTS ?? throw new ArgumentNullException(nameof(ELEMENTS)));
+				return new EV3.Opcodes.ARRAYSubcommand(ARRAYSubcommandValue.RESIZE, parameterList.ToArray());
+			}
+
+			/// <param name="HANDLE">Array handle</param>
+			/// <param name="VALUE">Value to write - type depends on type of array</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.ARRAYSubcommand cmdFILL(IExpression<Data16> HANDLE, IExpression VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.ARRAYSubcommand(ARRAYSubcommandValue.FILL, parameterList.ToArray());
+			}
+
+			/// <param name="HSOURCE">Source array Handle</param>
+			/// <param name="HDEST">Destination array handle</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.ARRAYSubcommand cmdCOPY(IExpression<Data16> HSOURCE, IExpression<Data16> HDEST)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HSOURCE ?? throw new ArgumentNullException(nameof(HSOURCE)));
+				parameterList.Add(HDEST ?? throw new ArgumentNullException(nameof(HDEST)));
+				return new EV3.Opcodes.ARRAYSubcommand(ARRAYSubcommandValue.COPY, parameterList.ToArray());
+			}
+
+			/// <param name="HANDLE">Array handle</param>
+			/// <param name="INDEX">Index to element to write</param>
+			/// <param name="ELEMENTS">Number of elements to write</param>
+			/// <param name="VALUES">First value to write - type must be equal to the array type</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.ARRAYSubcommand cmdINIT8(IExpression<Data16> HANDLE, IExpression<Data32> INDEX, IExpression<Data32> ELEMENTS, params IExpression<Data8>[] VALUES)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
+				parameterList.Add(INDEX ?? throw new ArgumentNullException(nameof(INDEX)));
+				parameterList.Add(ELEMENTS ?? throw new ArgumentNullException(nameof(ELEMENTS)));
+				parameterList.AddRange(VALUES ?? throw new ArgumentNullException(nameof(VALUES)));
+				return new EV3.Opcodes.ARRAYSubcommand(ARRAYSubcommandValue.INIT8, parameterList.ToArray());
+			}
+
+			/// <param name="HANDLE">Array handle</param>
+			/// <param name="INDEX">Index to element to write</param>
+			/// <param name="ELEMENTS">Number of elements to write</param>
+			/// <param name="VALUES">First value to write - type must be equal to the array type</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.ARRAYSubcommand cmdINIT16(IExpression<Data16> HANDLE, IExpression<Data32> INDEX, IExpression<Data32> ELEMENTS, params IExpression<Data16>[] VALUES)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
+				parameterList.Add(INDEX ?? throw new ArgumentNullException(nameof(INDEX)));
+				parameterList.Add(ELEMENTS ?? throw new ArgumentNullException(nameof(ELEMENTS)));
+				parameterList.AddRange(VALUES ?? throw new ArgumentNullException(nameof(VALUES)));
+				return new EV3.Opcodes.ARRAYSubcommand(ARRAYSubcommandValue.INIT16, parameterList.ToArray());
+			}
+
+			/// <param name="HANDLE">Array handle</param>
+			/// <param name="INDEX">Index to element to write</param>
+			/// <param name="ELEMENTS">Number of elements to write</param>
+			/// <param name="VALUES">First value to write - type must be equal to the array type</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.ARRAYSubcommand cmdINIT32(IExpression<Data16> HANDLE, IExpression<Data32> INDEX, IExpression<Data32> ELEMENTS, params IExpression<Data32>[] VALUES)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
+				parameterList.Add(INDEX ?? throw new ArgumentNullException(nameof(INDEX)));
+				parameterList.Add(ELEMENTS ?? throw new ArgumentNullException(nameof(ELEMENTS)));
+				parameterList.AddRange(VALUES ?? throw new ArgumentNullException(nameof(VALUES)));
+				return new EV3.Opcodes.ARRAYSubcommand(ARRAYSubcommandValue.INIT32, parameterList.ToArray());
+			}
+
+			/// <param name="HANDLE">Array handle</param>
+			/// <param name="INDEX">Index to element to write</param>
+			/// <param name="ELEMENTS">Number of elements to write</param>
+			/// <param name="VALUES">First value to write - type must be equal to the array type</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.ARRAYSubcommand cmdINITF(IExpression<Data16> HANDLE, IExpression<Data32> INDEX, IExpression<Data32> ELEMENTS, params IExpression<DataFloat>[] VALUES)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
+				parameterList.Add(INDEX ?? throw new ArgumentNullException(nameof(INDEX)));
+				parameterList.Add(ELEMENTS ?? throw new ArgumentNullException(nameof(ELEMENTS)));
+				parameterList.AddRange(VALUES ?? throw new ArgumentNullException(nameof(VALUES)));
+				return new EV3.Opcodes.ARRAYSubcommand(ARRAYSubcommandValue.INITF, parameterList.ToArray());
+			}
+
+			/// <param name="HANDLE">Array handle</param>
+			/// <param name="ELEMENTS">Total number of elements in array</param>
+			[Support(Official = true, Xtended = false, Compat = false)]
+			public static EV3.Opcodes.ARRAYSubcommand cmdSIZE(IExpression<Data16> HANDLE, IExpression<Data32> ELEMENTS)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
+				parameterList.Add(ELEMENTS ?? throw new ArgumentNullException(nameof(ELEMENTS)));
+				return new EV3.Opcodes.ARRAYSubcommand(ARRAYSubcommandValue.SIZE, parameterList.ToArray());
+			}
+
+			/// <param name="HANDLE">Array handle</param>
+			/// <param name="ELEMENTS">Total number of elements in array</param>
+			/// <remarks>
+			/// Renamed from SIZE
+			/// </remarks>
+			[Support(Official = false, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.ARRAYSubcommand cmdSET_SIZE(IExpression<Data16> HANDLE, IExpression<Data32> ELEMENTS)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
+				parameterList.Add(ELEMENTS ?? throw new ArgumentNullException(nameof(ELEMENTS)));
+				return new EV3.Opcodes.ARRAYSubcommand(ARRAYSubcommandValue.SET_SIZE, parameterList.ToArray());
+			}
+
+			/// <param name="PRGID">Program slot number (must be running)</param>
+			/// <param name="HANDLE">Array handle</param>
+			/// <param name="INDEX">Index to first byte to read</param>
+			/// <param name="BYTES">Number of bytes to read</param>
+			/// <param name="ARRAY">First byte of array to receive data</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.ARRAYSubcommand cmdREAD_CONTENT(IExpression<Data16> PRGID, IExpression<Data16> HANDLE, IExpression<Data32> INDEX, IExpression<Data32> BYTES, IExpression<Data8> ARRAY)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
+				parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
+				parameterList.Add(INDEX ?? throw new ArgumentNullException(nameof(INDEX)));
+				parameterList.Add(BYTES ?? throw new ArgumentNullException(nameof(BYTES)));
+				parameterList.Add(ARRAY ?? throw new ArgumentNullException(nameof(ARRAY)));
+				return new EV3.Opcodes.ARRAYSubcommand(ARRAYSubcommandValue.READ_CONTENT, parameterList.ToArray());
+			}
+
+			/// <param name="PRGID">Program slot number (must be running)</param>
+			/// <param name="HANDLE">Array handle</param>
+			/// <param name="INDEX">Index to first byte to write</param>
+			/// <param name="BYTES">Number of bytes to write</param>
+			/// <param name="ARRAY">First byte of array to deliver data</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.ARRAYSubcommand cmdWRITE_CONTENT(IExpression<Data16> PRGID, IExpression<Data16> HANDLE, IExpression<Data32> INDEX, IExpression<Data32> BYTES, IExpression<Data8> ARRAY)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
+				parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
+				parameterList.Add(INDEX ?? throw new ArgumentNullException(nameof(INDEX)));
+				parameterList.Add(BYTES ?? throw new ArgumentNullException(nameof(BYTES)));
+				parameterList.Add(ARRAY ?? throw new ArgumentNullException(nameof(ARRAY)));
+				return new EV3.Opcodes.ARRAYSubcommand(ARRAYSubcommandValue.WRITE_CONTENT, parameterList.ToArray());
+			}
+
+			/// <param name="PRGID">Program slot number (must be running)</param>
+			/// <param name="HANDLE">Array handle</param>
+			/// <param name="BYTES">Number of bytes in array</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.ARRAYSubcommand cmdREAD_SIZE(IExpression<Data16> PRGID, IExpression<Data16> HANDLE, IExpression<Data32> BYTES)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(PRGID ?? throw new ArgumentNullException(nameof(PRGID)));
+				parameterList.Add(HANDLE ?? throw new ArgumentNullException(nameof(HANDLE)));
+				parameterList.Add(BYTES ?? throw new ArgumentNullException(nameof(BYTES)));
+				return new EV3.Opcodes.ARRAYSubcommand(ARRAYSubcommandValue.READ_SIZE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Test if file exists
+			/// </summary>
+			/// <param name="NAME">File name</param>
+			/// <param name="FLAG">Exist (0 = no, 1 = yes)</param>
+			/// <remarks>
+			/// if name starts with '~','/' or '.' it is not from current folder
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILENAMESubcommand cmdEXIST(IExpression<DataString> NAME, IExpression<Data8> FLAG)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
+				parameterList.Add(FLAG ?? throw new ArgumentNullException(nameof(FLAG)));
+				return new EV3.Opcodes.FILENAMESubcommand(FILENAMESubcommandValue.EXIST, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Calculate folder/file size
+			/// </summary>
+			/// <param name="NAME">File name</param>
+			/// <param name="FILES">Total number of files</param>
+			/// <param name="SIZE">Total folder size [KB]</param>
+			/// <remarks>
+			/// if name starts with '~','/' or '.' it is not from current folder
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILENAMESubcommand cmdTOTALSIZE(IExpression<DataString> NAME, IExpression<Data32> FILES, IExpression<Data32> SIZE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
+				parameterList.Add(FILES ?? throw new ArgumentNullException(nameof(FILES)));
+				parameterList.Add(SIZE ?? throw new ArgumentNullException(nameof(SIZE)));
+				return new EV3.Opcodes.FILENAMESubcommand(FILENAMESubcommandValue.TOTALSIZE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Split filename into Folder, name, extension
+			/// </summary>
+			/// <param name="FILENAME">File name</param>
+			/// <param name="LENGTH">Maximal length for each of the below parameters</param>
+			/// <param name="FOLDER">Folder name</param>
+			/// <param name="NAME">Name</param>
+			/// <param name="EXT">Extension</param>
+			/// <remarks>
+			/// Example: passing "../folder/subfolder/name.ext" in FILENAME will return "../folder/subfolder" in FOLDER, "name" in NAME and ".ext" in EXT.
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILENAMESubcommand cmdSPLIT(IExpression<DataString> FILENAME, IExpression<Data8> LENGTH, IExpression<DataString> FOLDER, IExpression<DataString> NAME, IExpression<DataString> EXT)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(FILENAME ?? throw new ArgumentNullException(nameof(FILENAME)));
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(FOLDER ?? throw new ArgumentNullException(nameof(FOLDER)));
+				parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
+				parameterList.Add(EXT ?? throw new ArgumentNullException(nameof(EXT)));
+				return new EV3.Opcodes.FILENAMESubcommand(FILENAMESubcommandValue.SPLIT, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Merge Folder, name, extension into filename
+			/// </summary>
+			/// <param name="FOLDER">Folder name</param>
+			/// <param name="NAME">Name</param>
+			/// <param name="EXT">Extension</param>
+			/// <param name="LENGTH">Maximal length for the below parameter</param>
+			/// <param name="FILENAME">File name</param>
+			/// <remarks>
+			/// Example: passing "../folder/subfolder" in FOLDER, "name" in NAME and ".ext" in EXT will return "../folder/subfolder/name.ext" in FILENAME.
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILENAMESubcommand cmdMERGE(IExpression<DataString> FOLDER, IExpression<DataString> NAME, IExpression<DataString> EXT, IExpression<Data8> LENGTH, IExpression<DataString> FILENAME)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(FOLDER ?? throw new ArgumentNullException(nameof(FOLDER)));
+				parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
+				parameterList.Add(EXT ?? throw new ArgumentNullException(nameof(EXT)));
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(FILENAME ?? throw new ArgumentNullException(nameof(FILENAME)));
+				return new EV3.Opcodes.FILENAMESubcommand(FILENAMESubcommandValue.MERGE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Check filename
+			/// </summary>
+			/// <param name="FILENAME">File name</param>
+			/// <param name="OK">Filename ok (0 = FAIL, 1 = OK)</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILENAMESubcommand cmdCHECK(IExpression<DataString> FILENAME, IExpression<Data8> OK)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(FILENAME ?? throw new ArgumentNullException(nameof(FILENAME)));
+				parameterList.Add(OK ?? throw new ArgumentNullException(nameof(OK)));
+				return new EV3.Opcodes.FILENAMESubcommand(FILENAMESubcommandValue.CHECK, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Pack file or folder into "raf" container
+			/// </summary>
+			/// <param name="FILENAME">File name</param>
+			/// <remarks>
+			/// .raf is the same as .tar.gz
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILENAMESubcommand cmdPACK(IExpression<DataString> FILENAME)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(FILENAME ?? throw new ArgumentNullException(nameof(FILENAME)));
+				return new EV3.Opcodes.FILENAMESubcommand(FILENAMESubcommandValue.PACK, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Unpack "raf" container
+			/// </summary>
+			/// <param name="FILENAME">File name</param>
+			/// <remarks>
+			/// .raf is the same as .tar.gz
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILENAMESubcommand cmdUNPACK(IExpression<DataString> FILENAME)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(FILENAME ?? throw new ArgumentNullException(nameof(FILENAME)));
+				return new EV3.Opcodes.FILENAMESubcommand(FILENAMESubcommandValue.UNPACK, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Get current folder name
+			/// </summary>
+			/// <param name="LENGTH">Maximal length for the below parameter</param>
+			/// <param name="FOLDERNAME">Folder name</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.FILENAMESubcommand cmdGET_FOLDERNAME(IExpression<Data8> LENGTH, IExpression<DataString> FOLDERNAME)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(FOLDERNAME ?? throw new ArgumentNullException(nameof(FOLDERNAME)));
+				return new EV3.Opcodes.FILENAMESubcommand(FILENAMESubcommandValue.GET_FOLDERNAME, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Get active state
+			/// </summary>
+			/// <param name="HARDWARE">Hardware Transport Layer</param>
+			/// <param name="ACTIVE">Active [0,1]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.COM_GETSubcommand cmdGET_ON_OFF(IExpression<Data8> HARDWARE, IExpression<Data8> ACTIVE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
+				parameterList.Add(ACTIVE ?? throw new ArgumentNullException(nameof(ACTIVE)));
+				return new EV3.Opcodes.COM_GETSubcommand(COM_GETSubcommandValue.GET_ON_OFF, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Get visibility state
+			/// </summary>
+			/// <param name="HARDWARE">Hardware Transport Layer</param>
+			/// <param name="VISIBLE">Visible [0,1]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.COM_GETSubcommand cmdGET_VISIBLE(IExpression<Data8> HARDWARE, IExpression<Data8> VISIBLE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
+				parameterList.Add(VISIBLE ?? throw new ArgumentNullException(nameof(VISIBLE)));
+				return new EV3.Opcodes.COM_GETSubcommand(COM_GETSubcommandValue.GET_VISIBLE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Get status.
+			/// </summary>
+			/// <param name="HARDWARE">Hardware Transport Layer</param>
+			/// <param name="ITEM">Name index</param>
+			/// <param name="RESULT">Results</param>
+			/// <remarks>
+			/// This command gets the result of the command that is being executed. This could be a search or a connection request.
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.COM_GETSubcommand cmdGET_RESULT(IExpression<Data8> HARDWARE, IExpression<Data8> ITEM, IExpression<Data8> RESULT)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
+				parameterList.Add(ITEM ?? throw new ArgumentNullException(nameof(ITEM)));
+				parameterList.Add(RESULT ?? throw new ArgumentNullException(nameof(RESULT)));
+				return new EV3.Opcodes.COM_GETSubcommand(COM_GETSubcommandValue.GET_RESULT, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Get pin code.
+			/// </summary>
+			/// <param name="HARDWARE">Hardware Transport Layer</param>
+			/// <param name="NAME">Name</param>
+			/// <param name="LENGTH">Max length of returned string</param>
+			/// <param name="PINCODE">Pin code</param>
+			/// <remarks>
+			/// For now "1234" is returned
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.COM_GETSubcommand cmdGET_PIN(IExpression<Data8> HARDWARE, IExpression<DataString> NAME, IExpression<Data8> LENGTH, IExpression<DataString> PINCODE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
+				parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(PINCODE ?? throw new ArgumentNullException(nameof(PINCODE)));
+				return new EV3.Opcodes.COM_GETSubcommand(COM_GETSubcommandValue.GET_PIN, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Gets a list state value. This can be compared to previous values to determine if items are added or removed from a list since the last call.
+			/// </summary>
+			/// <param name="HARDWARE">Hardware Transport Layer</param>
+			/// <param name="STATE">Value that represents the current state</param>
+			[Support(Official = false, Xtended = false, Compat = true)]
+			public static EV3.Opcodes.COM_GETSubcommand cmdLIST_STATE(IExpression<Data8> HARDWARE, IExpression<Data16> STATE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
+				parameterList.Add(STATE ?? throw new ArgumentNullException(nameof(STATE)));
+				return new EV3.Opcodes.COM_GETSubcommand(COM_GETSubcommandValue.LIST_STATE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Get number of item from search.
+			/// </summary>
+			/// <param name="HARDWARE">Hardware Transport Layer</param>
+			/// <param name="ITEMS">No of items in seach list</param>
+			/// <remarks>
+			/// After a search has been completed, SEARCH ITEMS will return the number of remote devices found.
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.COM_GETSubcommand cmdSEARCH_ITEMS(IExpression<Data8> HARDWARE, IExpression<Data8> ITEMS)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
+				parameterList.Add(ITEMS ?? throw new ArgumentNullException(nameof(ITEMS)));
+				return new EV3.Opcodes.COM_GETSubcommand(COM_GETSubcommandValue.SEARCH_ITEMS, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Get search item informations.
+			/// </summary>
+			/// <param name="HARDWARE">Hardware Transport Layer</param>
+			/// <param name="ITEM">Item - index in search list</param>
+			/// <param name="LENGTH">Max length of returned string</param>
+			/// <param name="NAME">Name</param>
+			/// <param name="PAIRED">Paired [0,1]</param>
+			/// <param name="CONNECTED">Connected [0,1]</param>
+			/// <param name="TYPE">Bluetooth Device Type</param>
+			/// <param name="VISIBLE">Visible [0,1]</param>
+			/// <remarks>
+			/// Used to retrieve the item information in the search list
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.COM_GETSubcommand cmdSEARCH_ITEM(IExpression<Data8> HARDWARE, IExpression<Data8> ITEM, IExpression<Data8> LENGTH, IExpression<DataString> NAME, IExpression<Data8> PAIRED, IExpression<Data8> CONNECTED, IExpression<Data8> TYPE, IExpression<Data8> VISIBLE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
+				parameterList.Add(ITEM ?? throw new ArgumentNullException(nameof(ITEM)));
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
+				parameterList.Add(PAIRED ?? throw new ArgumentNullException(nameof(PAIRED)));
+				parameterList.Add(CONNECTED ?? throw new ArgumentNullException(nameof(CONNECTED)));
+				parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
+				parameterList.Add(VISIBLE ?? throw new ArgumentNullException(nameof(VISIBLE)));
+				return new EV3.Opcodes.COM_GETSubcommand(COM_GETSubcommandValue.SEARCH_ITEM, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Get no of item in favourite list.
+			/// </summary>
+			/// <param name="HARDWARE">Hardware Transport Layer</param>
+			/// <param name="ITEMS">No of items in seach list</param>
+			/// <remarks>
+			/// The number of paired devices, not necessarily visible or present devices
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.COM_GETSubcommand cmdFAVOUR_ITEMS(IExpression<Data8> HARDWARE, IExpression<Data8> ITEMS)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
+				parameterList.Add(ITEMS ?? throw new ArgumentNullException(nameof(ITEMS)));
+				return new EV3.Opcodes.COM_GETSubcommand(COM_GETSubcommandValue.FAVOUR_ITEMS, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Get favourite item information.
+			/// </summary>
+			/// <param name="HARDWARE">Hardware Transport Layer</param>
+			/// <param name="ITEM">Item - index in favourite list</param>
+			/// <param name="LENGTH">Max length of returned string</param>
+			/// <param name="NAME">Name</param>
+			/// <param name="PAIRED">Paired [0,1]</param>
+			/// <param name="CONNECTED">Connected [0,1]</param>
+			/// <param name="TYPE">Bluetooth Device Type</param>
+			/// <remarks>
+			/// Used to retrieve the item information in the favourite list. All items in the favourite list are paired devices.
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.COM_GETSubcommand cmdFAVOUR_ITEM(IExpression<Data8> HARDWARE, IExpression<Data8> ITEM, IExpression<Data8> LENGTH, IExpression<DataString> NAME, IExpression<Data8> PAIRED, IExpression<Data8> CONNECTED, IExpression<Data8> TYPE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
+				parameterList.Add(ITEM ?? throw new ArgumentNullException(nameof(ITEM)));
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
+				parameterList.Add(PAIRED ?? throw new ArgumentNullException(nameof(PAIRED)));
+				parameterList.Add(CONNECTED ?? throw new ArgumentNullException(nameof(CONNECTED)));
+				parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
+				return new EV3.Opcodes.COM_GETSubcommand(COM_GETSubcommandValue.FAVOUR_ITEM, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Get bluetooth address information
+			/// </summary>
+			/// <param name="HARDWARE">Hardware Transport Layer</param>
+			/// <param name="LENGTH">Max length of returned string</param>
+			/// <param name="STRING">Bluetooth address</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.COM_GETSubcommand cmdGET_ID(IExpression<Data8> HARDWARE, IExpression<Data8> LENGTH, IExpression<DataString> STRING)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(STRING ?? throw new ArgumentNullException(nameof(STRING)));
+				return new EV3.Opcodes.COM_GETSubcommand(COM_GETSubcommandValue.GET_ID, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Gets the name of the brick
+			/// </summary>
+			/// <param name="LENGTH">Max length of returned string</param>
+			/// <param name="NAME">Brick name</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.COM_GETSubcommand cmdGET_BRICKNAME(IExpression<Data8> LENGTH, IExpression<DataString> NAME)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
+				return new EV3.Opcodes.COM_GETSubcommand(COM_GETSubcommandValue.GET_BRICKNAME, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Gets the network information. WIFI only
+			/// </summary>
+			/// <param name="HARDWARE">Hardware Transport Layer</param>
+			/// <param name="LENGTH">Max length of returned string</param>
+			/// <param name="NAME">Access point (AP) name</param>
+			/// <param name="MAC">MAC address</param>
+			/// <param name="IP">IP address</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.COM_GETSubcommand cmdGET_NETWORK(IExpression<Data8> HARDWARE, IExpression<Data8> LENGTH, IExpression<DataString> NAME, IExpression<DataString> MAC, IExpression<DataString> IP)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
+				parameterList.Add(MAC ?? throw new ArgumentNullException(nameof(MAC)));
+				parameterList.Add(IP ?? throw new ArgumentNullException(nameof(IP)));
+				return new EV3.Opcodes.COM_GETSubcommand(COM_GETSubcommandValue.GET_NETWORK, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Return if hardare is present. WIFI only
+			/// </summary>
+			/// <param name="HARDWARE">Hardware Transport Layer</param>
+			/// <param name="OK">Present [0,1]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.COM_GETSubcommand cmdGET_PRESENT(IExpression<Data8> HARDWARE, IExpression<Data8> OK)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
+				parameterList.Add(OK ?? throw new ArgumentNullException(nameof(OK)));
+				return new EV3.Opcodes.COM_GETSubcommand(COM_GETSubcommandValue.GET_PRESENT, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Returns the encryption mode of the hardware. WIFI only
+			/// </summary>
+			/// <param name="HARDWARE">Hardware Transport Layer</param>
+			/// <param name="ITEM">Item - index in favourite list</param>
+			/// <param name="TYPE">Encryption type</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.COM_GETSubcommand cmdGET_ENCRYPT(IExpression<Data8> HARDWARE, IExpression<Data8> ITEM, IExpression<Data8> TYPE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
+				parameterList.Add(ITEM ?? throw new ArgumentNullException(nameof(ITEM)));
+				parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
+				return new EV3.Opcodes.COM_GETSubcommand(COM_GETSubcommandValue.GET_ENCRYPT, parameterList.ToArray());
+			}
+
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.COM_GETSubcommand cmdCONNEC_ITEMS(IExpression<Data8> HARDWARE, IExpression<Data8> ITEMS)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
+				parameterList.Add(ITEMS ?? throw new ArgumentNullException(nameof(ITEMS)));
+				return new EV3.Opcodes.COM_GETSubcommand(COM_GETSubcommandValue.CONNEC_ITEMS, parameterList.ToArray());
+			}
+
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.COM_GETSubcommand cmdCONNEC_ITEM(IExpression<Data8> HARDWARE, IExpression<Data8> ITEM, IExpression<Data8> LENGTH, IExpression<Data8> NAME, IExpression<Data8> TYPE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
+				parameterList.Add(ITEM ?? throw new ArgumentNullException(nameof(ITEM)));
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
+				parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
+				return new EV3.Opcodes.COM_GETSubcommand(COM_GETSubcommandValue.CONNEC_ITEM, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Returns the encryption mode of the hardware. WIFI only
+			/// </summary>
+			/// <param name="HARDWARE">Hardware Transport Layer</param>
+			/// <param name="LENGTH">Max length of returned string</param>
+			/// <param name="NAME">Name</param>
+			/// <param name="TYPE">Encryption type</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.COM_GETSubcommand cmdGET_INCOMING(IExpression<Data8> HARDWARE, IExpression<Data8> LENGTH, IExpression<DataString> NAME, IExpression<Data8> TYPE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
+				parameterList.Add(TYPE ?? throw new ArgumentNullException(nameof(TYPE)));
+				return new EV3.Opcodes.COM_GETSubcommand(COM_GETSubcommandValue.GET_INCOMING, parameterList.ToArray());
+			}
+
+			/// <param name="HARDWARE">Hardware Transport Layer</param>
+			/// <param name="ACTIVE">Active [0,1], 1 = on, 0 = off</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.COM_GETSubcommand cmdGET_MODE2(IExpression<Data8> HARDWARE, IExpression<Data8> ACTIVE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
+				parameterList.Add(ACTIVE ?? throw new ArgumentNullException(nameof(ACTIVE)));
+				return new EV3.Opcodes.COM_GETSubcommand(COM_GETSubcommandValue.GET_MODE2, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Set active state, either on or off
+			/// </summary>
+			/// <param name="HARDWARE">Hardware Transport Layer</param>
+			/// <param name="ACTIVE">Active [0,1], 1 = on, 0 = off</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.COM_SETSubcommand cmdSET_ON_OFF(IExpression<Data8> HARDWARE, IExpression<Data8> ACTIVE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
+				parameterList.Add(ACTIVE ?? throw new ArgumentNullException(nameof(ACTIVE)));
+				return new EV3.Opcodes.COM_SETSubcommand(COM_SETSubcommandValue.SET_ON_OFF, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Set visibility state - Only available for bluetooth
+			/// </summary>
+			/// <param name="HARDWARE">Hardware Transport Layer</param>
+			/// <param name="VISIBLE">Visible [0,1], 1 = visible, 0 = invisible</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.COM_SETSubcommand cmdSET_VISIBLE(IExpression<Data8> HARDWARE, IExpression<Data8> VISIBLE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
+				parameterList.Add(VISIBLE ?? throw new ArgumentNullException(nameof(VISIBLE)));
+				return new EV3.Opcodes.COM_SETSubcommand(COM_SETSubcommandValue.SET_VISIBLE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Starts or or stops the search for remote devices
+			/// </summary>
+			/// <param name="HARDWARE">Hardware Transport Layer</param>
+			/// <param name="SEARCH">Search [0,1] 0 = stop search, 1 = start search</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.COM_SETSubcommand cmdSET_SEARCH(IExpression<Data8> HARDWARE, IExpression<Data8> SEARCH)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
+				parameterList.Add(SEARCH ?? throw new ArgumentNullException(nameof(SEARCH)));
+				return new EV3.Opcodes.COM_SETSubcommand(COM_SETSubcommandValue.SET_SEARCH, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Set pin code.
+			/// </summary>
+			/// <param name="HARDWARE">Hardware Transport Layer</param>
+			/// <param name="NAME">Name</param>
+			/// <param name="PINCODE">Pin code</param>
+			/// <remarks>
+			/// Set the pincode for a remote device. Used when requested by bluetooth. Not at this point possible by user program.
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.COM_SETSubcommand cmdSET_PIN(IExpression<Data8> HARDWARE, IExpression<DataString> NAME, IExpression<DataString> PINCODE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
+				parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
+				parameterList.Add(PINCODE ?? throw new ArgumentNullException(nameof(PINCODE)));
+				return new EV3.Opcodes.COM_SETSubcommand(COM_SETSubcommandValue.SET_PIN, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Set pin code.
+			/// </summary>
+			/// <param name="HARDWARE">Hardware Transport Layer</param>
+			/// <param name="ACCEPT">Acceptance [0,1] 0 = reject 1 = accept</param>
+			/// <remarks>
+			/// Set the pincode for a remote device. Used when requested by bluetooth. Not at this point possible by user program.
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.COM_SETSubcommand cmdSET_PASSKEY(IExpression<Data8> HARDWARE, IExpression<Data8> ACCEPT)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
+				parameterList.Add(ACCEPT ?? throw new ArgumentNullException(nameof(ACCEPT)));
+				return new EV3.Opcodes.COM_SETSubcommand(COM_SETSubcommandValue.SET_PASSKEY, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Initiate or close the connection request to a remote device by the specified name.
+			/// </summary>
+			/// <param name="HARDWARE">Hardware Transport Layer</param>
+			/// <param name="NAME">Name</param>
+			/// <param name="CONNECTION">Connect [0,1], 1 = Connect, 0 = Disconnect</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.COM_SETSubcommand cmdSET_CONNECTION(IExpression<Data8> HARDWARE, IExpression<DataString> NAME, IExpression<Data8> CONNECTION)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
+				parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
+				parameterList.Add(CONNECTION ?? throw new ArgumentNullException(nameof(CONNECTION)));
+				return new EV3.Opcodes.COM_SETSubcommand(COM_SETSubcommandValue.SET_CONNECTION, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Sets the name of the brick
+			/// </summary>
+			/// <param name="NAME">Name</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.COM_SETSubcommand cmdSET_BRICKNAME(IExpression<DataString> NAME)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
+				return new EV3.Opcodes.COM_SETSubcommand(COM_SETSubcommandValue.SET_BRICKNAME, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Moves the index in list one step up.
+			/// </summary>
+			/// <param name="HARDWARE">Hardware Transport Layer</param>
+			/// <param name="ITEM">Index in table</param>
+			/// <remarks>
+			/// Used to re-arrange WIFI list. Only used for WIFI.
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.COM_SETSubcommand cmdSET_MOVEUP(IExpression<Data8> HARDWARE, IExpression<Data8> ITEM)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
+				parameterList.Add(ITEM ?? throw new ArgumentNullException(nameof(ITEM)));
+				return new EV3.Opcodes.COM_SETSubcommand(COM_SETSubcommandValue.SET_MOVEUP, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Moves the index in list one step down.
+			/// </summary>
+			/// <param name="HARDWARE">Hardware Transport Layer</param>
+			/// <param name="ITEM">Index in table</param>
+			/// <remarks>
+			/// Used to re-arrange WIFI list. Only used for WIFI.
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.COM_SETSubcommand cmdSET_MOVEDOWN(IExpression<Data8> HARDWARE, IExpression<Data8> ITEM)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
+				parameterList.Add(ITEM ?? throw new ArgumentNullException(nameof(ITEM)));
+				return new EV3.Opcodes.COM_SETSubcommand(COM_SETSubcommandValue.SET_MOVEDOWN, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Sets the encryption type for an item in a list.
+			/// </summary>
+			/// <param name="HARDWARE">Hardware Transport Layer</param>
+			/// <param name="ITEM">Index in table</param>
+			/// <param name="ENCRYPT">Encryption type</param>
+			/// <remarks>
+			/// Only used for WIFI.
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.COM_SETSubcommand cmdSET_ENCRYPT(IExpression<Data8> HARDWARE, IExpression<Data8> ITEM, IExpression<Data8> ENCRYPT)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
+				parameterList.Add(ITEM ?? throw new ArgumentNullException(nameof(ITEM)));
+				parameterList.Add(ENCRYPT ?? throw new ArgumentNullException(nameof(ENCRYPT)));
+				return new EV3.Opcodes.COM_SETSubcommand(COM_SETSubcommandValue.SET_ENCRYPT, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Sets the SSID name. Only used for WIFI
+			/// </summary>
+			/// <param name="HARDWARE">Hardware Transport Layer</param>
+			/// <param name="NAME">Name</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.COM_SETSubcommand cmdSET_SSID(IExpression<Data8> HARDWARE, IExpression<DataString> NAME)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
+				parameterList.Add(NAME ?? throw new ArgumentNullException(nameof(NAME)));
+				return new EV3.Opcodes.COM_SETSubcommand(COM_SETSubcommandValue.SET_SSID, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Set active mode state, either active or not
+			/// </summary>
+			/// <param name="HARDWARE">Hardware Transport Layer</param>
+			/// <param name="ACTIVE">Active [0,1], 1 = on, 0 = off</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.COM_SETSubcommand cmdSET_MODE2(IExpression<Data8> HARDWARE, IExpression<Data8> ACTIVE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(HARDWARE ?? throw new ArgumentNullException(nameof(HARDWARE)));
+				parameterList.Add(ACTIVE ?? throw new ArgumentNullException(nameof(ACTIVE)));
+				return new EV3.Opcodes.COM_SETSubcommand(COM_SETSubcommandValue.SET_MODE2, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Enables test byte codes for 10 seconds
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.TSTSubcommand cmdTST_OPEN()
+			{
+				var parameterList = new List<IByteCode>();
+				return new EV3.Opcodes.TSTSubcommand(TSTSubcommandValue.TST_OPEN, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Disables test byte codes
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.TSTSubcommand cmdTST_CLOSE()
+			{
+				var parameterList = new List<IByteCode>();
+				return new EV3.Opcodes.TSTSubcommand(TSTSubcommandValue.TST_CLOSE, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Read connector pin status
+			/// </summary>
+			/// <param name="PORT">Input connector [0..3], output connector [16..19]</param>
+			/// <param name="LENGTH">Number of pins in returned string</param>
+			/// <param name="STRING">String variable start index ('0' = low, '1' = high)</param>
+			/// <remarks>
+			/// Input -----— STRING[0] Pin1 I_ONx current source control output ['0','1'] STRING[1] Pin2 LEGDETx ['0','1'] STRING[2] Pin5 DIGIx0 ['0','1'] STRING[3] Pin6 DIGIx1 ['0','1'] STRING[4] - TXINx_EN ['0','1']
+			/// Output -----— STRING[0] Pin1 MxIN0 ['0','1'] STRING[1] Pin2 MxIN1 ['0','1'] STRING[2] Pin5 DETx0 ['0','1'] STRING[3] Pin5 INTx0 ['0','1'] STRING[4] Pin6 DIRx ['0','1']
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.TSTSubcommand cmdTST_READ_PINS(IExpression<Data8> PORT, IExpression<Data8> LENGTH, IExpression<Data8> STRING)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(PORT ?? throw new ArgumentNullException(nameof(PORT)));
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(STRING ?? throw new ArgumentNullException(nameof(STRING)));
+				return new EV3.Opcodes.TSTSubcommand(TSTSubcommandValue.TST_READ_PINS, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Write to connector pin
+			/// </summary>
+			/// <param name="PORT">Input connector [0..3], output connector [16..19]</param>
+			/// <param name="LENGTH">Number of pins in returned string</param>
+			/// <param name="STRING">String variable start index ('0' = set low, '1' = set high, 'X' = tristate, '-' = don't touch)</param>
+			/// <remarks>
+			/// Input -----— STRING[0] Pin1 I_ONx current source control output ['0','1','X','-'] STRING[1] Pin2 LEGDETx ['0','1','X','-'] STRING[2] Pin5 DIGIx0 ['0','1','X','-'] STRING[3] Pin6 DIGIx1 ['0','1','X','-'] STRING[4] - TXINx_EN ['0','1','X','-']
+			/// Output -----— STRING[0] Pin1 MxIN0 ['0','1','X','-'] STRING[1] Pin2 MxIN1 ['0','1','X','-'] STRING[2] Pin5 DETx0 Write ['0','1','X','-'] STRING[3] Pin5 INTx0 Read ['0','1','X','-'] STRING[4] Pin6 DIRx ['0','1','X','-']
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.TSTSubcommand cmdTST_WRITE_PINS(IExpression<Data8> PORT, IExpression<Data8> LENGTH, IExpression<Data8> STRING)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(PORT ?? throw new ArgumentNullException(nameof(PORT)));
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(STRING ?? throw new ArgumentNullException(nameof(STRING)));
+				return new EV3.Opcodes.TSTSubcommand(TSTSubcommandValue.TST_WRITE_PINS, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Read raw count from ADC
+			/// </summary>
+			/// <param name="INDEX">Input mapped index (see remarks) [0..15]</param>
+			/// <param name="VALUE">Raw count [0..4095]</param>
+			/// <remarks>
+			/// INDEX 0..3 Input connector pin 1 (0=conn1, 1=conn2, 2=conn3, 3=conn4) INDEX 4..7 Input connector pin 6 (4=conn1, 5=conn2, 6=conn3, 7=conn4) INDEX 8..11 Output connector pin 5 (8=conn1, 9=conn2, 10=conn3, 11=conn4)
+			/// INDEX 12 Battery temperature INDEX 13 Current flowing to motors INDEX 14 Current flowing from the battery INDEX 15 Voltage at battery cell 1, 2, 3,4, 5, and 6
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.TSTSubcommand cmdTST_READ_ADC(IExpression<Data8> INDEX, IExpression<Data16> VALUE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(INDEX ?? throw new ArgumentNullException(nameof(INDEX)));
+				parameterList.Add(VALUE ?? throw new ArgumentNullException(nameof(VALUE)));
+				return new EV3.Opcodes.TSTSubcommand(TSTSubcommandValue.TST_READ_ADC, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Write data to port through UART
+			/// </summary>
+			/// <param name="PORT">Input connector [0..3]</param>
+			/// <param name="LENGTH">Length of string to write [0..63]</param>
+			/// <param name="STRING">String of data</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.TSTSubcommand cmdTST_WRITE_UART(IExpression<Data8> PORT, IExpression<Data8> LENGTH, IExpression<Data8> STRING)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(PORT ?? throw new ArgumentNullException(nameof(PORT)));
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(STRING ?? throw new ArgumentNullException(nameof(STRING)));
+				return new EV3.Opcodes.TSTSubcommand(TSTSubcommandValue.TST_WRITE_UART, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Read data from port through UART
+			/// </summary>
+			/// <param name="PORT">Input connector [0..3]</param>
+			/// <param name="LENGTH">Length of string to write [0..63]</param>
+			/// <param name="STRING">String of data</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.TSTSubcommand cmdTST_READ_UART(IExpression<Data8> PORT, IExpression<Data8> LENGTH, IExpression<Data8> STRING)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(PORT ?? throw new ArgumentNullException(nameof(PORT)));
+				parameterList.Add(LENGTH ?? throw new ArgumentNullException(nameof(LENGTH)));
+				parameterList.Add(STRING ?? throw new ArgumentNullException(nameof(STRING)));
+				return new EV3.Opcodes.TSTSubcommand(TSTSubcommandValue.TST_READ_UART, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Enable all UARTs
+			/// </summary>
+			/// <param name="BITRATE">Bit rate [2400..115200 b/S]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.TSTSubcommand cmdTST_ENABLE_UART(IExpression<Data32> BITRATE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(BITRATE ?? throw new ArgumentNullException(nameof(BITRATE)));
+				return new EV3.Opcodes.TSTSubcommand(TSTSubcommandValue.TST_ENABLE_UART, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Disable all UARTs
+			/// </summary>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.TSTSubcommand cmdTST_DISABLE_UART()
+			{
+				var parameterList = new List<IByteCode>();
+				return new EV3.Opcodes.TSTSubcommand(TSTSubcommandValue.TST_DISABLE_UART, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Read accu switch state
+			/// </summary>
+			/// <param name="ACTIVE">State [0..1]</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.TSTSubcommand cmdTST_ACCU_SWITCH(IExpression<Data8> ACTIVE)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(ACTIVE ?? throw new ArgumentNullException(nameof(ACTIVE)));
+				return new EV3.Opcodes.TSTSubcommand(TSTSubcommandValue.TST_ACCU_SWITCH, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Turn on mode2
+			/// </summary>
+			/// <remarks>
+			/// This only works on pre-release EV3 hardware.
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.TSTSubcommand cmdTST_BOOT_MODE2()
+			{
+				var parameterList = new List<IByteCode>();
+				return new EV3.Opcodes.TSTSubcommand(TSTSubcommandValue.TST_BOOT_MODE2, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Read mode2 status
+			/// </summary>
+			/// <param name="STATUS">State [0..2]</param>
+			/// <remarks>
+			/// This only works on pre-release EV3 hardware.
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.TSTSubcommand cmdTST_POLL_MODE2(IExpression<Data8> STATUS)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(STATUS ?? throw new ArgumentNullException(nameof(STATUS)));
+				return new EV3.Opcodes.TSTSubcommand(TSTSubcommandValue.TST_POLL_MODE2, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Closes mode2
+			/// </summary>
+			/// <remarks>
+			/// This only works on pre-release EV3 hardware.
+			/// </remarks>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.TSTSubcommand cmdTST_CLOSE_MODE2()
+			{
+				var parameterList = new List<IByteCode>();
+				return new EV3.Opcodes.TSTSubcommand(TSTSubcommandValue.TST_CLOSE_MODE2, parameterList.ToArray());
+			}
+
+			/// <summary>
+			/// Read RAM test status status
+			/// </summary>
+			/// <param name="STATUS">State [0,1] 0 = FAIL, 1 = SUCCESS</param>
+			[Support(Official = true, Xtended = true, Compat = true)]
+			public static EV3.Opcodes.TSTSubcommand cmdTST_RAM_CHECK(IExpression<Data8> STATUS)
+			{
+				var parameterList = new List<IByteCode>();
+				parameterList.Add(STATUS ?? throw new ArgumentNullException(nameof(STATUS)));
+				return new EV3.Opcodes.TSTSubcommand(TSTSubcommandValue.TST_RAM_CHECK, parameterList.ToArray());
+			}
 
-		/// <summary>
-		/// Read RAM test status status
-		/// </summary>
-		/// <param name="STATUS">State [0,1] 0 = FAIL, 1 = SUCCESS</param>
-		[Support(Official = true, Xtended = true, Compat = true)]
-		public static TSTSubcommand cmdTST_RAM_CHECK(IExpression<Data8> STATUS)
-		{
-			var parameterList = new List<IByteCode>();
-			parameterList.Add(STATUS ?? throw new ArgumentNullException(nameof(STATUS)));
-			return new TSTSubcommand(TSTSubcommandValue.TST_RAM_CHECK, parameterList.ToArray());
 		}
-
 	}
 }
 

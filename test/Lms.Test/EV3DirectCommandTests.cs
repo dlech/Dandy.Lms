@@ -5,6 +5,7 @@ using System.Text;
 using Dandy.Core;
 
 using static Dandy.Lms.Bytecodes.EV3.BytecodeFactory;
+using static Dandy.Lms.Bytecodes.EV3.BytecodeFactory.Opcode;
 
 using Xunit;
 using FluentAssertions;

@@ -529,7 +529,7 @@ namespace Dandy.Lms.Bytecodes.EV3
                     }
                     catch (ArgumentException ex)
                     {
-                        throw new InvalidOperationException($"Attempting to redefine a label - {$"{nameof(BytecodeFactory.opLABEL)} can only be used once per label"}", ex);
+                        throw new InvalidOperationException($"Attempting to redefine a label - {$"{nameof(BytecodeFactory.Opcode.opLABEL)} can only be used once per label"}", ex);
                     }
                 }
                 else
@@ -548,10 +548,10 @@ namespace Dandy.Lms.Bytecodes.EV3
 
             if (type == BytecodeObjectType.Subcall)
             {
-                writer.Write(BytecodeFactory.opRETURN());
+                writer.Write(BytecodeFactory.Opcode.opRETURN());
             }
 
-            writer.Write(BytecodeFactory.opOBJECT_END());
+            writer.Write(BytecodeFactory.Opcode.opOBJECT_END());
 
             foreach (var item in deferredLabelWriteMap)
             {

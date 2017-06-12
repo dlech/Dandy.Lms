@@ -7,6 +7,7 @@ using FluentAssertions;
 using Xunit;
 
 using static Dandy.Lms.Bytecodes.EV3.BytecodeFactory;
+using static Dandy.Lms.Bytecodes.EV3.BytecodeFactory.Opcode;
 using static Dandy.Lms.Bytecodes.EV3.Constants.Defines;
 using static Dandy.Lms.Bytecodes.EV3.Constants.BUTTONTYPE;
 using static Dandy.Lms.Bytecodes.EV3.Constants.FONTTYPE;

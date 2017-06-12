@@ -213,15 +213,20 @@ namespace Dandy.Lms.Bytecodes.EV3
 
 	partial class BytecodeFactory
 	{
+		/// <summary>
+		/// Contains all of the opcode factory methods.
+		/// </summary>
+		public static class Opcode
+		{
 <#
 
 	foreach (var op in bytecodes.Ops.Concat(subcommands))
 	{
 		if (op.Value.Desc != null) {
 #>
-		/// <summary>
-		/// <#= Escape(op.Value.Desc.Trim()) #>
-		/// </summary>
+			/// <summary>
+			/// <#= Escape(op.Value.Desc.Trim()) #>
+			/// </summary>
 <#
 		}
 
@@ -230,12 +235,12 @@ namespace Dandy.Lms.Bytecodes.EV3
 			foreach (var p in op.Value.Params)
 			{
 #>
-		/// <param name="<#= p.Name ?? "" #>"><#= Escape(p.Desc?.Trim()) ?? "" #></param>
+			/// <param name="<#= p.Name ?? "" #>"><#= Escape(p.Desc?.Trim()) ?? "" #></param>
 <#
 				if (p.Type == "PARNO")
 				{
 #>
-		/// <param name="<#= p.Name ?? "" #>_">variable arguments</param>
+			/// <param name="<#= p.Name ?? "" #>_">variable arguments</param>
 <#
 				}
 			}
@@ -244,16 +249,16 @@ namespace Dandy.Lms.Bytecodes.EV3
 		if (op.Value.Remarks != null)
 		{
 #>
-		/// <remarks>
+			/// <remarks>
 <#
 			foreach (var line in op.Value.Remarks.Trim().Split(new string[]{"\r\n", "\n"}, StringSplitOptions.None))
 			{
 #>
-		/// <#= Escape(line) #>
+			/// <#= Escape(line) #>
 <#
 			}
 #>
-		/// </remarks>
+			/// </remarks>
 <#
 		}
 
@@ -266,40 +271,41 @@ namespace Dandy.Lms.Bytecodes.EV3
 		var opcodePrefix = (opcodeType == "Opcode") ? "op" : "cmd";
 		var opcodeEnum = (opcodeType == "Opcode") ? "OpcodeValue" : (opcodeType + "Value");
 #>
-		[Support(Official = <#= op.Value.Support.Official.ToString().ToLower() #>, Xtended = <#= op.Value.Support.Xtended.ToString().ToLower() #>, Compat = <#= op.Value.Support.Compat.ToString().ToLower() #>)]
-		public static <#= opcodeType #> <#= opcodePrefix #><#= op.Key #>(<#= parameters #>)
-		{
-			var parameterList = new List<IByteCode>();
+			[Support(Official = <#= op.Value.Support.Official.ToString().ToLower() #>, Xtended = <#= op.Value.Support.Xtended.ToString().ToLower() #>, Compat = <#= op.Value.Support.Compat.ToString().ToLower() #>)]
+			public static EV3.Opcodes.<#= opcodeType #> <#= opcodePrefix #><#= op.Key #>(<#= parameters #>)
+			{
+				var parameterList = new List<IByteCode>();
 <#
 		foreach (var p in op.Value.Params)
 		{
 			if (p.Type == "PARVALUES")
 			{
 #>
-			parameterList.AddRange(<#= p.Name #> ?? throw new ArgumentNullException(nameof(<#= p.Name #>)));
+				parameterList.AddRange(<#= p.Name #> ?? throw new ArgumentNullException(nameof(<#= p.Name #>)));
 <#
 			}
 			else
 			{
 #>
-			parameterList.Add(<#= p.Name #> ?? throw new ArgumentNullException(nameof(<#= p.Name #>)));
+				parameterList.Add(<#= p.Name #> ?? throw new ArgumentNullException(nameof(<#= p.Name #>)));
 <#
 			}
 
 			if (p.Type == "PARNO")
 			{
 #>
-			parameterList.AddRange(<#= p.Name #>_ ?? throw new ArgumentNullException(nameof(<#= p.Name #>_)));
+				parameterList.AddRange(<#= p.Name #>_ ?? throw new ArgumentNullException(nameof(<#= p.Name #>_)));
 <#
 			}
 		}
 #>
-			return new <#= opcodeType #>(<#= opcodeEnum #>.<#= op.Key #>, parameterList.ToArray());
-		}
+				return new EV3.Opcodes.<#= opcodeType #>(<#= opcodeEnum #>.<#= op.Key #>, parameterList.ToArray());
+			}
 
 <#
 	}
 #>
+		}
 	}
 }
 
