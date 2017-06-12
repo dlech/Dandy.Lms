@@ -31,9 +31,40 @@ using System.Diagnostics;
 #pragma warning disable IDE1006 // Naming Styles
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
-namespace Dandy.Lms.Bytecodes.EV3
+namespace Dandy.Lms.Bytecodes.EV3.Opcodes
 {
+	enum OpcodeValue
+	{
 <#
+	foreach (var op in bytecodes.Ops)
+	{
+#>
+		<#= op.Key #> = <#= $"0x{op.Value.Value:X2}" #>,
+<#
+	}
+#>
+	}
+
+<#
+	foreach (var op in bytecodes.Ops.Where(o => o.Value.Params?.Any(p => p.Commands != null) ?? false))
+	{
+#>
+	enum <#= op.Key #>SubcommandValue
+	{
+<#
+		var subp = op.Value.Params.Single(p => p.Commands != null);
+		foreach (var s in subp.Commands)
+		{
+#>
+		<#= s.Key #> = <#= $"0x{s.Value.Value:X2}" #>,
+<#
+		}
+#>
+	}
+
+<#
+	}
+
 	foreach (var op in bytecodes.Ops.Where(o => o.Value.Params.Any(p => p.Commands != null)))
 	{
 		foreach (var subcommand in op.Value.Params.Single(p => p.Commands != null).Commands)
@@ -42,12 +73,15 @@ namespace Dandy.Lms.Bytecodes.EV3
 			subcommandMap.Add(subcommand.Key, op.Key);
 		}
 #>
+	/// <summary>
+	/// Base class for <#= op.Key #> subcommands.
+	/// </summary>
 	[DebuggerDisplay("{code}")]
-	public class cmd<#= op.Key #> : AbstractOpcode
+	public class <#= op.Key #>Subcommand : AbstractOpcode
 	{
-		cmd<#= op.Key #>Value code;
+		<#= op.Key #>SubcommandValue code;
 
-		internal cmd<#= op.Key #>(cmd<#= op.Key #>Value code, params IByteCode[] parameters) : base((byte)code, parameters)
+		internal <#= op.Key #>Subcommand(<#= op.Key #>SubcommandValue code, params IByteCode[] parameters) : base((byte)code, parameters)
 		{
 			this.code = code;
 		}
@@ -56,31 +90,36 @@ namespace Dandy.Lms.Bytecodes.EV3
 <#
 	}
 #>
-	partial class BytecodeFactory
+}
+
+namespace Dandy.Lms.Bytecodes.EV3.Constants
+{
+	/// <summary>
+	/// Common EV3 bytecode constant values.
+	/// </summary>
+	public static class Defines
 	{
-		public static class Constant
-		{
 <#
 	foreach (var d in bytecodes.Defines)
 	{
 		if (d.Value.Desc != null) {
 #>
-			/// <summary>
-			/// <#= Escape(d.Value.Desc.Trim()) #>
-			/// </summary>
+		/// <summary>
+		/// <#= Escape(d.Value.Desc.Trim()) #>
+		/// </summary>
 <#
 		}
 
 		if (d.Value.Remarks != null) {
 #>
-			/// <remarks>
-			/// <#= Escape(d.Value.Remarks.Trim()) #>
-			/// </remarks>
+		/// <remarks>
+		/// <#= Escape(d.Value.Remarks.Trim()) #>
+		/// </remarks>
 <#
 		}
 
 #>
-			[Support(Official = <#= d.Value.Support.Official.ToString().ToLower() #>, Xtended = <#= d.Value.Support.Xtended.ToString().ToLower() #>, Compat = <#= d.Value.Support.Compat.ToString().ToLower() #>)]
+		[Support(Official = <#= d.Value.Support.Official.ToString().ToLower() #>, Xtended = <#= d.Value.Support.Xtended.ToString().ToLower() #>, Compat = <#= d.Value.Support.Compat.ToString().ToLower() #>)]
 <#
 
 		try
@@ -88,7 +127,7 @@ namespace Dandy.Lms.Bytecodes.EV3
 			if (d.Value.Value.StartsWith("0x"))
 			{
 #>
-			public const uint <#= d.Key #> = <#= d.Value.Value #>;
+		public const uint <#= d.Key #> = <#= d.Value.Value #>;
 
 <#
 			}
@@ -96,7 +135,7 @@ namespace Dandy.Lms.Bytecodes.EV3
 			{
 				int.Parse(d.Value.Value);
 #>
-			public const int <#= d.Key #> = <#= d.Value.Value #>;
+		public const int <#= d.Key #> = <#= d.Value.Value #>;
 
 <#
 			}
@@ -104,7 +143,7 @@ namespace Dandy.Lms.Bytecodes.EV3
 		catch (Exception)
 		{
 #>
-			public const string <#= d.Key #> = "<#= d.Value.Value #>";
+		public const string <#= d.Key #> = "<#= d.Value.Value #>";
 
 <#
 		}
@@ -117,54 +156,64 @@ namespace Dandy.Lms.Bytecodes.EV3
 	{
 		if (e.Value.Desc != null) {
 #>
-		/// <summary>
-		/// <#= Escape(e.Value.Desc.Trim()) #>
-		/// </summary>
+	/// <summary>
+	/// <#= Escape(e.Value.Desc.Trim()) #>
+	/// </summary>
 <#
 		}
 
 		if (e.Value.Remarks != null) {
 #>
-			/// <remarks>
-			/// <#= Escape(e.Value.Remarks.Trim()) #>
-			/// </remarks>
+		/// <remarks>
+		/// <#= Escape(e.Value.Remarks.Trim()) #>
+		/// </remarks>
 <#
 		}
 
 #>
-		[Support(Official = <#= e.Value.Support.Official.ToString().ToLower() #>, Xtended = <#= e.Value.Support.Xtended.ToString().ToLower() #>, Compat = <#= e.Value.Support.Compat.ToString().ToLower() #>)]
-		public enum <#= e.Key #>
-		{
+	[Support(Official = <#= e.Value.Support.Official.ToString().ToLower() #>, Xtended = <#= e.Value.Support.Xtended.ToString().ToLower() #>, Compat = <#= e.Value.Support.Compat.ToString().ToLower() #>)]
+	public enum <#= e.Key #>
+	{
 <#
 		foreach (var m in e.Value.Members)
 		{
 			if (m.Value.Desc != null) {
 #>
-			/// <summary>
-			/// <#= Escape(m.Value.Desc.Trim()) #>
-			/// </summary>
+		/// <summary>
+		/// <#= Escape(m.Value.Desc.Trim()) #>
+		/// </summary>
 <#
 			}
 
 			if (m.Value.Remarks != null) {
 #>
-				/// <remarks>
-				/// <#= Escape( m.Value.Remarks.Trim()) #>
-				/// </remarks>
+			/// <remarks>
+			/// <#= Escape( m.Value.Remarks.Trim()) #>
+			/// </remarks>
 <#
 			}
 
 #>
-			[Support(Official = <#= m.Value.Support.Official.ToString().ToLower() #>, Xtended = <#= m.Value.Support.Xtended.ToString().ToLower() #>, Compat = <#= m.Value.Support.Compat.ToString().ToLower() #>)]
-			<#= m.Key #> = <#= m.Value.Value #>,
+		[Support(Official = <#= m.Value.Support.Official.ToString().ToLower() #>, Xtended = <#= m.Value.Support.Xtended.ToString().ToLower() #>, Compat = <#= m.Value.Support.Compat.ToString().ToLower() #>)]
+		<#= m.Key #> = <#= m.Value.Value #>,
 
 <#
 		}
 #>
-		}
+	}
 
 <#
 	}
+#>
+}
+
+namespace Dandy.Lms.Bytecodes.EV3
+{
+	using Dandy.Lms.Bytecodes.EV3.Opcodes;
+
+	partial class BytecodeFactory
+	{
+<#
 
 	foreach (var op in bytecodes.Ops.Concat(subcommands))
 	{
@@ -252,38 +301,6 @@ namespace Dandy.Lms.Bytecodes.EV3
 	}
 #>
 	}
-
-	enum OpcodeValue
-	{
-<#
-	foreach (var op in bytecodes.Ops)
-	{
-#>
-		<#= op.Key #> = <#= $"0x{op.Value.Value:X2}" #>,
-<#
-	}
-#>
-	}
-<#
-	foreach (var op in bytecodes.Ops.Where(o => o.Value.Params?.Any(p => p.Commands != null) ?? false))
-	{
-#>
-	enum cmd<#= op.Key #>Value
-	{
-<#
-		var subp = op.Value.Params.Single(p => p.Commands != null);
-		foreach (var s in subp.Commands)
-		{
-#>
-		<#= s.Key #> = <#= $"0x{s.Value.Value:X2}" #>,
-<#
-		}
-#>
-	}
-
-<#
-	}
-#>
 }
 
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
@@ -300,7 +317,7 @@ namespace Dandy.Lms.Bytecodes.EV3
 	{
 		if (map.TryGetValue(opcode, out var parent))
 		{
-			return "cmd" + parent;
+			return parent + "Subcommand";
 		}
 		return "Opcode";
 	}
@@ -327,7 +344,7 @@ namespace Dandy.Lms.Bytecodes.EV3
 			case "PARVALUES":
 				return $"params IExpression<{GetBasicType(parameter.ElementType)}>[]";
 			case "SUBP":
-				return "cmd" + opcode;
+				return opcode + "Subcommand";
 			default:
 				return "object";
 		}

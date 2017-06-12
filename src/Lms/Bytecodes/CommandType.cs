@@ -22,7 +22,7 @@ namespace Dandy.Lms.Bytecodes
     /// Flags indicating the type of a command.
     /// </summary>
     [Flags]
-    public enum CommandTypeFlags
+    enum CommandTypeFlags
     {
         /// <summary>
         /// The command is a direct command.

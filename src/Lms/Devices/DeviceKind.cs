@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dandy.Lms.Bytecodes
+namespace Dandy.Lms.Devices
 {
     /// <summary>
     /// Indicates the kind of a device.

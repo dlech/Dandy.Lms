@@ -14,7 +14,7 @@ namespace Dandy.Lms.Bytecodes.EV3.System
         private readonly int size;
         private readonly string path;
 
-        public sealed override SystemCommandType SystemCommandType => SystemCommandType.BeginDownload;
+        internal sealed override SystemCommandValue SystemCommandValue => SystemCommandValue.BeginDownload;
 
         public BeginDownload(int size, string path)
         {
@@ -40,7 +40,7 @@ namespace Dandy.Lms.Bytecodes.EV3.System
         private readonly byte handle;
         private readonly byte[] payload;
 
-        public sealed override SystemCommandType SystemCommandType => SystemCommandType.ContinueDownload;
+        internal sealed override SystemCommandValue SystemCommandValue => SystemCommandValue.ContinueDownload;
 
         public ContinueDownload(byte handle, byte[] payload)
         {
@@ -66,7 +66,7 @@ namespace Dandy.Lms.Bytecodes.EV3.System
         private readonly ushort chunkSize;
         private readonly string path;
 
-        public sealed override SystemCommandType SystemCommandType => SystemCommandType.BeginUpload;
+        internal sealed override SystemCommandValue SystemCommandValue => SystemCommandValue.BeginUpload;
 
         public BeginUpload(ushort chunkSize, string path)
         {
@@ -94,7 +94,7 @@ namespace Dandy.Lms.Bytecodes.EV3.System
         private readonly byte handle;
         private readonly ushort chunkSize;
 
-        public sealed override SystemCommandType SystemCommandType => SystemCommandType.ContinueUpload;
+        internal sealed override SystemCommandValue SystemCommandValue => SystemCommandValue.ContinueUpload;
 
         public ContinueUpload(byte handle, ushort chunkSize)
         {
@@ -121,7 +121,7 @@ namespace Dandy.Lms.Bytecodes.EV3.System
         private readonly ushort chunkSize;
         private readonly string path;
 
-        public sealed override SystemCommandType SystemCommandType => SystemCommandType.BeginGetFile;
+        internal sealed override SystemCommandValue SystemCommandValue => SystemCommandValue.BeginGetFile;
 
         public BeginGetFile(ushort chunkSize, string path)
         {
@@ -149,7 +149,7 @@ namespace Dandy.Lms.Bytecodes.EV3.System
         private readonly byte handle;
         private readonly ushort chunkSize;
 
-        public sealed override SystemCommandType SystemCommandType => SystemCommandType.ContinueGetFile;
+        internal sealed override SystemCommandValue SystemCommandValue => SystemCommandValue.ContinueGetFile;
 
         public ContinueGetFile(byte handle, ushort chunkSize)
         {
@@ -177,7 +177,7 @@ namespace Dandy.Lms.Bytecodes.EV3.System
         private readonly ushort chunkSize;
         private readonly string path;
 
-        public sealed override SystemCommandType SystemCommandType => SystemCommandType.BeginListFiles;
+        internal sealed override SystemCommandValue SystemCommandValue => SystemCommandValue.BeginListFiles;
 
         public BeginListFiles(ushort chunkSize, string path)
         {
@@ -205,7 +205,7 @@ namespace Dandy.Lms.Bytecodes.EV3.System
         private readonly byte handle;
         private readonly ushort chunkSize;
 
-        public sealed override SystemCommandType SystemCommandType => SystemCommandType.ContinueListFiles;
+        internal sealed override SystemCommandValue SystemCommandValue => SystemCommandValue.ContinueListFiles;
 
         public ContinueListFiles(byte handle, ushort chunkSize)
         {
@@ -232,7 +232,7 @@ namespace Dandy.Lms.Bytecodes.EV3.System
         private readonly byte handle;
         private readonly ulong hash;
 
-        public sealed override SystemCommandType SystemCommandType => SystemCommandType.CloseFileHandle;
+        internal sealed override SystemCommandValue SystemCommandValue => SystemCommandValue.CloseFileHandle;
 
         public CloseFileHandle(byte handle, ulong hash)
         {
@@ -256,7 +256,7 @@ namespace Dandy.Lms.Bytecodes.EV3.System
     {
         private readonly string path;
 
-        public sealed override SystemCommandType SystemCommandType => SystemCommandType.CreateDirectory;
+        internal sealed override SystemCommandValue SystemCommandValue => SystemCommandValue.CreateDirectory;
 
         public CreateDirectory(string path)
         {
@@ -278,7 +278,7 @@ namespace Dandy.Lms.Bytecodes.EV3.System
     {
         private readonly string path;
 
-        public sealed override SystemCommandType SystemCommandType => SystemCommandType.DeleteFile;
+        internal sealed override SystemCommandValue SystemCommandValue => SystemCommandValue.DeleteFile;
 
         public DeleteFile(string path)
         {
@@ -298,7 +298,7 @@ namespace Dandy.Lms.Bytecodes.EV3.System
 
     sealed class ListOpenHandles : SystemCommand<ushort>
     {
-        public sealed override SystemCommandType SystemCommandType => SystemCommandType.ListOpenHandles;
+        internal sealed override SystemCommandValue SystemCommandValue => SystemCommandValue.ListOpenHandles;
 
         public ListOpenHandles()
         {
@@ -320,7 +320,7 @@ namespace Dandy.Lms.Bytecodes.EV3.System
         private readonly string name;
         private readonly byte[] payload;
 
-        public sealed override SystemCommandType SystemCommandType => SystemCommandType.WriteMailbox;
+        internal sealed override SystemCommandValue SystemCommandValue => SystemCommandValue.WriteMailbox;
 
         public WriteMailbox(string name, byte[] payload)
         {
@@ -346,7 +346,7 @@ namespace Dandy.Lms.Bytecodes.EV3.System
         private readonly string hostMACAddress;
         private readonly string pinCode;
 
-        public sealed override SystemCommandType SystemCommandType => SystemCommandType.SendBluetoothPin;
+        internal sealed override SystemCommandValue SystemCommandValue => SystemCommandValue.SendBluetoothPin;
 
         public SendBluetoothPin(string hostMACAddress, string pinCode)
         {
@@ -372,7 +372,7 @@ namespace Dandy.Lms.Bytecodes.EV3.System
 
     sealed class EnterFimrwareUpdateMode : SystemCommand<Unit>
     {
-        public sealed override SystemCommandType SystemCommandType => SystemCommandType.EnterFimrwareUpdateMode;
+        internal sealed override SystemCommandValue SystemCommandValue => SystemCommandValue.EnterFimrwareUpdateMode;
 
         public EnterFimrwareUpdateMode()
         {
@@ -392,7 +392,7 @@ namespace Dandy.Lms.Bytecodes.EV3.System
     {
         private readonly string id;
 
-        public sealed override SystemCommandType SystemCommandType => SystemCommandType.SetBundleID;
+        internal sealed override SystemCommandValue SystemCommandValue => SystemCommandValue.SetBundleID;
 
         public SetBundleID(string id)
         {
@@ -414,7 +414,7 @@ namespace Dandy.Lms.Bytecodes.EV3.System
     {
         private readonly string id;
 
-        public sealed override SystemCommandType SystemCommandType => SystemCommandType.SetBundleSeedID;
+        internal sealed override SystemCommandValue SystemCommandValue => SystemCommandValue.SetBundleSeedID;
 
         public SetBundleSeedID(string id)
         {

@@ -4,7 +4,7 @@ using System.IO;
 namespace Dandy.Lms.Bytecodes.EV3
 {
     /// <summary>
-    /// Object that represents a direct command.
+    /// Object that represents an EV3 direct command.
     /// </summary>
     /// <typeparam name="TReply">The data type for values returned by the command.</typeparam>
     /// <seealso cref="Command{TReply}"/>
@@ -21,7 +21,7 @@ namespace Dandy.Lms.Bytecodes.EV3
         /// <summary>
         /// The type of command. Always returns <see cref="CommandTypeFlags.Direct"/>
         /// </summary>
-        public sealed override CommandTypeFlags CommandType => CommandTypeFlags.Direct;
+        internal sealed override CommandTypeFlags CommandType => CommandTypeFlags.Direct;
 
         internal DirectCommand(int globals, ReplyParser<TReply> replyParser, BytecodeObject obj)
         {

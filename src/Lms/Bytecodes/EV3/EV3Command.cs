@@ -1,4 +1,6 @@
 ﻿
+using Dandy.Lms.Devices;
+
 namespace Dandy.Lms.Bytecodes.EV3
 {
     /// <summary>
@@ -16,5 +18,7 @@ namespace Dandy.Lms.Bytecodes.EV3
         /// Always returns <see cref="DeviceKind.EV3"/>
         /// </summary>
         public sealed override DeviceKind DeviceKind => DeviceKind.EV3;
+
+        internal abstract CommandTypeFlags CommandType { get; }
     }
 }

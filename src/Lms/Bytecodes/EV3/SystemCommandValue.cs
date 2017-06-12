@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Dandy.Lms.Bytecodes.EV3.System
 {
-    enum SystemCommandType
+    enum SystemCommandValue
     {
         BeginDownload = 0x92,
         ContinueDownload = 0x93,

@@ -6,7 +6,10 @@ using Dandy.Lms.Bytecodes.EV3;
 
 namespace Dandy.Lms.Bytecodes
 {
-    static class InternalExtensions
+    /// <summary>
+    /// Internal extension methods
+    /// </summary>
+    static class BytecodeExtensions
     {
         internal static void Write(this BinaryWriter writer, string value, int sizeOfLengthPrefix, bool includeNullCharInLength = true, bool includeNullTerminator = true)
         {

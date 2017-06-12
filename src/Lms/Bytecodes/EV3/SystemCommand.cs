@@ -9,9 +9,9 @@ namespace Dandy.Lms.Bytecodes.EV3.System
 {
     abstract class SystemCommand<TReply> : EV3Command<TReply>
     {
-        public sealed override CommandTypeFlags CommandType => CommandTypeFlags.System;
+        internal sealed override CommandTypeFlags CommandType => CommandTypeFlags.System;
 
-        public abstract SystemCommandType SystemCommandType { get; }
+        internal abstract SystemCommandValue SystemCommandValue { get; }
 
         public sealed override byte[] ToBytes(bool expectReply)
         {
@@ -19,7 +19,7 @@ namespace Dandy.Lms.Bytecodes.EV3.System
             {
                 var replyFlag = expectReply ? 0 : CommandTypeFlags.NoReply;
                 writer.Write((byte)(CommandType | replyFlag));
-                writer.Write((byte)SystemCommandType);
+                writer.Write((byte)SystemCommandValue);
                 WriteCommandParameters(writer);
                 return ((MemoryStream)writer.BaseStream).ToArray();
             }
@@ -32,7 +32,7 @@ namespace Dandy.Lms.Bytecodes.EV3.System
             using (var reader = new BinaryReader(new MemoryStream(data), Encoding.ASCII))
             {
                 var replyType = (CommandTypeFlags)reader.ReadByte();
-                var systemCommand = (SystemCommandType)reader.ReadByte();
+                var systemCommand = (SystemCommandValue)reader.ReadByte();
                 var replyStatus = (ReplyStatus)reader.ReadByte();
                 if (replyType.HasFlag(CommandTypeFlags.Error))
                 {

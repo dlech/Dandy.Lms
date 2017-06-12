@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dandy.Lms.Bytecodes.EV3.Opcodes;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -47,7 +48,7 @@ namespace Dandy.Lms.Bytecodes.EV3
         /// </exception>
         public BytecodeObject WithLocals<T0>(
             out IExpression<T0> lv0, int size0)
-            where T0 : VMValueType
+            where T0 : VMDataType
         {
             if (size0 < 0)
             {
@@ -77,8 +78,8 @@ namespace Dandy.Lms.Bytecodes.EV3
         public BytecodeObject WithLocals<T0, T1>(
             out IExpression<T0> lv0, int size0,
             out IExpression<T1> lv1, int size1)
-            where T0 : VMValueType
-            where T1 : VMValueType
+            where T0 : VMDataType
+            where T1 : VMDataType
         {
             int offset = 0;
             lv0 = new LocalVariable<T0>(size0, ref offset);
@@ -109,9 +110,9 @@ namespace Dandy.Lms.Bytecodes.EV3
             out IExpression<T0> lv0, int size0,
             out IExpression<T1> lv1, int size1,
             out IExpression<T2> lv2, int size2)
-            where T0 : VMValueType
-            where T1 : VMValueType
-            where T2 : VMValueType
+            where T0 : VMDataType
+            where T1 : VMDataType
+            where T2 : VMDataType
         {
             int offset = 0;
             lv0 = new LocalVariable<T0>(size0, ref offset);
@@ -147,10 +148,10 @@ namespace Dandy.Lms.Bytecodes.EV3
             out IExpression<T1> lv1, int size1,
             out IExpression<T2> lv2, int size2,
             out IExpression<T3> lv3, int size3)
-            where T0 : VMValueType
-            where T1 : VMValueType
-            where T2 : VMValueType
-            where T3 : VMValueType
+            where T0 : VMDataType
+            where T1 : VMDataType
+            where T2 : VMDataType
+            where T3 : VMDataType
         {
             int offset = 0;
             lv0 = new LocalVariable<T0>(size0, ref offset);
@@ -191,11 +192,11 @@ namespace Dandy.Lms.Bytecodes.EV3
             out IExpression<T2> lv2, int size2,
             out IExpression<T3> lv3, int size3,
             out IExpression<T4> lv4, int size4)
-            where T0 : VMValueType
-            where T1 : VMValueType
-            where T2 : VMValueType
-            where T3 : VMValueType
-            where T4 : VMValueType
+            where T0 : VMDataType
+            where T1 : VMDataType
+            where T2 : VMDataType
+            where T3 : VMDataType
+            where T4 : VMDataType
         {
             int offset = 0;
             lv0 = new LocalVariable<T0>(size0, ref offset);
@@ -241,12 +242,12 @@ namespace Dandy.Lms.Bytecodes.EV3
             out IExpression<T3> lv3, int size3,
             out IExpression<T4> lv4, int size4,
             out IExpression<T5> lv5, int size5)
-            where T0 : VMValueType
-            where T1 : VMValueType
-            where T2 : VMValueType
-            where T3 : VMValueType
-            where T4 : VMValueType
-            where T5 : VMValueType
+            where T0 : VMDataType
+            where T1 : VMDataType
+            where T2 : VMDataType
+            where T3 : VMDataType
+            where T4 : VMDataType
+            where T5 : VMDataType
         {
             int offset = 0;
             lv0 = new LocalVariable<T0>(size0, ref offset);
@@ -297,13 +298,13 @@ namespace Dandy.Lms.Bytecodes.EV3
             out IExpression<T4> lv4, int size4,
             out IExpression<T5> lv5, int size5,
             out IExpression<T6> lv6, int size6)
-            where T0 : VMValueType
-            where T1 : VMValueType
-            where T2 : VMValueType
-            where T3 : VMValueType
-            where T4 : VMValueType
-            where T5 : VMValueType
-            where T6 : VMValueType
+            where T0 : VMDataType
+            where T1 : VMDataType
+            where T2 : VMDataType
+            where T3 : VMDataType
+            where T4 : VMDataType
+            where T5 : VMDataType
+            where T6 : VMDataType
         {
             int offset = 0;
             lv0 = new LocalVariable<T0>(size0, ref offset);

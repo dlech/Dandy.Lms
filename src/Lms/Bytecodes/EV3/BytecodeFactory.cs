@@ -8,21 +8,10 @@ using System.Runtime.InteropServices;
 using System.Text;
 
 using Dandy.Core;
+using Dandy.Lms.Bytecodes.EV3.Opcodes;
 
 namespace Dandy.Lms.Bytecodes.EV3
 {
-    /// <summary>
-    /// Common interface of all bytecodes.
-    /// </summary>
-    public interface IByteCode
-    {
-        /// <summary>
-        /// Write the bytecode's binary data.
-        /// </summary>
-        /// <param name="writer">Writer used to write the bytecode.</param>
-        void Write(BinaryWriter writer);
-    }
-
     /// <summary>
     /// Common interface for all bytecode expressions.
     /// </summary>
@@ -37,7 +26,7 @@ namespace Dandy.Lms.Bytecodes.EV3
     /// Interface that declares the type returned by an <see cref="IExpression"/> when it is evaluated.
     /// </summary>
     /// <typeparam name="T">The type of the expression.</typeparam>
-    public interface IExpression<T> : IExpression where T : VMValueType
+    public interface IExpression<T> : IExpression where T : VMDataType
     {
         /// <summary>
         /// Gets an index accessor expression.
@@ -48,28 +37,6 @@ namespace Dandy.Lms.Bytecodes.EV3
         /// Thrown if this expression is not a string or an array.
         /// </exception>
         IExpression<Data8> this[int index] { get; }
-    }
-    
-    /// <summary>
-    /// Indicates if an opcode, enum member, etc. is supported by a VM/firmware vendor.
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Enum | AttributeTargets.Field)]
-    sealed class SupportAttribute : Attribute
-    {
-        /// <summary>
-        /// Indicates that the target is supported on the official LEGO VM.
-        /// </summary>
-        public bool Official;
-
-        /// <summary>
-        /// Indicates that the target is supported on the RoboMatter/National Instruments eXtended VM.
-        /// </summary>
-        public bool Xtended;
-
-        /// <summary>
-        /// Indicates that the target is supported on the ev3dev lms2012-compat VM".
-        /// </summary>
-        public bool Compat;
     }
     
     enum PrimPar : byte
@@ -306,7 +273,7 @@ namespace Dandy.Lms.Bytecodes.EV3
         }
     }
 
-    class Variable<T> : IExpression<T> where T : VMValueType
+    class Variable<T> : IExpression<T> where T : VMDataType
     {
         readonly PrimPar primParVariableType;
         readonly int size;
@@ -378,14 +345,14 @@ namespace Dandy.Lms.Bytecodes.EV3
         }
     }
 
-    class LocalVariable<T> : Variable<T> where T : VMValueType
+    class LocalVariable<T> : Variable<T> where T : VMDataType
     {
         internal LocalVariable(int size, ref int offset) : base(PrimPar.Local, size, ref offset)
         {
         }
     }
 
-    class GlobalVariable<T> : Variable<T> where T : VMValueType
+    class GlobalVariable<T> : Variable<T> where T : VMDataType
     {
         internal GlobalVariable(int size, ref int offset) : base (PrimPar.Global, size, ref offset)
         {
@@ -396,73 +363,6 @@ namespace Dandy.Lms.Bytecodes.EV3
             var data = Activator.CreateInstance<T>();
             data.ParseValue(reader, Size);
             return data;
-        }
-    }
-
-    /// <summary>
-    /// Base class for <see cref="Opcode"/> and subcommands.
-    /// </summary>
-    public abstract class AbstractOpcode : IByteCode
-    {
-        readonly byte code;
-        readonly IByteCode[] parameters;
-
-        internal IEnumerable<IByteCode> Parameters => parameters;
-
-        internal AbstractOpcode(byte code, params IByteCode[] parameters)
-        {
-            this.code = code;
-            this.parameters = parameters;
-        }
-
-        internal IEnumerable<Tuple<LabelPlaceholder, int, Action<int>>> Write(BinaryWriter writer)
-        {
-            writer.Write(code);
-            foreach (var p in parameters)
-            {
-                if (p is LabelPlaceholder lp)
-                {
-                    Action<int> deferredWrite = v =>
-                    {
-                        writer.Write(PrimPar.Long.BitwiseOr(PrimPar.TwoBytes).AsByte());
-                        writer.Write((short)v);
-                    };
-                    writer.WriteDeferred(ref deferredWrite);
-                    var pos = writer.BaseStream.Position;
-                    yield return new Tuple<LabelPlaceholder, int, Action<int>>(lp, (int)pos, deferredWrite);
-                }
-                else
-                {
-                    writer.Write(p);
-                }
-            }
-        }
-
-        void IByteCode.Write(BinaryWriter writer)
-        {
-            // have to call ToList() to force complete iteration, otherwise parameters will be missed
-            Write(writer).ToList();
-        }
-    }
-
-    /// <summary>
-    /// Represents an opcode. These are basically VM function calls and are the building blocks of <see cref="BytecodeObject"/>s.
-    /// </summary>
-    [DebuggerDisplay("{code}")]
-    public class Opcode : AbstractOpcode
-    {
-        OpcodeValue code;
-
-        internal OpcodeValue Code => code;
-
-        internal Opcode(OpcodeValue code, params IByteCode[] parameters) : base((byte)code, parameters)
-        {
-            this.code = code;
-        }
-
-        internal void Write(BinaryWriter writer, out Action<int> deferredWriteLabel, out Action<int> deferredWriteSubcall)
-        {
-            throw new NotImplementedException();
         }
     }
 
@@ -514,7 +414,7 @@ namespace Dandy.Lms.Bytecodes.EV3
         /// </exception>
         public static DirectCommand<T0> DirectCommand<T0>(
             out IExpression<T0> gv0, int size0)
-            where T0 : VMValueType
+            where T0 : VMDataType
         {
             int offset = 0;
             gv0 = new GlobalVariable<T0>(size0, ref offset);
@@ -541,8 +441,8 @@ namespace Dandy.Lms.Bytecodes.EV3
         public static DirectCommand<ValueTuple<T0, T1>> DirectCommand<T0, T1>(
             out IExpression<T0> gv0, int size0,
             out IExpression<T1> gv1, int size1)
-            where T0 : VMValueType
-            where T1 : VMValueType
+            where T0 : VMDataType
+            where T1 : VMDataType
         {
             int offset = 0;
             gv0 = new GlobalVariable<T0>(size0, ref offset);
@@ -582,9 +482,9 @@ namespace Dandy.Lms.Bytecodes.EV3
             out IExpression<T0> gv0, int size0,
             out IExpression<T1> gv1, int size1,
             out IExpression<T2> gv2, int size2)
-            where T0 : VMValueType
-            where T1 : VMValueType
-            where T2 : VMValueType
+            where T0 : VMDataType
+            where T1 : VMDataType
+            where T2 : VMDataType
         {
             int offset = 0;
             gv0 = new GlobalVariable<T0>(size0, ref offset);
@@ -631,10 +531,10 @@ namespace Dandy.Lms.Bytecodes.EV3
             out IExpression<T1> gv1, int size1,
             out IExpression<T2> gv2, int size2,
             out IExpression<T3> gv3, int size3)
-            where T0 : VMValueType
-            where T1 : VMValueType
-            where T2 : VMValueType
-            where T3 : VMValueType
+            where T0 : VMDataType
+            where T1 : VMDataType
+            where T2 : VMDataType
+            where T3 : VMDataType
         {
             int offset = 0;
             gv0 = new GlobalVariable<T0>(size0, ref offset);
@@ -688,11 +588,11 @@ namespace Dandy.Lms.Bytecodes.EV3
             out IExpression<T2> gv2, int size2,
             out IExpression<T3> gv3, int size3,
             out IExpression<T4> gv4, int size4)
-            where T0 : VMValueType
-            where T1 : VMValueType
-            where T2 : VMValueType
-            where T3 : VMValueType
-            where T4 : VMValueType
+            where T0 : VMDataType
+            where T1 : VMDataType
+            where T2 : VMDataType
+            where T3 : VMDataType
+            where T4 : VMDataType
         {
             int offset = 0;
             gv0 = new GlobalVariable<T0>(size0, ref offset);
@@ -753,12 +653,12 @@ namespace Dandy.Lms.Bytecodes.EV3
             out IExpression<T3> gv3, int size3,
             out IExpression<T4> gv4, int size4,
             out IExpression<T5> gv5, int size5)
-            where T0 : VMValueType
-            where T1 : VMValueType
-            where T2 : VMValueType
-            where T3 : VMValueType
-            where T4 : VMValueType
-            where T5 : VMValueType
+            where T0 : VMDataType
+            where T1 : VMDataType
+            where T2 : VMDataType
+            where T3 : VMDataType
+            where T4 : VMDataType
+            where T5 : VMDataType
         {
             int offset = 0;
             gv0 = new GlobalVariable<T0>(size0, ref offset);
@@ -826,13 +726,13 @@ namespace Dandy.Lms.Bytecodes.EV3
             out IExpression<T4> gv4, int size4,
             out IExpression<T5> gv5, int size5,
             out IExpression<T6> gv6, int size6)
-            where T0 : VMValueType
-            where T1 : VMValueType
-            where T2 : VMValueType
-            where T3 : VMValueType
-            where T4 : VMValueType
-            where T5 : VMValueType
-            where T6 : VMValueType
+            where T0 : VMDataType
+            where T1 : VMDataType
+            where T2 : VMDataType
+            where T3 : VMDataType
+            where T4 : VMDataType
+            where T5 : VMDataType
+            where T6 : VMDataType
         {
             int offset = 0;
             gv0 = new GlobalVariable<T0>(size0, ref offset);

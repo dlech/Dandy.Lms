@@ -2,19 +2,19 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.4</TargetFramework>
-    <RootNamespace>Dandy.Lms.Bytecodes</RootNamespace>
-    <AssemblyName>Dandy.Lms.Bytecodes</AssemblyName>
-    <Version>1.0.0-a3</Version>
+    <RootNamespace>Dandy.Lms</RootNamespace>
+    <AssemblyName>Dandy.Lms</AssemblyName>
+    <Version>1.0.0-a1</Version>
     <Authors>dlech</Authors>
     <Company>DandyFX</Company>
-    <Description>LEGO MINDSTORMS VM Commands</Description>
+    <Description>LEGO MINDSTORMS Interop Library</Description>
     <Copyright>2017 David Lechner</Copyright>
     <PackageLicenseUrl>https://github.com/dlech/Dandy.Lms/blob/master/LICENSE.txt</PackageLicenseUrl>
     <PackageProjectUrl>dlech.github.io/Dandy.Lms</PackageProjectUrl>
     <RepositoryUrl>https://github.com/dlech/Dandy.Lms.git</RepositoryUrl>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <PackageId>Dandy.Lms.Bytecodes</PackageId>
-    <Product>Dandy.Lms.Bytecodes</Product>
+    <PackageId>Dandy.Lms</PackageId>
+    <Product>Dandy.Lms</Product>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -32,11 +32,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="NXT\" />
+    <Folder Include="Bytecodes\NXT\" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="EV3\BytecodeFactory.Generated.tt">
+    <None Update="Bytecodes\EV3\BytecodeFactory.Generated.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>BytecodeFactory.Generated.cs</LastGenOutput>
     </None>
@@ -47,7 +47,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="EV3\BytecodeFactory.Generated.cs">
+    <Compile Update="Bytecodes\EV3\BytecodeFactory.Generated.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>BytecodeFactory.Generated.tt</DependentUpon>

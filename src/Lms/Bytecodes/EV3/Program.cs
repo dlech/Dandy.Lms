@@ -6,7 +6,7 @@ using System.Text;
 namespace Dandy.Lms.Bytecodes.EV3
 {
     /// <summary>
-    /// Object that represents a VM program.
+    /// Object that represents an EV3 VM program.
     /// </summary>
     public sealed class Program
     {

@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Bytecodes\Bytecodes.csproj" />
+    <ProjectReference Include="..\..\src\Lms\Lms.csproj" />
   </ItemGroup>
 
   <ItemGroup>

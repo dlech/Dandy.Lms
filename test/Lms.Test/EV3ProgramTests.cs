@@ -7,11 +7,11 @@ using FluentAssertions;
 using Xunit;
 
 using static Dandy.Lms.Bytecodes.EV3.BytecodeFactory;
-using static Dandy.Lms.Bytecodes.EV3.BytecodeFactory.Constant;
-using static Dandy.Lms.Bytecodes.EV3.BytecodeFactory.BUTTONTYPE;
-using static Dandy.Lms.Bytecodes.EV3.BytecodeFactory.FONTTYPE;
-using static Dandy.Lms.Bytecodes.EV3.BytecodeFactory.LEDPATTERN;
-using static Dandy.Lms.Bytecodes.EV3.BytecodeFactory.N_ICON_NO;
+using static Dandy.Lms.Bytecodes.EV3.Constants.Defines;
+using static Dandy.Lms.Bytecodes.EV3.Constants.BUTTONTYPE;
+using static Dandy.Lms.Bytecodes.EV3.Constants.FONTTYPE;
+using static Dandy.Lms.Bytecodes.EV3.Constants.LEDPATTERN;
+using static Dandy.Lms.Bytecodes.EV3.Constants.N_ICON_NO;
 
 namespace Dandy.Lms.Bytecodes.EV3.Test
 {
