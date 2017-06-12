@@ -1,16 +1,15 @@
 ﻿using Dandy.Lms.Devices;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace Dandy.Lms.Bytecodes.EV3.System
+namespace Dandy.Lms.Bytecodes.EV3
 {
-    abstract class SystemCommand<TReply> : ICommand<TReply>
+    sealed class SystemCommand<TReply> : ICommand<TReply>
     {
-        internal abstract SystemCommandValue SystemCommandValue { get; }
+        readonly SystemCommandValue systemCommandValue;
+        readonly Action<BinaryWriter> writeCommandParameters;
+        readonly Func<BinaryReader, TReply> parseReplyParameters;
 
         /// <summary>
         /// Gets the type of device compatible with this command.
@@ -20,19 +19,30 @@ namespace Dandy.Lms.Bytecodes.EV3.System
         /// </value>
         public DeviceKind DeviceKind => DeviceKind.EV3;
 
-        public byte[] ToBytes(bool expectReply)
+        internal SystemCommand(SystemCommandValue value,
+            Action<BinaryWriter> writeCommandParameters,
+            Func<BinaryReader, TReply> parseReplyParameters)
+        {
+            systemCommandValue = value;
+            this.writeCommandParameters = writeCommandParameters ?? throw new ArgumentNullException(nameof(writeCommandParameters));
+            this.parseReplyParameters = parseReplyParameters ?? throw new ArgumentNullException(nameof(parseReplyParameters));
+        }
+
+        public byte[] ToBytes(bool expectReply = true)
         {
             using (var writer = new BinaryWriter(new MemoryStream()))
             {
-                var replyFlag = expectReply ? 0 : CommandTypeFlags.NoReply;
-                writer.Write((byte)(CommandTypeFlags.System | replyFlag));
-                writer.Write((byte)SystemCommandValue);
-                WriteCommandParameters(writer);
+                var commandType = CommandTypeFlags.System;
+                if (!expectReply)
+                {
+                    commandType |= CommandTypeFlags.NoReply;
+                }
+                writer.Write((byte)commandType);
+                writer.Write((byte)systemCommandValue);
+                writeCommandParameters(writer);
                 return ((MemoryStream)writer.BaseStream).ToArray();
             }
         }
-
-        protected abstract void WriteCommandParameters(BinaryWriter writer);
 
         public TReply ParseReply(byte[] data)
         {
@@ -46,10 +56,8 @@ namespace Dandy.Lms.Bytecodes.EV3.System
                     // TODO: include replyStatus in exception
                     throw new IOException("Command did not return success", (int)replyStatus);
                 }
-                return ParseReplyParameters(reader);
+                return parseReplyParameters(reader);
             }
         }
-
-        protected abstract TReply ParseReplyParameters(BinaryReader reader);
     }
 }

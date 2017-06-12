@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dandy.Lms.Bytecodes.EV3.System
+namespace Dandy.Lms.Bytecodes.EV3
 {
     enum SystemCommandValue
     {
