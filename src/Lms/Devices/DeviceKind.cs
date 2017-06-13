@@ -12,6 +12,11 @@ namespace Dandy.Lms.Devices
     public enum DeviceKind
     {
         /// <summary>
+        /// The kind of device is not known.
+        /// </summary>
+        Unknown,
+
+        /// <summary>
         /// The device is a LEGO MINDSTORMS RCX intelligent brick.
         /// </summary>
         RCX,
